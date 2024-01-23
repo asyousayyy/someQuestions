@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int findFriendWithBall(const vector<int>& reciever, int seconds) {
+    int n = reciever.size();
+
+    // Build the graph
+    vector<int> graph(n + 1);  // 1-based indexing
+    for (int i = 0; i < n; i++) {
+        graph[i + 1] = reciever[i];
+    }
+
+    int currentFriend = 1;  // Friend 1 starts with the ball
+
+    for (int i = 0; i < seconds; i++) {
+        currentFriend = graph[currentFriend];
+    }
+
+    return currentFriend;
+}
+
+int main() {
+    int n=5; // Number of friends
+    vector<int> reciever = {2, 4, 1, 5, 3};  // Reciever array
+    int seconds = 6;  // Number of seconds
+
+    int friendWithBall = findFriendWithBall(reciever, seconds);
+    cout << "Friend with the ball after " << seconds << " seconds: " << friendWithBall << endl;
+
+    return 0;
+}
