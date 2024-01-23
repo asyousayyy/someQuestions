@@ -1,0 +1,51 @@
+class Solution {
+private:
+    int timer = 1;
+    
+    void dfs(int node, int parent, vector<int> &vis, vector<int> adj[], 
+    int t[], int low[], vector<vector<int>> &bridges){
+
+        vis[node] = 1;
+        t[node] = low[node] = timer;
+        timer++;
+
+        for(auto it : adj[node]){
+            if(it == parent) continue; //don't consider the parent
+            
+            if(vis[it] == 0){ //if not visited
+                dfs(it,node,vis,adj,t,low,bridges);
+                low[node] = min(low[it],low[node]);
+
+                if(low[it] > t[node]){
+                    bridges.push_back({it,node});
+                }
+            }
+
+            else{
+                //already visited
+                low[node] = min(low[it],low[node]);
+            }
+        }
+
+    }
+
+public:
+
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+        
+        vector<vector<int>> bridges;
+        vector<int> adj[n];
+
+        for(auto it : connections){
+            adj[it[0]].push_back(it[1]);
+            adj[it[1]].push_back(it[0]);
+        }
+
+        vector<int> vis(n,0);
+        int t[n]; //time of insertion on dfs
+        int low[n]; //lowest time of insertion
+
+        dfs(0,-1,vis,adj,t,low,bridges);
+        return bridges;
+    }
+};
