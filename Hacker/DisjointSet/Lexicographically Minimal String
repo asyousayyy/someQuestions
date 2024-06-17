@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class DisjointSet {
+    vector<int> parent, size;
+public:
+    DisjointSet(int n) {
+        parent.resize(n + 1);
+        size.resize(n + 1);
+        for (int i = 0; i <= n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    int findUPar(int node) {
+        if (node == parent[node])
+            return node;
+        return parent[node] = findUPar(parent[node]); // Path compression
+    }
+
+    void unionBySize(int u, int v) {
+        int ulp_u = findUPar(u);
+        int ulp_v = findUPar(v);
+        if (ulp_u == ulp_v) return;
+        if (size[ulp_u] < size[ulp_v]) {
+            parent[ulp_u] = ulp_v;
+            size[ulp_v] += size[ulp_u];
+        } else {
+            parent[ulp_v] = ulp_u;
+            size[ulp_u] += size[ulp_v];
+        }
+    }
+};
+
+int main() {
+    string a, b, c;
+    cin >> a >> b >> c;
+
+    DisjointSet ds(26);
+
+    for (int i = 0; i < a.size(); i++) {
+        int u = a[i] - 'a';
+        int v = b[i] - 'a';
+        ds.unionBySize(u, v);
+    }
+
+    vector<char> mp(26,0);
+    for (int i = 0; i < 26; i++) {
+        int leader = ds.findUPar(i);
+        if (mp[leader]==0 || mp[leader] > 'a' + i) {
+            mp[leader] = 'a' + i;
+        }
+    }
+
+    string ans;
+    for (char ch : c) {
+        int leader = ds.findUPar(ch - 'a');
+        ans += mp[leader];
+    }
+
+    cout << ans << endl;
+
+    return 0;
+}
