@@ -1,0 +1,69 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+typedef pair<ll, int> pll;
+
+int main() {
+    int n, m, f;
+    cin >> n >> m >> f;
+
+    int capacity[n];
+    for (int i = 0; i < n; i++) cin >> capacity[i];
+
+    vector<vector<pll>> adj(n);
+    for(int i=0; i<m; i++){
+        int u,v;
+        ll w;
+        cin>>u>>v>>w;
+        --u;
+        --v;
+        adj[u].push_back({v,w});
+        adj[v].push_back({u,w});
+    }
+
+    int k;
+    cin >> k;
+
+    priority_queue<pll,vector<pll>,greater<pll>>pq;
+    vector<ll> cost(n+1,LLONG_MAX);
+    vector<bool> vis(n,false);
+
+    pq.push({0,0}); //dist, node
+    cost[0] = 0;
+
+    while(!pq.empty()){
+        auto it = pq.top();
+        pq.pop();
+
+        ll curr_cost = it.first;
+        int u = it.second;
+
+        if(vis[u]) continue;
+        vis[u] = true; //we will use it full capacity
+
+        //park vehicles
+        for(int i=0; i<capacity[u] && k>0; i++){
+            cout<<curr_cost+f<<" ";
+            k--;//parking vehicles
+        }
+
+        if(k==0) break; //all cars parked
+
+        for(auto it : adj[u]){
+            int v = it.first;
+            ll wt = it.second;
+
+            if(!vis[v] && curr_cost + wt < cost[v]){
+                cost[v] = curr_cost + wt;
+                pq.push({curr_cost+wt, v});
+            }
+        }
+    }
+
+    if(k>0){ //left unparked
+        cout<<"-1"<<endl;
+    }  
+    
+    return 0;
+}
