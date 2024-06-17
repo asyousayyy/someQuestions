@@ -1,0 +1,66 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class DisjointSet {
+    vector<int> parent, size;
+public:
+    DisjointSet(int n) {
+        parent.resize(n + 1);
+        size.resize(n + 1);
+        for (int i = 0; i <= n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    int findUPar(int node) {
+        if (node == parent[node])
+            return node;
+        return parent[node] = findUPar(parent[node]); // path compression
+    }
+
+    void unionBySize(int u, int v) {
+        int ulp_u = findUPar(u);
+        int ulp_v = findUPar(v);
+        
+        if (ulp_u == ulp_v) return; // Already in the same group
+
+        // Union by size with b's leader taking over
+        parent[ulp_u] = ulp_v;
+        size[ulp_v] += size[ulp_u];
+    }
+
+    void makeLeader(int a) {
+        int ulp_a = findUPar(a);
+        parent[ulp_a] = a;
+        parent[a] = a;
+    }
+};
+
+int main() {
+
+    int n, q;
+    cin >> n >> q;
+
+    DisjointSet ds(n); // Initializing disjoint set for n soldiers
+
+    while (q--) {
+        int type;
+        cin >> type;
+        if (type == 1) {
+            int a, b;
+            cin >> a >> b;
+            ds.unionBySize(a, b);
+        } else if (type == 2) {
+            int a;
+            cin >> a;
+            ds.makeLeader(a);
+        } else if (type == 3) {
+            int a;
+            cin >> a;
+            cout << ds.findUPar(a) << endl;
+        }
+    }
+
+    return 0;
+}
