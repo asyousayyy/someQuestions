@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int sliding(char c, string s, map<char, int> &mp) {
+        int n = s.size();
+        int i = 0, j = 0;
+        int maxi = 0;
+
+        int count = 0;
+        while (j < n) {
+            if (s[j] != c) {
+                count++;
+            }
+
+            while (count > 1) {
+                if (s[i] != c) {
+                    count--;
+                }
+                i++;
+            }
+            maxi = max(maxi, j - i + 1);
+            j++;
+        }
+
+        if(maxi == s.size() && count == 1){
+            maxi = s.size()-1;
+        }
+
+        return maxi;
+    }
+
+    int maxRepOpt1(string s) {
+        int n = s.size();
+        int maxi = 0;
+        map<char, int> mp;
+
+        for (auto c : s) {
+            mp[c]++;
+        }
+
+        if(mp.size()==n) return 1;
+
+        for (auto &entry : mp) {
+            maxi = max(maxi, min(entry.second, sliding(entry.first,s,mp))); 
+        }
+
+        return maxi;
+    }
+};
