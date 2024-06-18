@@ -1,0 +1,44 @@
+class Solution {
+public:
+    long long maxi = -1;
+    long long count = 0;
+
+    int helper(vector<vector<int>> &adj, int node, int n){
+        long long score = 1;
+        int size = adj[node].size(); //these are the kids
+
+        int left = 0, right = 0;
+        if(size>0) left = helper(adj,adj[node][0],n);
+        if(size>1) right = helper(adj,adj[node][1],n);
+
+        if(left>0) score *= left;
+        if(right>0) score *= right;
+
+        int par = n - left - right - 1; //1 for the root node
+        if(par > 0) score *= par;
+
+        if(score > maxi){
+            maxi = score;
+            count = 1;
+        }
+
+        else if(score==maxi){
+            count++;
+        }
+
+        return left + right + 1;
+    }
+
+    int countHighestScoreNodes(vector<int>& par) {
+        int n = par.size();
+        vector<vector<int>> adj(n);
+
+        for(int i=1; i<n; i++){
+            adj[par[i]].push_back(i);
+        }
+
+        helper(adj,0,n);
+        return count;
+        
+    }
+};
