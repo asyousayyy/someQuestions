@@ -1,0 +1,52 @@
+class Solution {
+public:
+    int ones(string &s) {
+        int count = 0;
+        for(auto it : s) {
+            if(it - '0' == 1) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    int zeros(string &s) {
+        int count = 0;
+        for(auto it : s) {
+            if(it - '0' == 0) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    int helper(int i, vector<pair<int,int>>& v, int m, int n, int zero, int one, vector<vector<vector<int>>>& memo) {
+        if(i >= v.size()) return 0;
+        if(memo[i][zero][one] != -1) return memo[i][zero][one]; 
+
+        int nottake = helper(i+1, v, m, n, zero, one, memo);
+        int take = 0;
+
+        if(zero + v[i].first <= m && one + v[i].second <= n) {
+            take = 1 + helper(i+1, v, m, n, zero + v[i].first, one + v[i].second, memo);
+        }
+
+        memo[i][zero][one] = max(take, nottake);
+        return memo[i][zero][one];
+    }
+
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        int size = strs.size();
+        vector<pair<int, int>> v(size);
+
+        for(int i = 0; i < size; i++) {
+            v[i].first = zeros(strs[i]);
+            v[i].second = ones(strs[i]);
+        }
+
+        vector<vector<vector<int>>> memo(size, vector<vector<int>>(m+1, 
+        vector<int>(n+1, -1)));
+
+        return helper(0, v, m, n, 0, 0, memo);
+    }
+};
