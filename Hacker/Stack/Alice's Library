@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+    string s;
+    cin >> s;
+
+    vector<char> str(s.begin(), s.end());
+    stack<int> opening;
+
+    for (int i = 0; i < str.size(); ++i) {
+        if (str[i] == '/') {
+            opening.push(i);
+        } else if (str[i] == '\\') {
+            reverse(str.begin() + opening.top(), str.begin() + i + 1);
+            opening.pop();
+        }
+    }
+
+    string result;
+    for (char c : str) {
+        if (c != '/' && c != '\\') {
+            result += c;
+        }
+    }
+
+    cout << result << endl;
+    return 0;
+}
+
