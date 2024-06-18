@@ -1,0 +1,72 @@
+#include <bits/stdc++.h>
+#define inf 100000000
+using namespace std;
+typedef pair<int, int> ii;
+
+int main() {
+    int n, m, k, x;
+    cin >> n >> m >> k >> x;
+
+    vector<bool> med(n + 1, false); //cities with chocolates
+    for (int i = 0; i < k; i++) {
+        int temp;
+        cin >> temp;
+        med[temp] = true;
+    }
+
+    vector<vector<ii>> adj(n + 1);
+    for (int i = 0; i < m; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        adj[u].push_back({w, v});
+        adj[v].push_back({w, u});
+    }
+
+    int a, b;
+    cin >> a >> b;
+
+    vector<vector<int>> dis(n + 1, vector<int>(2, inf));
+    vector<vector<bool>> vis(n + 1, vector<bool>(2, false));
+
+    auto dijkstra = [&](int s, int type) {
+        dis[s][type] = 0;
+        priority_queue<ii, vector<ii>, greater<ii>> pq;
+        pq.push({0, s});
+        while (!pq.empty()) {
+            ii p = pq.top();
+            pq.pop();
+            int u = p.second, w = p.first;
+            if (vis[u][type]) continue;
+            vis[u][type] = true;
+            for (auto& edge : adj[u]) {
+                int weight = edge.first, v = edge.second;
+                if (dis[v][type] > dis[u][type] + weight) {
+                    dis[v][type] = dis[u][type] + weight;
+                    pq.push({dis[v][type], v});
+                }
+            }
+        }
+    };
+
+    dijkstra(a, 0); //dijkstra from A with no chocolate
+    fill(vis.begin(), vis.end(), vector<bool>(2, false)); 
+    // Reset visited array
+    dijkstra(b, 1); //dijkstra from B with chocolate
+
+    int ans = inf;
+    for (int i = 1; i <= n; i++) {
+        if (med[i] && dis[i][1] <= x) {
+            if (dis[i][1] != inf && dis[i][0] != inf) {
+                ans = min(ans, dis[i][1] + dis[i][0]);
+            }
+        }
+    }
+
+    if (ans == inf) {
+        cout << "-1\n";
+    } else {
+        cout << ans << "\n";
+    }
+
+    return 0;
+}
