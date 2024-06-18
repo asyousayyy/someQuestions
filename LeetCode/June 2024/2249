@@ -1,0 +1,35 @@
+bool isvalid(int i, int j, int x, int y, int r){
+        int left = pow((x-i),2) + pow((y-j),2);
+        int right = pow(r,2);
+
+        if(left <= right) return true;
+        return false;
+    }
+
+    void helper(vector<int> it, set<pair<int,int>> &st){
+        int x = it[0];
+        int y = it[1];
+        int r = it[2];
+
+        int minx = x-r,maxx = x+r, miny = y-r, maxy = y+r;
+
+        for(int i=minx; i<=maxx; i++){
+            for(int j = miny; j<=maxy; j++){
+                if(isvalid(i,j,x,y,r)){
+                    st.insert({i,j});
+                }
+            }
+        }
+    }
+
+    int countLatticePoints(vector<vector<int>>& circles) {
+        int n = circles.size();
+        int count = 0;
+        set<pair<int,int>> st;
+
+        for(auto it : circles){
+            helper(it,st);
+        }
+
+        return st.size();
+    }
