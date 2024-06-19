@@ -1,0 +1,17 @@
+vector<long long> maximumEvenSplit(long long finalSum) {
+        vector<long long> ans;
+        if(finalSum%2 != 0) return ans;
+
+        long long curr = 0, k = 2;
+
+        while(curr + k <= finalSum){
+            ans.push_back(k);
+            curr += k;
+            k+=2;
+        }
+
+        long long n = ans.size();
+        ans[n-1] += (finalSum - curr); //this much more we need
+
+        return ans;
+    }
