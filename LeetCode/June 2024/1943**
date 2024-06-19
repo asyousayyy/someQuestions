@@ -1,0 +1,34 @@
+class Solution {
+public:
+    vector<vector<long long>> splitPainting(vector<vector<int>>& seg) {
+        int n = seg.size();
+        vector<long long> v(1e5+1,0);
+        vector<vector<long long>> ans;
+
+        map<int,int> mp;
+
+        for(int i=0; i<n; i++){
+            v[seg[i][0]] += seg[i][2];
+            v[seg[i][1]] -= seg[i][2];
+            mp[seg[i][1]]++; //the ends
+        }
+
+        int i = 0;
+        for(int j=1; j<v.size(); j++){
+            v[j] += v[j-1];
+
+            if(v[j-1]==0){
+                i=j;
+                continue;
+            }
+
+            if(v[j] != v[j-1] || mp.find(j) != mp.end()){
+                ans.push_back({i,j,v[j-1]});
+                i = j;
+            }
+        }
+
+        return ans;
+
+    }
+};
