@@ -1,0 +1,44 @@
+class Solution {
+public:
+    int findShortestSubArray(vector<int>& nums) {
+        int n = nums.size();
+        map<int,int> mp;
+
+        for(auto it : nums){
+            mp[it]++;
+        }
+
+        int degree = 0;
+        int len = INT_MAX;
+        
+        vector<int> arr;
+        for(auto it : mp){
+            degree = max(degree, it.second);
+        }
+
+        for(auto it : mp){
+            if(it.second==degree){
+                arr.push_back(it.first);
+            }
+        }
+
+        for(int x=0; x<arr.size(); x++){
+            int i=0,j=0;
+            int count = 0;
+
+            while(i<=j && j<n){
+                if(nums[j]==arr[x]) count++;
+                if(count==degree){
+                    while(nums[i]!=arr[x]){
+                        i++;
+                    }
+                    len = min(len,j-i+1);
+                    break;
+                }
+                j++;
+            }
+        }
+
+        return len;
+    }
+};
