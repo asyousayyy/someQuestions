@@ -1,0 +1,53 @@
+ bool ismaxima(int i, vector<int> &v) {
+    bool flag1 = false, flag2 = false;
+    if (i - 1 >= 0 && v[i] > v[i - 1]) {
+        flag1 = true;
+    }
+    if (i + 1 < v.size() && v[i] > v[i + 1]) {
+        flag2 = true;
+    }
+    return flag1 && flag2;
+}
+
+bool isminima(int i, vector<int> &v) {
+    bool flag1 = false, flag2 = false;
+    if (i - 1 >= 0 && v[i] < v[i - 1]) {
+        flag1 = true;
+    }
+    if (i + 1 < v.size() && v[i] < v[i + 1]) {
+        flag2 = true;
+    }
+    return flag1 && flag2;
+}
+
+vector<int> nodesBetweenCriticalPoints(ListNode* head) {
+    vector<int> v, ans;
+    ListNode* temp = head;
+
+    while (temp != NULL) {
+        v.push_back(temp->val);
+        temp = temp->next;
+    }
+
+    for (int i = 1; i < v.size() - 1; i++) {
+        if (ismaxima(i, v)) {
+            ans.push_back(i);
+        }
+        if (isminima(i, v)) {
+            ans.push_back(i);
+        }
+    }
+
+    if (ans.size() < 2) {
+        return {-1, -1}; 
+    }
+
+    int mini = INT_MAX;
+    for (int i = 1; i < ans.size(); i++) {
+        mini = min(mini, ans[i] - ans[i - 1]);
+    }
+
+    int maxi = ans.back() - ans.front();
+
+    return {mini, maxi};
+}
