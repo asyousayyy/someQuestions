@@ -1,0 +1,29 @@
+   int helper(int x) {
+    int sum = 0;
+    if (x == 1) return 0;
+
+    if (x % 2 == 0) {
+        sum += 1 + helper(x / 2);
+    } else {
+        sum += 1 + helper(3 * x + 1);
+    }
+
+    return sum;
+}
+
+int getKth(int lo, int hi, int k) {
+    vector<pair<int, int>> power;
+
+    for (int i = lo; i <= hi; i++) {
+        power.push_back({helper(i), i});
+    }
+
+    sort(power.begin(), power.end(), [&](const pair<int, int> &a, 
+    const pair<int, int> &b) {
+        if (a.first == b.first)
+            return a.second < b.second;
+        return a.first < b.first;
+    });
+
+    return power[k-1].second;
+}
