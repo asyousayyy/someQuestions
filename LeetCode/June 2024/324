@@ -1,0 +1,23 @@
+void wiggleSort(vector<int>& nums) {
+    int n = nums.size();
+    vector<int> ans(n);
+
+    vector<int> nums1 = nums;
+    sort(nums1.begin(), nums1.end());
+
+    int mid = (n + 1) / 2;
+    int end = n;
+
+    int i = mid - 1;  
+    int j = end - 1;  
+
+    for (int k = 0; k < n; k++) {
+        if (k % 2 == 0) {
+            ans[k] = nums1[i--];  
+        } else {
+            ans[k] = nums1[j--];  
+        }
+    }
+
+    nums = ans;
+}
