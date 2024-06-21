@@ -1,0 +1,99 @@
+bool helper(int start, int parent, vector<vector<int>> &adj, 
+    map<int, int> &b, int currtime)
+    
+    {
+        if (start == 0)
+            return true;
+        b[start] = currtime;
+
+        for (auto it : adj[start])
+        {
+            if (it != parent)
+            {
+                if (helper(it, start, adj, b, currtime + 1))
+                { // reached root
+                    return true;
+                }
+            }
+        }
+
+        b.erase(start); // if not reached root
+        return false;
+    }
+
+    long long int help(int start, int parent, vector<vector<int>> &adj, 
+    vector<int> &amount, map<int, int> &b, int curr){
+        
+        long long int ans = LLONG_MIN;
+
+        for (auto it : adj[start])
+        {
+            if (it != parent)
+            {
+                if (b.find(start) == b.end())
+                {
+                    // not visited
+                    ans = max(ans, amount[start] + help(it, start, adj, amount, b, curr + 1));
+                }
+                else
+                {
+                    // if visited before Alice, then no need to add amount
+                    if (b[start] < curr)
+                    {
+                        ans = max(ans, help(it, start, adj, amount, b, curr + 1));
+                    }
+                    else if (b[start] > curr)
+                    { // visited later
+                        ans = max(ans, amount[start] + help(it, start, adj, amount, b, curr + 1));
+                    }
+                    else
+                    {
+                        // visited at the same time
+                        ans = max(ans, amount[start] / 2 + help(it, start, adj, amount, b, curr + 1));
+                    }
+                }
+            }
+        }
+
+        // now for leaf node, what if start is a leaf node
+        // it will keep ans = LLONG_MIN always because
+        // it != parent condition will always be false
+        if (ans == LLONG_MIN)
+        {
+            if (b.find(start) == b.end())
+            {
+                return amount[start];
+            }
+            else
+            {
+                if (b[start] == curr)
+                {
+                    return amount[start] / 2;
+                }
+                else
+                {
+                    return 0; //bob already visited, because it is a leaf node alice will come after bob
+                }
+            }
+        }
+
+        return ans;
+    }
+
+    int mostProfitablePath(vector<vector<int>> &edges, int bob, 
+    vector<int> &amount)
+    {
+        int n = edges.size() + 1;
+
+        vector<vector<int>> adj(n);
+        for (auto it : edges)
+        {
+            adj[it[0]].push_back(it[1]);
+            adj[it[1]].push_back(it[0]);
+        }
+
+        map<int, int> b; // bob and its time
+        helper(bob, -1, adj, b, 0);
+
+        return help(0, -1, adj, amount, b, 0);
+    }
