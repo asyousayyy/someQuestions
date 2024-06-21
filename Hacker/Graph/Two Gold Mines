@@ -1,0 +1,89 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int dx[4] = {1, -1, 0, 0};
+int dy[4] = {0, 0, 1, -1};
+
+int bfs(vector<vector<char>> &mat, int start_x, int start_y, int n, pair<int, int> target) {
+    vector<vector<bool>> visited(n, vector<bool>(n, false));
+    queue<pair<int, pair<int, int>>> q;
+    q.push({0, {start_x, start_y}});
+    visited[start_x][start_y] = true;
+
+    while (!q.empty()) {
+        auto it = q.front();
+        q.pop();
+        int t = it.first;
+        int u = it.second.first;
+        int v = it.second.second;
+
+        if (u == target.first && v == target.second) {
+            return t;
+        }
+
+        for (int i = 0; i < 4; i++) {
+            int nx = u + dx[i];
+            int ny = v + dy[i];
+            if (nx >= 0 && ny >= 0 && nx < n && ny < n && 
+			!visited[nx][ny] && mat[nx][ny] != '#') {
+                visited[nx][ny] = true;
+                q.push({t + 1, {nx, ny}});
+            }
+        }
+    }
+    return INT_MAX;
+}
+
+int main() {
+    int t;
+    cin >> t;
+
+    while (t--) {
+        int n;
+        cin >> n;
+
+        vector<vector<char>> mat(n, vector<char>(n));
+        vector<pair<int, int>> players;
+        vector<pair<int, int>> golds;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                cin >> mat[i][j];
+                if (mat[i][j] == '^') {
+                    players.push_back({i, j});
+                }
+                if (mat[i][j] == '*') {
+                    golds.push_back({i, j});
+                }
+            }
+        }
+
+        if (players.size() != 2 || golds.size() != 2) {
+            cout << "No" << endl;
+            continue;
+        }
+
+        int p1g1 = bfs(mat, players[0].first, players[0].second, n, 
+		golds[0]);
+        int p1g2 = bfs(mat, players[0].first, players[0].second, n,
+		golds[1]);
+        int p2g1 = bfs(mat, players[1].first, players[1].second, n, 
+		golds[0]);
+        int p2g2 = bfs(mat, players[1].first, players[1].second, n, 
+		golds[1]);
+
+        int time1 = max(p1g1, p2g2);
+        int time2 = max(p1g2, p2g1);
+
+        int result = min(time1, time2);
+
+        if (result == INT_MAX) {
+            cout << "No" << endl;
+        } else {
+            cout << "Yes" << endl;
+            cout << result << endl;
+        }
+    }
+
+    return 0;
+}
