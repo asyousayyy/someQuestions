@@ -1,0 +1,24 @@
+    int maxSatisfied(vector<int>& c, vector<int>& g, int min) {
+    int n = c.size();
+    int sum = 0;
+
+    for (int i = 0; i < n; i++) {
+        if (g[i] == 0) {
+            sum += c[i];
+        }
+    }
+
+    int maxi = 0;
+
+    for (int i = 0; i <= n - min; i++) {
+        int temp = 0;
+        for (int j = i; j < i + min; j++) {
+            if (g[j] == 1) {
+                temp += c[j];
+            }
+        }
+        maxi = max(maxi, temp);
+    }
+
+    return maxi + sum;
+}
