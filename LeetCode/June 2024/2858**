@@ -1,0 +1,43 @@
+int dfs(int node, int parent, vector<vector<int>> &adj, vector<vector<int>> &rev,
+    map<pair<int,int>,int>&dp){
+        
+        if(dp.find({node,parent})!=dp.end()){ //already visited
+            return dp[{node,parent}];
+        }
+
+        int op = 0;
+
+        for(auto it : adj[node]){ //as much are there, traverse
+            if(it != parent){
+                op += dfs(it,node,adj,rev,dp);
+            }
+        }
+
+        for(auto it : rev[node]){ //then remaining, with reverse edges
+            if(it != parent){
+                op += dfs(it,node,adj,rev,dp)+1;
+            }
+        }
+
+        return dp[{node,parent}] = op;
+    }
+
+    vector<int> minEdgeReversals(int n, vector<vector<int>>& edges) {
+        vector<int> ans;
+        map<pair<int,int>,int> dp;
+
+        vector<vector<int>> adj(n),rev(n);
+        for(auto it : edges){
+            int u = it[0];
+            int v = it[1];
+            adj[u].push_back(v);
+            rev[v].push_back(u);
+        }
+
+        for(int i=0; i<n; i++){
+            int x = dfs(i,-1,adj,rev,dp);
+            ans.push_back(x);
+        }
+
+        return ans;
+    }
