@@ -1,0 +1,41 @@
+int minimumObstacles(vector<vector<int>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+
+        vector<vector<int>> dist(m, vector<int>(n, INT_MAX));
+        dist[0][0] = 0;
+
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> pq;
+        pq.push({0, 0, 0}); // {cost, x, y}
+
+        int dx[4] = {1, -1, 0, 0};
+        int dy[4] = {0, 0, 1, -1};
+
+        while (!pq.empty()) {
+            auto it = pq.top();
+            pq.pop();
+
+            int cost = it[0];
+            int x = it[1];
+            int y = it[2];
+
+            if (x == m - 1 && y == n - 1) return cost;
+
+            for (int i = 0; i < 4; ++i) {
+                int newx = x + dx[i];
+                int newy = y + dy[i];
+
+                if (newx >= 0 && newy >= 0 && newx < m && newy < n) {
+                    
+                    int newCost = cost + (grid[newx][newy] == 1 ? 1 : 0);
+
+                    if (newCost < dist[newx][newy]) {
+                        dist[newx][newy] = newCost;
+                        pq.push({newCost, newx, newy});
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
