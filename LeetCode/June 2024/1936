@@ -1,0 +1,14 @@
+int addRungs(vector<int>& rungs, int dist) {
+    int curr = 0;
+    int ops = 0;
+    
+    for (int i = 0; i < rungs.size(); ++i) {
+        if (rungs[i] - curr > dist) {
+            int needed = (rungs[i] - curr - 1) / dist;
+            ops += needed;
+        }
+        curr = rungs[i];
+    }
+    
+    return ops;
+}
