@@ -1,0 +1,28 @@
+int dfs(int node,map<int,vector<int>> &tree,int &res,string &s) {
+        
+        int maxDepth = 0;
+        
+        for (int child : tree[node]) {
+            
+            int depth = dfs(child,tree,res,s);
+            if (s[child] != s[node]) {
+                res = max(res, maxDepth + depth + 1);
+                maxDepth = max(maxDepth, depth);
+            }
+
+        }
+        
+        return maxDepth + 1;
+    }
+
+    int longestPath(vector<int>& parent, string s) {
+        int res = 1;  
+        map<int, vector<int>> tree;
+        
+        for (int i = 0; i < parent.size(); ++i) {
+            tree[parent[i]].push_back(i);
+        }
+        
+        dfs(0,tree,res,s);  
+        return res;
+    }
