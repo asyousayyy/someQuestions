@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, m, k, c;
+    cin >> n >> m >> k >> c;
+
+    vector<vector<int>> adj(n); 
+    for (int i = 0; i < m; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    queue<pair<int, int>> q;
+    q.push({0, c}); 
+    vector<bool> visited(n, false); 
+    int ans = 0;
+
+    while (!q.empty()) {
+        auto it = q.front();
+        q.pop();
+        int fuel = it.first;
+        int city = it.second;
+
+        if (fuel <= k && !visited[city]) {
+            visited[city] = true;
+            ans++;
+            for (auto neighbor : adj[city]) {
+                q.push({fuel + 1, neighbor});
+            }
+        }
+    }
+
+    cout << ans << endl;
+
+    return 0;
+}
