@@ -1,0 +1,49 @@
+vector<bool> findAnswer(int n, vector<vector<int>>& edges) {
+    vector<vector<pair<int, int>>> adj(n); // Adjacency list with (neighbor, weight)
+    vector<bool> answer(edges.size(), false); // Result array
+
+    // Build the graph
+    for (auto& edge : edges) {
+        int u = edge[0], v = edge[1], w = edge[2];
+        adj[u].push_back({v, w});
+        adj[v].push_back({u, w});
+    }
+
+    // Step 1: Compute shortest paths using Dijkstra's algorithm
+    vector<int> dist(n, INT_MAX); // Distance array
+    dist[0] = 0;
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    pq.push({0, 0}); // {distance, node}
+
+    while (!pq.empty()) {
+        auto [d, u] = pq.top();
+        pq.pop();
+
+        if (d > dist[u]) continue;
+
+        for (auto& [v, weight] : adj[u]) {
+            if (dist[u] + weight < dist[v]) {
+                dist[v] = dist[u] + weight;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+
+    // Step 2: Identify edges that are part of any shortest path
+    for (int u = 0; u < n; ++u) {
+        for (auto& [v, weight] : adj[u]) {
+            if (dist[u] + weight == dist[v]) {
+                // Edge (u, v) is part of at least one shortest path
+                // Find the edge index in the original input and mark it as true
+                for (int i = 0; i < edges.size(); ++i) {
+                    if ((edges[i][0] == u && edges[i][1] == v) || (edges[i][0] == v && edges[i][1] == u)) {
+                        answer[i] = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    return answer;
+}
