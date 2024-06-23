@@ -1,0 +1,27 @@
+int minSetSize(vector<int>& arr) {
+        int n = arr.size();
+        map<int, int> mp;
+    
+        for (int num : arr) {
+            mp[num]++;
+        }
+
+        vector<int> v;
+        for (auto it : mp) {
+            v.push_back(it.second);
+        }
+        sort(v.rbegin(), v.rend());
+
+        int removed = 0;
+        int op = 0;
+
+        for (int count : v) {
+            removed += count;
+            op++;
+            if (removed >= n / 2) {
+                break;
+            }
+        }
+
+        return op;
+    }
