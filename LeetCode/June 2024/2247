@@ -1,0 +1,54 @@
+int maximumCost(int n, vector<vector<int>>& highways, int k) {
+    if (k >= n) {
+        return -1;
+    }
+    
+    vector<vector<Edge>> graph(n);
+    for (auto& h : highways) {
+        int a = h[0], b = h[1], cost = h[2];
+        graph[a].emplace_back(b, cost);
+        graph[b].emplace_back(a, cost);
+    }
+    
+    priority_queue<pair<int, int>> pq; // {distance, node}
+    
+    vector<vector<int>> dist(n, vector<int>(n, INT_MIN)); 
+    
+    pq.push({0, 0});
+    dist[0][0] = 0; // Starting point
+    
+    while (!pq.empty()) {
+        auto [current_cost, u] = pq.top();
+        pq.pop();
+        
+        for (auto& edge : graph[u]) {
+            int v = edge.to;
+            int cost_uv = edge.cost;
+            
+            int new_cost = current_cost + cost_uv;
+            
+            int highways_used = 0;
+            for (int i = 0; i < n; ++i) {
+                if (dist[v][i] != INT_MIN) {
+                    highways_used++;
+                }
+            }
+            
+            if (highways_used < k) {
+                if (new_cost > dist[v][highways_used]) {
+                    dist[v][highways_used] = new_cost;
+                    pq.push({new_cost, v});
+                }
+            }
+        }
+    }
+    
+    int max_cost = -1;
+    for (int i = 0; i < n; ++i) {
+        if (dist[n - 1][k - 1] != INT_MIN) {
+            max_cost = max(max_cost, dist[n - 1][k - 1]);
+        }
+    }
+    
+    return max_cost;
+}
