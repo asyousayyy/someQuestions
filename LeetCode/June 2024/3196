@@ -1,0 +1,23 @@
+long long helper(int curr, int flag, int n, vector<int>& nums, vector<vector<long long>>& dp) {
+    if (curr >= n) return 0;
+    if (dp[curr][flag] != -1) return dp[curr][flag];
+
+    long long nottake = nums[curr] + helper(curr + 1, flag, n, nums, dp);
+
+    long long take = LLONG_MIN;
+    if (flag == 1) { // Positive sign
+        take = nums[curr] + helper(curr + 1, 0, n, nums, dp); 
+    } else { // Negative sign
+        take = -nums[curr] + helper(curr + 1, 1, n, nums, dp);
+    }
+
+    return dp[curr][flag] = max(take, nottake);
+}
+
+long long maximumTotalCost(vector<int>& nums) {
+    int n = nums.size();
+    if (n == 0) return 0;
+
+    vector<vector<long long>> dp(n, vector<long long>(2, -1));
+    return helper(0, 1, n, nums, dp); 
+}
