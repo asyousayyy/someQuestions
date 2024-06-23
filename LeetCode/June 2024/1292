@@ -1,0 +1,37 @@
+bool helper(int mid, int thresh, vector<vector<int>> &pre){
+        int m = pre.size()-1;
+        int n = pre[0].size()-1;
+        for(int i=mid; i<=m; i++){
+            for(int j=mid; j<=n; j++){
+                if(pre[i][j] - pre[i-mid][j] - pre[i][j-mid] + pre[i-mid][j-mid]
+                <=thresh) return true;
+            }
+        }
+        return false;
+    }
+
+    int maxSideLength(vector<vector<int>>& mat, int thresh) {
+        int m = mat.size();
+        int n = mat[0].size();
+        vector<vector<int>> pre(m+1, vector<int> (n+1,0));
+
+        for(int i=1; i<=m; i++){
+            for(int j=1; j<=n; j++){
+                pre[i][j] = pre[i-1][j] + pre[i][j-1] - pre[i-1][j-1] + mat[i-1][j-1];
+            }
+        }
+
+        int low=0;
+        int high=min(m,n);
+
+        while(low<=high){
+            int mid = (low+high)/2;
+            if(helper(mid,thresh,pre)){
+                low = mid+1;
+            }
+            else{
+                high = mid-1;
+            }
+        }
+        return high;
+    }
