@@ -1,0 +1,38 @@
+void assign(map<int, int> &mp, TreeNode* root) {
+    if (!root) return;  
+    if (mp.find(root->val) != mp.end()) {
+        root->val = mp[root->val];
+    }
+    assign(mp, root->left);
+    assign(mp, root->right);
+}
+
+void helper(vector<int> &v, TreeNode* root) {
+    if (!root) return;  
+    v.push_back(root->val);
+    helper(v, root->left);
+    helper(v, root->right);
+}
+
+TreeNode* convertBST(TreeNode* root) {
+    if (!root) return root;  
+
+    vector<int> v;
+    helper(v, root);
+
+    sort(v.begin(), v.end(), greater<int>());
+    vector<int> pre(v.size(), 0);
+    pre[0] = v[0];
+
+    for (int i = 1; i < v.size(); i++) {
+        pre[i] = pre[i - 1] + v[i];
+    }
+
+    map<int, int> mp;
+    for (int i = 0; i < v.size(); i++) {
+        mp[v[i]] = pre[i];
+    }
+
+    assign(mp, root);
+    return root;
+}
