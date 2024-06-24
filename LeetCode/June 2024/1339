@@ -1,0 +1,46 @@
+const int mod = 1e9 + 7;
+
+long long helper(map<TreeNode*, long long> &mp, TreeNode* root) {
+    if(!root) return 0;
+
+    if(!root->right && !root->left) {
+        mp[root] = root->val;
+        return root->val;
+    }
+
+    long long leftsum = helper(mp, root->left);
+    long long rightsum = helper(mp, root->right);
+
+    long long total = root->val + leftsum + rightsum;
+
+    mp[root] = total;
+    return total;
+}
+
+void helper2(map<TreeNode*, long long> &mp, TreeNode* root, long long total, long long &maxi) {
+    if(!root) return;
+
+    if(root->left) {
+        long long curr = mp[root->left] * (total - mp[root->left]);
+        maxi = max(maxi, curr);
+        helper2(mp, root->left, total, maxi);
+    }
+
+    if(root->right) {
+        long long curr = mp[root->right] * (total - mp[root->right]);
+        maxi = max(maxi, curr);
+        helper2(mp, root->right, total, maxi);
+    }
+}
+
+int maxProduct(TreeNode* root) {
+    if(!root) return 0;
+    map<TreeNode*, long long> mp;
+
+    long long totalsum = helper(mp, root);
+    long long maxi = 0;
+
+    helper2(mp, root, totalsum, maxi);
+
+    return (int)(maxi % mod);        
+}
