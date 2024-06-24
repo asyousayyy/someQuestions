@@ -1,0 +1,42 @@
+  int check(int x, const vector<int> &nums) {
+    int sum = 0;
+    for(auto it : nums) {
+        if(it > x) {
+            sum += x;
+        } else {
+            sum += it;
+        }
+    }
+    return sum;
+}
+
+int findBestValue(vector<int>& nums, int target) {
+    int n = nums.size();
+    int low = 0;
+    int high = *max_element(nums.begin(), nums.end());
+
+    int value = 0;
+    int diff = INT_MAX;
+
+    while(low <= high) {
+
+        int mid = (low + high) / 2;
+        int currsum = check(mid, nums);
+        int currdiff = abs(currsum - target);
+
+        if(currdiff < diff) {
+            diff = currdiff;
+            value = mid;
+        } else if (currdiff == diff) {
+            value = min(value, mid);
+        }
+
+        if(currsum < target) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+
+    return value;
+}
