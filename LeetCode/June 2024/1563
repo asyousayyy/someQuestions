@@ -1,0 +1,36 @@
+int helper(vector<int> &pre, vector<vector<int>> &dp, int i, int j){
+        int maxi = 0;
+        if(i>=j) return 0;
+
+        if(dp[i][j]!=-1) return dp[i][j];
+
+        for(int k=i; k<j; k++){
+            int left = pre[k+1] - pre[i];
+            int right = pre[j+1] - pre[k+1];
+
+            if(left>right){
+                maxi = max(maxi, right+helper(pre,dp,k+1,j));
+            }
+            else if(right>left){
+                maxi = max(maxi, left+helper(pre,dp,i,k));
+            }
+            else{
+                maxi = max(maxi, left + max(helper(pre,dp,i,k),helper(pre,dp,k+1,j)));
+            }
+        }
+
+        dp[i][j] = maxi;
+        return dp[i][j];
+    }
+
+    int stoneGameV(vector<int>& stone) {
+        int n = stone.size();
+        vector<int> pre(n+1,0);
+
+        for (int i = 0; i < n; i++) {
+            pre[i + 1] = pre[i] + stone[i];
+        }
+
+        vector<vector<int>> dp(n,vector<int> (n,-1));
+        return helper(pre,dp,0,n-1);
+    }
