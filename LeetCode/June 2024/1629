@@ -1,0 +1,15 @@
+  char slowestKey(vector<int>& releaseTimes, string keysPressed) {
+    int n = releaseTimes.size();
+    int maxi = releaseTimes[0];
+    char result = keysPressed[0];
+
+    for (int i = 1; i < n; i++) {
+        int duration = releaseTimes[i] - releaseTimes[i - 1];
+        if (duration > maxi || (duration == maxi && keysPressed[i] > result)) {
+            maxi = duration;
+            result = keysPressed[i];
+        }
+    }
+
+    return result;
+}
