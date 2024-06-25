@@ -1,0 +1,32 @@
+vector<int> findRightInterval(vector<vector<int>>& intervals) {
+        int n = intervals.size();
+        vector<pair<int, int>> start_intervals;
+
+        for (int i = 0; i < n; ++i) {
+            start_intervals.push_back({intervals[i][0], i});
+        }
+
+        sort(start_intervals.begin(), start_intervals.end());
+
+        vector<int> ans(n);
+    
+        for (int i = 0; i < n; ++i) {
+            int end = intervals[i][1];
+            int left = 0, right = n - 1;
+            int idx = -1;
+
+            while (left <= right) {
+                int mid = left + (right - left) / 2;
+                if (start_intervals[mid].first >= end) {
+                    idx = start_intervals[mid].second;
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
+            }
+
+            ans[i] = idx;
+        }
+
+        return ans;
+    }
