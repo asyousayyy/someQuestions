@@ -1,0 +1,31 @@
+void helper2(map<TreeNode*, int> &mp, TreeNode* root) {
+    if (!root) return;
+
+    root->val = mp[root];  
+
+    helper2(mp, root->left);
+    helper2(mp, root->right);
+}
+
+void helper(map<TreeNode*, int> &mp, TreeNode* root, int &sum) {
+    if (!root) return;
+
+    helper(mp, root->right, sum);
+
+    sum += root->val;
+    mp[root] = sum;
+
+    helper(mp, root->left, sum);
+}
+
+TreeNode* bstToGst(TreeNode* root) {
+    if (!root) return NULL;
+
+    map<TreeNode*, int> mp;
+    int sum = 0;
+
+    helper(mp, root, sum);  
+    helper2(mp, root);     
+
+    return root;
+}
