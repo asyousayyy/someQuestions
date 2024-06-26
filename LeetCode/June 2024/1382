@@ -1,0 +1,23 @@
+void inorderTraversal(TreeNode* root, vector<int>& inorder) {
+    if (!root) return;
+    inorderTraversal(root->left, inorder);
+    inorder.push_back(root->val);
+    inorderTraversal(root->right, inorder);
+}
+
+TreeNode* sortedArrayToBST(vector<int>& inorder, int start, int end) {
+    if (start > end) return NULL;
+    
+    int mid = start + (end - start) / 2;
+    TreeNode* node = new TreeNode(inorder[mid]);
+    node->left = sortedArrayToBST(inorder, start, mid - 1);
+    node->right = sortedArrayToBST(inorder, mid + 1, end);
+    
+    return node;
+}
+
+TreeNode* balanceBST(TreeNode* root) {
+    vector<int> inorder;
+    inorderTraversal(root, inorder);
+    return sortedArrayToBST(inorder, 0, inorder.size() - 1);
+}
