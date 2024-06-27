@@ -77,3 +77,31 @@ int main() {
 
     return 0;
 }
+
+//AUTHOR SOLUTION
+BASICALLY, FROM THE TOTAL WAYS, REMOVE THE WAYS IN WHICH WE ARE SELECTING THE WINNERS FROM THE SAME GROUP
+TOTAL WAYS = NC2(FROM A GROUP OF SIZE N), SO NOW REMOVE THE TOTAL COMBINATIONS OF ALL THE ELEMENTS FROM IT AND REMOVE THEM FROM TOTAL WAYS AND DOUBLE THE ANSWER
+ll calc(ll n){
+    if(n<=1) return 0;
+    ll ans=n*(n-1);
+    return ans;
+}
+int main() {
+    FIO;
+    test
+    {
+      ll n,m,l,r,ans=0; cin>>n>>m;
+      dsu d(n);
+      vector<ll>adj[n];
+      for(ll i=0;i<m;i++){
+          cin>>l>>r; l--; r--;
+          bool ok=d.unite(l,r);
+      }
+      ans=calc(n);
+      for(ll i=0;i<n;i++){
+          ans-=calc(d.sz[i]);
+      }
+      cout<<ans<<endl;
+    }
+	return 0;
+}
