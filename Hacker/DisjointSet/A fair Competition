@@ -1,0 +1,79 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define N 100002
+
+typedef long long ll;
+
+ll n, m, ar[N], sz[N], u, v;
+
+void init() {
+    for (ll i = 1; i <= n; ++i) {
+        ar[i] = i;
+        sz[i] = 1;
+    }
+}
+
+ll find_root(ll x) {
+    if (ar[x] != x) {
+        ar[x] = find_root(ar[x]); 
+    }
+    return ar[x];
+}
+
+void union_sets(ll x, ll y) {
+    ll rx = find_root(x);
+    ll ry = find_root(y);
+
+    if (rx == ry)
+        return;
+
+    if (sz[rx] > sz[ry]) {
+        ar[ry] = ar[rx];
+        sz[rx] += sz[ry];
+    } else {
+        ar[rx] = ar[ry];
+        sz[ry] += sz[rx];
+    }
+}
+
+void solution() {
+    ll res = 0;
+    cin >> n >> m;
+
+    init();
+
+    while (m--) {
+        cin >> u >> v;
+        union_sets(u, v);
+    }
+
+    unordered_map<ll, ll> mp;
+    ll tsum = 0;
+
+    for (ll i = 1; i <= n; ++i) {
+        ll re = find_root(i);
+        if (mp.find(re) == mp.end()) {
+            tsum += sz[re];
+            mp[re] = 1;
+        }
+    }
+
+    for (auto &el : mp) {
+        res += (tsum - sz[el.first]) * sz[el.first];
+    }
+
+    cout << res << endl;
+}
+
+int main() {
+
+    ll t;
+    cin >> t;
+
+    while (t--) {
+        solution();
+    }
+
+    return 0;
+}
