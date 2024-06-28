@@ -1,0 +1,37 @@
+long long maximumImportance(int n, vector<vector<int>>& roads) {
+    
+    map<long long, long long> indegree;
+    vector<vector<long long>> adj[n];
+
+    for(auto it : roads) {
+        long long u = it[0];
+        long long v = it[1];
+        indegree[u]++;
+        indegree[v]++;
+    }
+
+    vector<pair<long long, long long>> v;
+    for(auto it : indegree) {
+        long long node = it.first;
+        long long indeg = it.second;
+        v.push_back({indeg, node});
+    }
+
+    sort(v.rbegin(), v.rend());
+    map<long long, long long> mp;
+
+    long long temp = n;
+    for(auto it : v) {
+        mp[it.second] = temp;
+        temp--;
+    }
+
+    long long cost = 0;
+    for(long long i = 0; i < roads.size(); i++) {
+        long long u = roads[i][0];
+        long long v = roads[i][1];
+        cost += (mp[u] + mp[v]);
+    }
+
+    return cost;
+}
