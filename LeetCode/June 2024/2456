@@ -1,0 +1,35 @@
+vector<vector<string>> mostPopularCreator(vector<string>& creators, vector<string>& ids, vector<int>& views) {
+    int n = creators.size();
+    vector<vector<string>> ans;
+
+    map<string, pair<int, long long>> mp;
+
+    for (int i = 0; i < n; i++) {
+        if (mp.find(creators[i]) != mp.end()) {
+            mp[creators[i]].second += views[i];
+            if (views[mp[creators[i]].first] < views[i] || 
+               (views[mp[creators[i]].first] == views[i] && 
+               ids[mp[creators[i]].first] > ids[i])) {
+                mp[creators[i]].first = i;
+            }
+        } else {
+            mp[creators[i]] = {i, views[i]};
+        }
+    }
+
+    long long maxi = -1;
+    for (auto it : mp) {
+        long long val = it.second.second;
+        if (val > maxi) {
+            maxi = val;
+        }
+    }
+
+    for (auto it : mp) {
+        if (it.second.second == maxi) {
+            ans.push_back({it.first, ids[it.second.first]});
+        }
+    }
+
+    return ans;
+}
