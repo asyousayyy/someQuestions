@@ -1,0 +1,70 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+long long find_set(long long x, vector<pair<long long, long long>> &parent) {
+    if (parent[x].first == x) {
+        return x;
+    }
+    return parent[x].first = find_set(parent[x].first, parent);
+}
+
+bool union_set(long long x, long long y, vector<pair<long long, long long>> &parent) {
+    long long xroot = find_set(x, parent);
+    long long yroot = find_set(y, parent);
+
+    if (xroot == yroot) {
+        return false;
+    }
+
+    if (parent[xroot].second > parent[yroot].second) {
+        parent[yroot].first = xroot;
+    } else if (parent[yroot].second > parent[xroot].second) {
+        parent[xroot].first = yroot;
+    } else {
+        parent[xroot].second++;
+        parent[yroot].first = xroot;
+    }
+    return true;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    long long t;
+    cin >> t;
+    while (t--) {
+        long long n;
+        cin >> n;
+
+        vector<pair<long long, long long>> parent(2 * n);
+        for (long long i = 0; i < 2 * n; ++i) {
+            parent[i] = {i, 0};
+        }
+
+        long long ind = 0, ans = 0;
+        map<string, long long> index;
+        for (long long i = 0; i < n; ++i) {
+            string s1, s2;
+            cin >> s1 >> s2;
+
+            if (index.find(s1) == index.end()) {
+                index[s1] = ind++;
+            }
+
+            if (index.find(s2) == index.end()) {
+                index[s2] = ind++;
+            }
+
+            if (s1 == s2) {
+                continue;
+            }
+            ans++;
+            if (!union_set(index[s1], index[s2], parent)) {
+                ans++;
+            }
+        }
+        cout << ans << endl;
+    }
+    return 0;
+}
