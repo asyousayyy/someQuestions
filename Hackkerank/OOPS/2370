@@ -1,0 +1,25 @@
+int helper(int idx, int prev,string &s, int &k,vector<vector<int>> &dp){
+
+        if(idx==s.size()){
+            return 0;
+        }
+
+        if(dp[idx][prev+1] != -1) return dp[idx][prev+1];
+
+        int take = 0;
+        int nottake = 0;
+
+        if(prev==-1 || abs(s[idx]-'a'-prev) <= k){
+            take = 1 + helper(idx+1,s[idx]-'a',s,k,dp);
+        }
+
+        nottake = helper(idx+1,prev,s,k,dp);
+
+        return dp[idx][prev+1]=max(take,nottake);
+    }
+
+    int longestIdealString(string s, int k) {
+        int n = s.size();
+        vector<vector<int>> dp(n,vector<int> (27,-1));
+        return helper(0,-1,s,k,dp);
+    }
