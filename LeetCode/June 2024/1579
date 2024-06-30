@@ -1,0 +1,98 @@
+class DisjointSet {
+public:
+    vector<int> parent, rank, size;
+
+    DisjointSet(int n) {
+        rank.resize(n + 1, 1);
+        parent.resize(n + 1);
+        size.resize(n + 1, 1);
+
+        for (int i = 1; i <= n; i++) {
+            parent[i] = i;
+        }
+    }
+
+    int findUltPar(int node) {
+        if (node == parent[node])
+            return node;
+
+        return parent[node] = findUltPar(parent[node]);
+    }
+
+    void unionByRank(int u, int v) {
+        int par_u = findUltPar(u);
+        int par_v = findUltPar(v);
+
+        if (par_u == par_v) return;
+
+        if (rank[par_u] < rank[par_v]) {
+            parent[par_u] = par_v;
+        } else if (rank[par_v] < rank[par_u]) {
+            parent[par_v] = par_u;
+        } else {
+            parent[par_v] = par_u;
+            rank[par_u]++;
+        }
+    }
+
+    void unionBySize(int u, int v) {
+        int par_u = findUltPar(u);
+        int par_v = findUltPar(v);
+
+        if (par_u == par_v) return;
+
+        if (size[par_u] < size[par_v]) {
+            parent[par_u] = par_v;
+            size[par_v] += size[par_u];
+        } else {
+            parent[par_v] = par_u;
+            size[par_u] += size[par_v];
+        }
+    }
+};
+
+class Solution {
+public:
+    int maxNumEdgesToRemove(int n, vector<vector<int>>& edges) {
+        DisjointSet alice(n), bob(n);
+        int remove = 0;
+        int aliceEdges = 0, bobEdges = 0;
+
+        for (auto &edge : edges) {
+            if (edge[0] == 3) {
+                if (alice.findUltPar(edge[1]) != alice.findUltPar(edge[2])) {
+                    alice.unionBySize(edge[1], edge[2]);
+                    bob.unionBySize(edge[1], edge[2]);
+                    aliceEdges++;
+                    bobEdges++;
+                } else {
+                    remove++;
+                }
+            }
+        }
+
+        for (auto &edge : edges) {
+            if (edge[0] == 1) {
+                if (alice.findUltPar(edge[1]) != alice.findUltPar(edge[2])) {
+                    alice.unionBySize(edge[1], edge[2]);
+                    aliceEdges++;
+                } else {
+                    remove++;
+                }
+            } else if (edge[0] == 2) {
+                if (bob.findUltPar(edge[1]) != bob.findUltPar(edge[2])) {
+                    bob.unionBySize(edge[1], edge[2]);
+                    bobEdges++;
+                } else {
+                    remove++;
+                }
+            }
+        }
+
+        if (aliceEdges != n - 1 || bobEdges != n - 1) {
+            return -1;
+        }
+
+        return remove;
+    }
+};
