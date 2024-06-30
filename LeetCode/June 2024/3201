@@ -1,0 +1,39 @@
+int maximumLength(vector<int>& nums) {
+        int n = nums.size();
+        int l1=0,l2=0,l3=0,l4=0;
+
+        for(int i=0; i<n; i++){
+            if(nums[i]%2==0){ //only evens
+                l1++;
+            }
+            else{
+                l2++; //only odds
+            }
+        }
+        
+        bool flag = 0; 
+        for(int i=0; i<n; i++){
+            if(nums[i]%2==1 && flag == 0){
+                l3++;
+                flag = !flag;
+            }
+            else if(nums[i]%2 == 0 && flag == 1){
+                l3++;
+                flag = !flag;
+            }
+        }   
+        
+        flag = 1; 
+        for(int i=0; i<n; i++){
+            if(nums[i]%2==0 && flag == 1){
+                l4++;
+                flag = !flag;
+            }
+            else if(nums[i]%2 == 1 && flag == 0){
+                l4++;
+                flag = !flag;
+            }
+        }        
+
+        return max(max(l1,l2), max(l3,l4));
+    }
