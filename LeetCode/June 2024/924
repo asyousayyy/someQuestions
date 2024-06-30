@@ -1,0 +1,56 @@
+  int helper(vector<int> adj[], vector<int> &initial, int rem, int n) {
+    queue<int> q;
+    vector<int> vis(n, 0);
+
+    for (int i = 0; i < initial.size(); i++) {
+        if (initial[i] == rem) continue;
+        vis[initial[i]] = 1; 
+        q.push(initial[i]);
+    }
+
+    while (!q.empty()) {
+        int node = q.front();
+        q.pop();
+
+        for (auto it : adj[node]) {
+            if (vis[it]) continue;
+            q.push(it);
+            vis[it] = 1; 
+        }
+    }
+
+    int count = 0;
+    for (auto it : vis) {
+        if (it == 1) count++;
+    }
+
+    return count; // count of infected nodes
+}
+
+int minMalwareSpread(vector<vector<int>>& graph, vector<int>& initial) {
+    int n = graph.size();
+    vector<int> adj[n];
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (graph[i][j] && i != j) {
+                adj[i].push_back(j);
+            }
+        }
+    }
+
+    int val = INT_MAX;
+    int ans = -1;
+
+    sort(initial.begin(), initial.end());
+
+    for (auto it : initial) {
+        int m = helper(adj, initial, it, n);
+        if (m < val) {
+            val = m;
+            ans = it;
+        }
+    }
+
+    return ans;
+}
