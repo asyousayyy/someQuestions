@@ -1,0 +1,82 @@
+class DisjointSet {
+    public:
+    vector<int> rank, parent, size; 
+    DisjointSet(int n) {
+        rank.resize(n+1, 0); 
+        parent.resize(n+1);
+        size.resize(n+1); 
+
+        for(int i = 0;i<=n;i++) {
+            parent[i] = i; 
+            size[i] = 1; 
+        }
+
+    }
+
+  int findUltPar(int node) {
+        if(node == parent[node])
+            return node; 
+
+        return parent[node] = findUltPar(parent[node]); 
+    }
+
+void unionByRank(int u, int v) {
+        int par_u = findUltPar(u); 
+        int par_v = findUltPar(v); 
+
+        if(par_u == par_v) return;
+
+        if(rank[par_u] < rank[par_v]) {
+            parent[par_u] = par_v; 
+        }
+        else if(rank[par_v] < rank[par_u]) {
+            parent[par_v] = par_u; 
+        }
+        else {
+            parent[par_v] = par_u; 
+            rank[par_u]++; 
+        }
+    }
+
+void unionBySize(int u, int v) {
+        int par_u = findUltPar(u); 
+        int par_v = findUltPar(v); 
+
+        if(par_u == par_v) return;
+
+        if(size[par_u] < size[par_v]) {
+            parent[par_u] = par_v; 
+            size[par_v] += size[par_u]; 
+        }
+        else {
+            parent[par_v] = par_u;
+            size[par_u] += size[par_v]; 
+        }
+    }
+};
+
+class Solution {
+public:
+    vector<bool> areConnected(int n, int threshold, vector<vector<int>>& queries) {
+        //connect nodes value greater then threshold with its multiples
+        DisjointSet ds(n+1);
+
+        for(int x = threshold+1; x<=n; x++){
+            int i = 2;
+            int temp = x*i; //3*2
+
+            while(temp<=n){
+                ds.unionBySize(x,temp); //(3,6)
+                i++;
+                temp = x * i; //3*3
+            }
+        }
+
+        vector<bool> ans(queries.size(),false);
+        for(int i=0; i<queries.size(); i++){
+            ans[i] = (ds.findUltPar(queries[i][0]) == ds.findUltPar(queries[i][1]));
+        }
+
+        return ans;
+    }
+};
