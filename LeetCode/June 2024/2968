@@ -1,0 +1,22 @@
+int maxFrequencyScore(vector<int>& nums, long long k) {
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+
+        long long i=0,curr=0,med=0,maxi = 1;
+
+        for(int j=0; j<n; j++){
+
+            curr += (nums[j]-nums[med]); //current cost
+            
+            med = (j+i+1)/2;
+
+            while(curr > k){
+                curr -= nums[med]-nums[i];
+                i++;
+                med = (i+j+1)/2;
+            }
+
+            maxi = max(maxi, j-i+1);
+        }
+        return maxi;
+    }
