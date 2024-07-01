@@ -1,0 +1,38 @@
+int maxNumberOfFamilies(int n, vector<vector<int>>& seats) {
+        int count = 0;
+        map<int,vector<int>> mp;
+
+        for(auto it : seats){
+            mp[it[0]].push_back(it[1]);
+        }
+
+        for(auto it : mp){
+            vector<int> temp = it.second;
+            vector<bool> vis(10,true);
+
+            for(int t : temp){
+                vis[t] = false;
+            }
+
+            bool left = vis[2]&&vis[3]&&vis[4]&&vis[5];
+            bool middle = vis[4]&&vis[5]&&vis[6]&&vis[7];
+            bool right = vis[6]&&vis[7]&&vis[8]&&vis[9];
+
+            //in one row, at max 2 families when both right and left are true
+            if(left && right){
+                count += 2;
+            }
+            else if(right){
+                count++;
+            }
+            else if(left){
+                count++;
+            }
+            else if(middle){
+                count++;
+            }
+ 
+        }
+        count += (n - mp.size())*2; //unoccupied rows have 2 families
+        return count;
+    }
