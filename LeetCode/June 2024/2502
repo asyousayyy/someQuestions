@@ -1,0 +1,53 @@
+class Allocator {
+    vector<int> v;
+    int elements;
+
+public:
+    Allocator(int n) {
+        elements = n;
+        v.resize(n, -1);
+    }
+
+    bool canAllocate(int start, int size) {
+        for (int j = start; j < start + size; j++) {
+            if (v[j] != -1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    void allocateBlock(int start, int size, int mID) {
+        for (int j = start; j < start + size; j++) {
+            v[j] = mID;
+        }
+    }
+    
+    int allocate(int size, int mID) {
+        for (int i = 0; i <= elements - size; i++) {
+            if (canAllocate(i, size)) {
+                allocateBlock(i, size, mID);
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    int free(int mID) {
+        int count = 0;
+        for (int i = 0; i < v.size(); i++) {
+            if (v[i] == mID) {
+                count++;
+                v[i] = -1;
+            }
+        }
+        return count;
+    }
+};
+
+/**
+ * Your Allocator object will be instantiated and called as such:
+ * Allocator* obj = new Allocator(n);
+ * int param_1 = obj->allocate(size,mID);
+ * int param_2 = obj->free(mID);
+ */
