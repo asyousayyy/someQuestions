@@ -1,0 +1,33 @@
+bool helper(int mid, vector<int> &dist, double hour){
+    double time = 0;
+
+        for(int i=0; i<dist.size()-1; i++){
+            time = time + ceil((double)dist[i]/mid);
+        }
+
+        time = time + (double)(dist.back()/(double)mid); //for last, no waiting
+
+        if(time <= hour) return true;
+        else return false;
+    }
+
+    int minSpeedOnTime(vector<int>& dist, double hour) {
+        int low = 1;
+        int high = 1e9;
+        int ans = -1;
+
+        while(low<=high){
+            int mid = low + (high-low)/2;
+
+            if(helper(mid,dist,hour)){
+                ans = mid;
+                high = mid-1;
+            }
+
+            else{
+                low = mid+1;
+            }
+        }    
+
+        return ans;
+    }
