@@ -1,0 +1,16 @@
+int helper(int n, vector<int> &dp){
+        if(dp[n]!=-1) return dp[n];
+        int moves = n; //max moves possible
+
+        for(int i=1; i<=n; i++){
+            int temp = max(i, 1+helper(n-i,dp)); //break, not break
+            moves = min(moves,temp);
+        }
+
+        return dp[n] = moves;
+    }
+
+    int twoEggDrop(int n) {        
+        vector<int> dp(n+1,-1);
+        return helper(n,dp);
+    }
