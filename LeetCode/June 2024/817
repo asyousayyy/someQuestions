@@ -1,0 +1,25 @@
+int numComponents(ListNode* head, vector<int>& nums) {
+        if(!head) return 0;
+        int count = 0;
+        bool flag = false;
+        set<int> st(nums.begin(), nums.end());
+
+        while(head){
+            if(st.find(head->val)!=st.end()){
+                flag = true; 
+            }
+            else{
+                if(flag){
+                    count++;
+                    flag = false;
+                }
+            }
+            head = head->next;
+        }
+
+        if(flag){
+            count++;
+        }
+
+        return count;
+    }
