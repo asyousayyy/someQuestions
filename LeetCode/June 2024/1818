@@ -1,0 +1,30 @@
+const int mod = 1e9+7;
+
+    int minAbsoluteSumDiff(vector<int>& nums1, vector<int>& nums2) {
+        int n = nums1.size();
+        int curr = 0;
+        int maxi = 0;
+
+        vector<int> v = nums1;
+        sort(v.begin(), v.end());
+
+        for(int i=0; i<n; i++){
+            int diff = abs(nums1[i]-nums2[i]);
+            curr = (curr + diff)%mod;
+
+            auto it = lower_bound(v.begin(),v.end(), nums2[i]);
+
+            if(it != v.end()){
+                int temp = abs(*it - nums2[i]);
+                maxi = max(maxi, diff - temp); //maxi is maximum decrease
+            }
+
+            if(it != v.begin()){
+                --it;
+                int temp = abs(*it - nums2[i]);
+                maxi = max(maxi, diff - temp);
+            }
+        }
+
+        return (curr - maxi + mod)%mod;
+    }
