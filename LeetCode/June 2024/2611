@@ -1,0 +1,23 @@
+int miceAndCheese(vector<int>& r1, vector<int>& r2, int k) {
+        int n = r1.size();
+        long long sum = accumulate(r2.begin(), r2.end(),0);
+
+        priority_queue<pair<int,int>> pq;
+        for(int i=0; i<n; i++){
+            pq.push({r1[i] - r2[i],i});
+        }
+
+        while(k--){
+            auto it = pq.top();
+            pq.pop();
+
+            int diff = it.first;
+            int idx = it.second;
+
+            sum -= r2[idx];
+            sum += r1[idx];
+
+        }
+
+        return sum;
+    }
