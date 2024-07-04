@@ -1,0 +1,26 @@
+int gcd(int a, int b) {
+    if (b == 0) return a;
+    return gcd(b, a % b);
+}
+
+ListNode* insertGreatestCommonDivisors(ListNode* head) {
+    if (!head || !head->next) return head;  
+
+    ListNode* first = head;
+    ListNode* second = head->next;
+
+    while (second) {
+        int a = first->val;
+        int b = second->val;
+        int gcdValue = gcd(a, b);
+
+        ListNode* newNode = new ListNode(gcdValue);
+        newNode->next = second;
+        first->next = newNode;
+
+        first = second;
+        second = second->next;
+    }
+
+    return head;
+}
