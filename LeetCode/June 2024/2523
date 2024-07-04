@@ -1,0 +1,43 @@
+vector<bool> isprime;
+vector<int> primes;
+
+void sieve(int n, int m) {
+    isprime.resize(m + 1, true);  
+    isprime[0] = isprime[1] = false;  
+
+    for (int i = 2; i * i <= m; i++) {
+        if (isprime[i]) {
+            for (int j = i * i; j <= m; j += i) {
+                isprime[j] = false;
+            }
+        }
+    }
+
+    primes.clear();
+    for (int i = n; i <= m; i++) {
+        if (isprime[i]) {
+            primes.push_back(i);
+        }
+    }
+}
+
+vector<int> closestPrimes(int left, int right) {
+    sieve(left, right);
+    if (primes.size() < 2) return {-1, -1};
+
+    int minDiff = INT_MAX;
+    int prime1 = -1, prime2 = -1;
+
+    for (int i = 0; i < primes.size() - 1; i++) {
+
+        int diff = primes[i + 1] - primes[i];
+
+        if (diff < minDiff) {
+            minDiff = diff;
+            prime1 = primes[i];
+            prime2 = primes[i + 1];
+        }
+    }
+
+    return {prime1, prime2};
+}
