@@ -1,0 +1,32 @@
+ const int mod = 1e9 + 7;
+
+int helper(int target, int x, int idx, vector<int> &v, vector<vector<int>> &dp) {
+    
+    int n = v.size();
+    
+    if(target==0) return 1;
+    if(idx >= n || target<0) return 0;
+
+    if (dp[idx][target] != -1) return dp[idx][target];
+
+    long long curr = pow(v[idx], x);
+
+    long long take = 0;
+    if (curr <= target) {
+        take = helper(target - curr, x, idx + 1, v, dp);
+    }
+
+    long long nottake = helper(target, x, idx + 1, v, dp);
+
+    return dp[idx][target] = (take + nottake) % mod; 
+}
+
+int numberOfWays(int n, int x) {
+    vector<int> v;
+    for (int i = 1; i <= n; i++) {
+        if (pow(i, x) > n) break;
+        v.push_back(i);
+    }
+    vector<vector<int>> dp(n, vector<int>(n + 1, -1)); 
+    return helper(n, x, 0, v, dp);
+}
