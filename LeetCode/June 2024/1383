@@ -1,0 +1,27 @@
+int maxPerformance(int n, vector<int>& speed, vector<int>& eff, int k) {
+    vector<pair<int, int>> v;
+    long long maxi = 0;
+    const int MOD = 1e9 + 7;
+
+    for (int i = 0; i < speed.size(); i++) {
+        v.push_back({eff[i], speed[i]});
+    }
+
+    sort(v.begin(), v.end());
+    priority_queue<int, vector<int>, greater<int>> pq; 
+    long long sum = 0;
+
+    for (int i = v.size()-1; i >=0 ; i--) {
+        sum += v[i].second;
+        pq.push(v[i].second);
+
+        if (pq.size() > k) {
+            sum -= pq.top();
+            pq.pop();
+        }
+
+        maxi = max(maxi, sum * v[i].first);
+    }
+
+    return maxi % MOD;
+}
