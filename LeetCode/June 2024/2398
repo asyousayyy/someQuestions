@@ -1,0 +1,32 @@
+int maximumRobots(vector<int>& charge, vector<int>& cost, long long budget) {
+    int n = charge.size();
+    long long sum = 0;
+    int maxRobots = 0;
+    deque<int> dq; 
+
+    int left = 0;
+    for (int right = 0; right < n; ++right) {
+        sum += cost[right];
+        while (!dq.empty() && charge[dq.back()] <= charge[right]) {
+            dq.pop_back();
+        }
+        dq.push_back(right);
+
+        long long totalCost = charge[dq.front()] + (right - left + 1) * sum;
+
+        while (totalCost > budget) {
+            sum -= cost[left];
+            if (dq.front() == left) dq.pop_front();
+            left++;
+            if (left <= right) {
+                totalCost = charge[dq.front()] + (right - left + 1) * sum;
+            } else {
+                totalCost = 0;
+            }
+        }
+
+        maxRobots = max(maxRobots, right - left + 1);
+    }
+
+    return maxRobots;
+}
