@@ -1,0 +1,37 @@
+void helpermax(string s, int x, string &ans) {
+    int n = s.size();
+    int i = 0;
+
+    while (i < n && (s[i] - '0') >= x) {
+        i++;
+    }
+
+    if (i == 0) {
+        ans += to_string(x);
+        ans += s;
+    } else {
+        ans = s.substr(0, i) + to_string(x) + s.substr(i);
+    }
+}
+
+void helpermin(string s, int x, string &ans) {
+    int n = s.size();
+    int i = 0;
+
+    while (i < n && (s[i] - '0') <= x) {
+        i++;
+    }
+
+    ans = s.substr(0, i) + to_string(x) + s.substr(i);
+}
+
+string maxValue(string n, int x) {
+    string ans;
+    if (n[0] == '-') {
+        helpermin(n.substr(1), x, ans);
+        ans = "-" + ans; 
+    } else {
+        helpermax(n, x, ans);
+    }
+    return ans;
+}
