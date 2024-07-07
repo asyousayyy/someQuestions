@@ -1,0 +1,50 @@
+int numberOfSubmatrices(vector<vector<char>>& grid) {
+        int m = grid.size(), n = grid[0].size();
+        int count = 0;
+
+        //x = 1, y = -1
+        vector<vector<int>>prex(m, vector<int>(n,0));
+        vector<vector<int>>prey(m, vector<int>(n,0));
+        // for(int i=0; i<m; i++){
+        //     for(int j=0; j<n; j++){
+        //         if(grid[i][j]=='X'){
+        //             pre[i][j] = 1;
+        //         }
+        //         else if(grid[i][j] = 'Y'){
+        //             pre[i][j] = -1;
+        //         }
+        //         else{
+        //             pre[i][j] = 0;
+        //         }
+        //     }
+        // }
+
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                prex[i][j] = (grid[i][j]=='X')?1:0;
+                if(i>0) prex[i][j] += prex[i-1][j];
+                if(j>0) prex[i][j] += prex[i][j-1];
+                if(i>0 && j>0) prex[i][j] -= prex[i-1][j-1];
+            }
+        }
+
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                prey[i][j] = (grid[i][j]=='Y')?1:0;
+                if(i>0) prey[i][j] += prey[i-1][j];
+                if(j>0) prey[i][j] += prey[i][j-1];
+                if(i>0 && j>0) prey[i][j] -= prey[i-1][j-1];
+            }
+        }
+
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(prex[i][j]==prey[i][j] && prex[i][j]>=1){
+                    count++;
+                }
+            }
+        }
+
+        return count;
+
+    }
