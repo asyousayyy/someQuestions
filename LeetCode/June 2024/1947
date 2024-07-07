@@ -1,0 +1,33 @@
+void helper(vector<vector<int>> &students, vector<vector<int>> &mentors, int &score,
+    int curr, int idx, vector<bool> &vis){
+
+        if(idx == students.size()){
+            score = max(score,curr);
+            return;
+        }
+
+        for(int i=0; i<mentors.size(); i++){
+            if(!vis[i]){
+                int count = 0;
+                for(int j=0; j<mentors[i].size(); j++){
+                    if(mentors[i][j]==students[idx][j]){
+                        count++;
+                    }
+                }
+                vis[i] = true;
+                helper(students,mentors,score,curr+count,idx+1,vis);
+                vis[i] = false;
+            }
+        }
+    }
+
+    int maxCompatibilitySum(vector<vector<int>>& students, 
+    vector<vector<int>>& mentors) {
+
+        int n = students.size();
+        vector<bool> vis(n,0);
+        int score = 0;
+        helper(students, mentors, score, 0, 0, vis);
+        return score;
+        
+    }
