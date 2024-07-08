@@ -1,0 +1,32 @@
+bool ispalindrome(const string &s) {
+    int i = 0, j = s.size() - 1;
+    while (i <= j) {
+        if (s[i] != s[j]) {
+            return false;
+        }
+        i++;
+        j--;
+    }
+    return true;
+}
+
+bool helper(const string &a, const string &b, int i, int j) {
+    int n = a.size();
+    while (i < j) {
+        if(a[i]==b[j]){
+            i++;
+            j--;
+        }
+        else{
+            break;
+        }
+    }
+    return ispalindrome(a.substr(i,j-i+1)) || 
+           ispalindrome(b.substr(i,j-i+1));
+}
+
+bool checkPalindromeFormation(string a, string b) {
+    int n = a.size();
+    return ispalindrome(a) || ispalindrome(b) || 
+           helper(a,b,0,n - 1) || helper(b,a,0,n-1);
+}
