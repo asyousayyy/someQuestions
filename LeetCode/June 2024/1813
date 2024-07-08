@@ -1,0 +1,58 @@
+bool areSentencesSimilar(string s1, string s2) {
+        vector<string> v1,v2;
+        int n1 = s1.size(), n2 = s2.size();
+        int i=0,j=0;
+
+        while(i<n1){
+            string t = "";
+            while(i<n1 && s1[i]!=' '){
+                t += s1[i];
+                i++;
+            }
+            v1.push_back(t);
+            i++;
+        }
+
+        while(j<n2){
+            string t = "";
+            while(j<n2 && s2[j]!=' '){
+                t += s2[j];
+                j++;
+            }
+            v2.push_back(t);
+            j++;
+        }
+
+        i = 0, j = v1.size()-1;
+        int x = 0, y = v2.size()-1;
+
+        if(v1[i]!=v2[x] && v1[j]!=v2[y]){
+            return false;
+        }
+
+        while(i<=j && x<=y){
+            
+            if(v1[i]==v2[x] && v1[j]==v2[y]){
+                i++;
+                x++;
+                j--;
+                y--;
+            }
+
+            else if(v1[i]==v2[x] && v1[j]!=v2[y]){
+                i++;
+                x++;
+            }
+
+            else if(v1[i]!=v2[x] && v1[j]==v2[y]){
+                j--;
+                y--;
+            }
+
+            else{
+                return false;
+            }
+        }
+
+        return true;
+    }
