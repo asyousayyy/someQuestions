@@ -1,0 +1,31 @@
+  int smallestChair(vector<vector<int>>& times, int targetFriend) {
+    int n = times.size();
+    int ans = -1;
+    int target = times[targetFriend][0];
+    
+    priority_queue<int,vector<int>, greater<int>> seats;
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+
+    for(int i = 0; i < n; i++){
+        seats.push(i);
+    }
+
+    sort(times.begin(), times.end()); 
+
+    for(auto it : times){
+        while(!pq.empty() && it[0] >= pq.top().first){
+            seats.push(pq.top().second);
+            pq.pop();
+        }
+
+        if(it[0] == target){
+            return seats.top();
+        }
+
+        pq.push({it[1], seats.top()});
+        seats.pop();
+        
+    }
+
+    return -1;
+}
