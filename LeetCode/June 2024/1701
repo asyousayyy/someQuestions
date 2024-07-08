@@ -1,0 +1,17 @@
+double averageWaitingTime(vector<vector<int>>& c) {
+        int n = c.size();
+        double wait = c[0][1], end = c[0][0]+c[0][1];
+
+        for(int i=1; i<n; i++){
+            if(end > c[i][0]){
+                end += c[i][1];
+                wait += (end - c[i][0]);
+            }
+            else{
+                end = c[i][0]+c[i][1];
+                wait += (c[i][1]);
+            }
+        }
+
+        return wait/n;
+    }
