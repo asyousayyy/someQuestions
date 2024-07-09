@@ -1,0 +1,21 @@
+long long numberOfWeeks(vector<int>& mile) {
+        long long ans = 0;
+        int n = mile.size();
+        long long maxi = *max_element(mile.begin(), mile.end());
+
+        long long sum = accumulate(mile.begin(), mile.end(), 0LL) - maxi;
+
+        if(sum==maxi){
+            ans = 2LL*maxi;
+        }
+
+        else if(sum < maxi){
+            ans = 2LL * sum + 1LL;
+        }
+
+        else{
+            ans = (long long)(maxi + sum);
+        }
+
+        return ans;
+    }
