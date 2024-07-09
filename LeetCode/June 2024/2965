@@ -1,0 +1,28 @@
+
+vector<int> findMissingAndRepeatedValues(vector<vector<int>>& grid) {
+    int n = grid.size();
+    int sum1 = 0, sum2 = 0;
+    long long sq1 = 0, sq2 = 0;
+
+    for (int i = 1; i <= n * n; ++i) {
+        sum1 += i;
+        sq1 += (long long)(i * i);
+    }
+
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            sum2 += grid[i][j];
+            sq2 += (long long)(grid[i][j]) * grid[i][j];
+        }
+    }
+
+    int sumDiff = sum1 - sum2;
+    long long sqDiff = sq1 - sq2;
+
+    int sumMisRep = sqDiff / sumDiff;
+
+    int mis = (sumDiff + sumMisRep) / 2;
+    int rep = mis - sumDiff;
+
+    return {rep, mis};
+}
