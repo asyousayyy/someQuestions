@@ -1,0 +1,36 @@
+ bool helper(string s, map<char, int> mp) {
+    int n = s.size();
+    for (int i = 0; i < n; i++) {
+        if (mp.find(s[i]) != mp.end()) {
+            mp[s[i]]--;
+            if (mp[s[i]] == 0) {
+                mp.erase(s[i]);
+            }
+        }
+    }
+    return mp.size() == 0;
+}
+
+vector<string> wordSubsets(vector<string>& w1, vector<string>& w2) {
+    int n = w1.size(), m = w2.size();
+    vector<string> ans;
+    map<char, int> mp;
+
+    for (auto it : w2) {
+        map<char, int> temp;
+        for (char c : it) {
+            temp[c]++;
+        }
+        for (auto t : temp) {
+            mp[t.first] = max(mp[t.first], t.second);
+        }
+    }
+
+    for (auto it : w1) {
+        if (helper(it, mp)) {
+            ans.push_back(it);
+        }
+    }
+
+    return ans;
+}
