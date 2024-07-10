@@ -1,0 +1,28 @@
+bool canReach(string s, int minj, int maxj) {
+        
+        if(s.back()=='1') return false;
+        
+        queue<int> q;
+        q.push(0);
+        int maxi = 0;
+
+        while(!q.empty()){
+            
+            int curr = q.front();
+            q.pop();
+
+            for(int i = max(curr+minj,maxi+1); i<=min(curr+maxj, (int)s.size()-1); ++i){
+                if(s[i]=='0'){
+                    q.push(i);
+                    if(i == s.size()-1){
+                        return true;
+                    }
+                }
+            }
+
+            maxi = curr+maxj;
+
+        }
+
+        return false;
+    }
