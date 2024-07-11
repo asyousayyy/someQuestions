@@ -1,0 +1,35 @@
+vector<int> helper(int a){
+        vector<int> ans;
+        while(a>0){
+            int digit = a%10;
+            ans.push_back(digit);
+            a = a/10;
+        }
+        sort(ans.begin(), ans.end());
+        return ans;
+    }
+
+    bool compare(int a, int b){
+
+        vector<int>f1 = helper(a);
+        vector<int>f2 = helper(b);
+
+        if(f1.size() != f2.size()) return false;
+
+        for(int i=0; i<f1.size(); i++){
+            if(f1[i]!=f2[i])return false;
+        }
+
+        return true;
+    }
+
+    bool reorderedPowerOf2(int n) {
+        for(int i=0; i<31; i++){
+            int temp = pow(2,i);
+            if(compare(temp,n)==true){
+                return true;
+            }
+        }
+
+        return false;
+    }
