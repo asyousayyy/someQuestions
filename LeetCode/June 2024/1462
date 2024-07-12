@@ -1,0 +1,42 @@
+void dfs(vector<vector<int>> &adj, int u, int v,vector<vector<int>> &vis){
+        
+        if(vis[u][v]==1) return;
+
+        vis[u][v] = 1;
+        for(auto it : adj[v]){
+            dfs(adj,u,it,vis);
+        }
+    }
+
+    vector<bool> checkIfPrerequisite(int n, vector<vector<int>>& pre, 
+    vector<vector<int>>& q) {
+
+        vector<bool> ans(q.size());
+        vector<vector<int>> vis(n, vector<int>(n, 0));
+        
+        vector<vector<int>> adj(n);
+        for(int i=0; i<pre.size(); i++){
+            adj[pre[i][0]].push_back(pre[i][1]);
+            //adj[pre[i][1]].push_back(pre[i][0]);
+        }
+
+        for (int i = 0; i < n; i++) {
+            for (auto it : adj[i]) {
+                dfs(adj, i, it, vis);
+            }
+        }
+
+        for(int i=0; i<q.size(); i++){
+            int a = q[i][0];
+            int b = q[i][1];
+            if(vis[a][b]==true){
+                ans[i] = 1;
+            }
+            else{
+                ans[i] = 0;
+            }
+        }
+
+        return ans;
+
+    }
