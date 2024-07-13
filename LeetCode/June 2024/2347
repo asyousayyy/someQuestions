@@ -1,0 +1,38 @@
+bool flush(vector<char> &s){
+        char ch = s[0];
+        for(int i=1; i<5; i++){
+            if(s[i]!=ch) return false;
+        }
+        return true;
+    }
+
+    bool check1(vector<int> &r){
+        map<int,int> mp;
+        for(auto it : r){
+            mp[it]++;
+        }
+        for(auto it : mp){
+            if(it.second >= 3) return true;
+        }
+        return false;
+    }
+
+    bool check2(vector<int> &r){
+        map<int,int> mp;
+        for(auto it : r){
+            mp[it]++;
+        }
+        for(auto it : mp){
+            if(it.second == 2) return true;
+        }
+        return false;
+    }
+
+    string bestHand(vector<int>& r, vector<char>& s) {
+        
+        if(flush(s)) return "Flush";
+        if(check1(r)) return "Three of a Kind";
+        if(check2(r)) return "Pair";
+
+        return "High Card";
+    }
