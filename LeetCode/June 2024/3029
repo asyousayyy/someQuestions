@@ -1,0 +1,18 @@
+int minimumTimeToInitialState(string word, int k) {
+        int count = 1, n = word.size();
+        string s = word;
+        //1 because time greater than 0 and must perform operation
+        //so if string length=k, then answer = 1
+        
+        for(int i=k; i<n; i+=k){
+            if(s.substr(i,n-i) == s.substr(0,n-i)){
+                return count; //found lps
+            }
+
+            else{
+                count++;
+            }
+        }
+
+        return count;
+    }
