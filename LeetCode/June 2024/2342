@@ -1,0 +1,29 @@
+int helper(int n){
+        int sum = 0;
+        while(n>0){
+            sum += n%10;
+            n = n/10;
+        }
+        return sum;
+    }
+    
+    int maximumSum(vector<int>& nums) {
+        int n = nums.size();
+        map<int,vector<int>> mp;
+
+        for(int i=0; i<n; i++){
+            int sum = helper(nums[i]);
+            mp[sum].push_back(nums[i]);
+        }
+
+        int ans = -1;
+        for(auto it : mp){
+            vector<int> temp = it.second;
+            sort(temp.begin(), temp.end());
+            if(temp.size()>1){
+                ans = max(ans, temp[temp.size()-1]+temp[temp.size()-2]);
+            }
+        }
+
+        return ans;
+    }
