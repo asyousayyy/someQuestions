@@ -1,0 +1,60 @@
+bool check1(vector<int> &l1, vector<int> &l2) {
+        if (l1.size() != l2.size()) return false;
+        int n = l1.size();
+        
+        for (int i = 0; i < n; ++i) {
+            if (l1[i] < l2[i]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    bool check2(vector<int> &r1, vector<int> &r2) {
+        if (r1.size() != r2.size()) return false;
+        int n = r1.size();
+        
+        for (int i = 0; i < n; ++i) {
+            if (r1[i] > r2[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    bool check3(string s, string e) {
+        string s1, s2;
+        for (int i = 0; i < s.size(); ++i) {
+            if (s[i] != '_') {
+                s1 += s[i];
+            }
+            if (e[i] != '_') {
+                s2 += e[i];
+            }
+        }
+        return s1 == s2;
+    }
+
+    bool canChange(string start, string target) {
+        vector<int> l1, l2, r1, r2;
+        int n = start.size();
+
+        for (int i = 0; i < n; ++i) {
+            if (start[i] == 'L') {
+                l1.push_back(i);
+            }
+            if (target[i] == 'L') {
+                l2.push_back(i);
+            }
+            if (start[i] == 'R') {
+                r1.push_back(i);
+            }
+            if (target[i] == 'R') {
+                r2.push_back(i);
+            }
+        }
+
+        if (check1(l1, l2) && check2(r1, r2) && check3(start, target)) return true;
+        else return false;
+    }
