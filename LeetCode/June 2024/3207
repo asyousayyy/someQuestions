@@ -1,0 +1,21 @@
+long long maximumPoints(vector<int>& arr, int curr) {
+        long long pt = 0;
+        int n = arr.size();
+        sort(arr.begin(), arr.end());
+        int i = 0, j = n-1;
+
+        if(curr < arr[0]) return 0;
+
+        while(j>=0){
+            int temp = curr/arr[i];
+            pt += temp;
+            curr -= temp*(arr[i]);
+
+            if(curr < arr[0]){
+                curr += arr[j];
+                j--;
+            }
+        }
+
+        return pt;
+    }
