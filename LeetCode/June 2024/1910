@@ -1,0 +1,40 @@
+bool check(stack<char> st, string p){
+        int n = p.size();
+        int j = n-1;
+
+        while(!st.empty() && j>=0){
+            if(p[j]==st.top()){
+                st.pop();
+                j--;
+            }
+            else return false;
+        }
+
+        return true;
+    }
+
+    string removeOccurrences(string s, string p) {
+        
+        stack<char> st;
+        string ans;
+
+        for(int i=0; i<s.size(); i++){
+            st.push(s[i]);
+            if(st.size()>=p.size()){
+                if(check(st,p)){
+                    int n = p.size();
+                    while(n--){
+                        st.pop();
+                    }
+                }
+            }
+        }
+
+        while(!st.empty()){
+            ans += st.top();
+            st.pop();
+        }
+
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
