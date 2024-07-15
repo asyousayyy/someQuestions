@@ -1,0 +1,41 @@
+TreeNode* helper(int val,map<int,int> &l, map<int,int> &r){
+        TreeNode* root = new TreeNode(val);
+
+        if(l.find(val) != l.end()){
+            root->left = helper(l[val],l,r);
+        }
+        if(r.find(val) != r.end()){
+            root->right = helper(r[val],l,r);
+        }
+
+        return root;
+    }
+
+    TreeNode* createBinaryTree(vector<vector<int>>& d) {
+        
+        map<int, int> l, r;
+        set<int> children;
+
+        for (auto& it : d) {
+            int par = it[0];
+            int child = it[1];
+            int isleft = it[2];
+            children.insert(child);
+        
+            if (isleft == 1) {
+                l[par] = child;
+            } else if (isleft == 0) {
+                r[par] = child;
+            }
+        }
+
+        int root = -1;
+        for (auto& it : d) {
+            if (children.find(it[0]) == children.end()) {
+                root = it[0];
+                break;
+            }
+        }
+
+        return helper(root, l, r);
+    }
