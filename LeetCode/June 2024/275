@@ -1,0 +1,26 @@
+bool ispossible(vector<int> &c, int mid) {
+    int n = c.size();
+    int idx = lower_bound(c.begin(), c.end(), mid) - c.begin();
+    int total = (n - idx);
+    return total >= mid;
+}
+
+int hIndex(vector<int>& c) {
+    int n = c.size();
+    int low = 0; 
+    int high = n; 
+    int ans = 0;
+
+    while (low <= high) {
+        int mid = (low + high) / 2;
+
+        if (ispossible(c, mid)) {
+            ans = mid;
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+
+    return ans;
+}
