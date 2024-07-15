@@ -1,0 +1,23 @@
+ int maxCount(vector<int>& b, int n, int maxsum) {
+        
+        int m = b.size();
+        set<int> st(b.begin(), b.end());
+        int count = 0;
+
+        vector<int> v;
+        for(int i=1; i<=n; i++){
+            if(st.find(i) == st.end()){
+                v.push_back(i);
+            }
+        }
+
+        int sum = 0;
+        for(auto it : v){
+            sum += it;
+            if(sum > maxsum) break;
+            count++;
+        }
+
+        return count;
+
+    }
