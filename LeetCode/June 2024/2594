@@ -1,0 +1,36 @@
+bool ispossible(long long mid, vector<int> &ranks, int cars) {
+    int n = ranks.size();
+    long long count = 0;
+
+    for (int i = 0; i < n; i++) {
+        count += (long long)sqrt(mid / ranks[i]);
+        if (count >= cars) {
+            return true;
+        }
+    }
+
+    return count >= cars;
+}
+
+long long repairCars(vector<int>& ranks, int cars) {
+    long long time = 0;
+    //sort(ranks.begin(), ranks.end());
+
+    long long low = 0;
+    long long high = (long long)*max_element(ranks.begin(), ranks.end()) * 
+    (long long)cars * (long long)cars;
+    long long ans = 0;
+
+    while (low <= high) {
+        long long mid = low + (high - low) / 2;
+
+        if (ispossible(mid, ranks, cars)) {
+            ans = mid;
+            high = mid - 1;
+        } else {
+            low = mid + 1;
+        }
+    }
+
+    return ans;
+}
