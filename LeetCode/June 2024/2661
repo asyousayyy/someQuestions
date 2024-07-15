@@ -1,0 +1,46 @@
+   // bool check(vector<vector<int>> &vis, int i, int j){
+    //     int m = vis.size(), n = vis[0].size();
+    //     bool flag1=true, flag2=true;
+    //     for(int x=0; x<n; x++){
+    //         if(vis[i][x]==false){
+    //             flag1 = false;
+    //             break;
+    //         }
+    //     }
+
+    //     for(int x=0; x<m; x++){
+    //         if(vis[x][j]==false){
+    //             flag2 = false;
+    //             break;
+    //         }
+    //     }
+
+    //     return flag1||flag2;
+    // }
+
+int firstCompleteIndex(vector<int>& arr, vector<vector<int>>& mat) {
+    int m = mat.size(), n = mat[0].size();
+    map<int, pair<int, int>> mp;
+    
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            mp[mat[i][j]] = {i, j};
+        }
+    }
+
+    vector<int> row(m, 0), col(n, 0);
+    
+    for (int i = 0; i < arr.size(); i++) {
+        int x = mp[arr[i]].first;
+        int y = mp[arr[i]].second;
+        
+        row[x]++;
+        col[y]++;
+        
+        if (row[x] == n || col[y] == m) {
+            return i;
+        }
+    }
+
+    return m * n + 1;
+}
