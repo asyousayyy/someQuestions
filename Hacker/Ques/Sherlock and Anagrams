@@ -1,0 +1,20 @@
+int sherlockAndAnagrams(string s) {
+    int count = 0;
+    int n = s.size();
+    map<string,int> mp;
+    
+    for(int len=1; len<n; len++){
+        for(int i=0; i<=n-len; i++){
+            string temp = s.substr(i,len);
+            sort(temp.begin(), temp.end());
+            mp[temp]++;
+        }
+    }
+    
+    for(auto it : mp){
+        int m = it.second;
+        count += m*(m-1)/2;
+    }
+    
+    return count;
+}
