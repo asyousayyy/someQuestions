@@ -1,0 +1,38 @@
+bool ispossible(int diff, vector<int>& price, int k) {
+    
+        int cnt = 1;  
+        int last_price = price[0];
+        int n = price.size();
+    
+        for (int i = 1; i < n; ++i) {
+            if (price[i] - last_price >= diff) {
+                cnt++;
+                last_price = price[i];  
+            }
+            if (cnt >= k) return true;  
+        }
+    
+        return cnt >= k;
+}
+
+    int maximumTastiness(vector<int>& price, int k) {
+        sort(price.begin(), price.end());
+        int low = 1;
+        int high = price.back()-price[0];
+
+        int ans = 0;
+        while(low<=high){
+            int mid = (low+high)/2;
+
+            if(ispossible(mid,price,k)){
+                ans = mid;
+                low = mid+1;
+            }
+
+            else{
+                high = mid-1;
+            }
+        }
+
+        return ans;
+    }
