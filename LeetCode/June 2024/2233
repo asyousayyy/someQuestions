@@ -1,0 +1,27 @@
+const int mod = 1e9+7;
+
+    int maximumProduct(vector<int>& nums, int k) {
+        int n = nums.size();
+        long long maxi = 1;
+        priority_queue<int,vector<int>,greater<int>> pq;
+
+        for(auto it : nums){
+            pq.push(it);
+        }
+
+        while(k>0 && !pq.empty()){
+            int t = pq.top();
+            pq.pop();
+            pq.push(t+1);
+            k--;
+        }
+
+        while(!pq.empty()){
+            int t = pq.top();
+            pq.pop();
+            maxi = (maxi * t)%mod;
+        }
+
+        return maxi%mod;
+
+    }
