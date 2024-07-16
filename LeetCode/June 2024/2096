@@ -1,0 +1,59 @@
+
+int depth(TreeNode* node, int val) {
+    if (node == NULL) return -1;
+    if (node->val == val) return 0;
+
+    int left = depth(node->left, val);
+    int right = depth(node->right, val);
+
+    if (left == -1 && right == -1) return -1;
+    if (left == -1) return 1 + right;
+    if (right == -1) return 1 + left;
+
+    return 1 + min(left, right);
+}
+
+bool depth_end(TreeNode* node, int val, string& temp) {
+    if (node == NULL) return false;
+    if (node->val == val) return true;
+
+    temp.push_back('L');
+    if(depth_end(node->left,val,temp)) return true;
+    else temp.pop_back();
+
+    temp.push_back('R');
+    if(depth_end(node->right,val,temp)) return true;
+    else temp.pop_back();
+
+    return false;
+}
+
+TreeNode* ancestor(TreeNode* node, int s, int e) {
+    
+    if (node == NULL) return NULL;
+
+    if (node->val == s || node->val == e) return node;
+
+    TreeNode* left = ancestor(node->left, s, e);
+    TreeNode* right = ancestor(node->right, s, e);
+
+    if (left != NULL && right != NULL) return node;
+    if (left != NULL) return left;
+    if (right != NULL) return right;
+    return NULL;
+}
+
+string getDirections(TreeNode* root, int startValue, int destValue) {
+    
+    TreeNode* lca = ancestor(root, startValue, destValue);
+    string answer;
+    int start_depth = depth(lca, startValue);
+    
+    for (int i = 1; i <= start_depth; ++i) answer.push_back('U');
+
+    string end;
+    depth_end(lca, destValue, end);
+
+    answer+= end;
+    return answer;
+}
