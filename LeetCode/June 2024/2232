@@ -1,0 +1,36 @@
+string minimizeResult(string s) {
+        int n = s.size();
+        string ans;
+        int idx = -1;
+        for(int i=0; i<n; i++){
+            if(s[i]=='+'){
+                idx = i;
+            }
+        }
+
+        int mini = INT_MAX;
+
+        for(int i=0; i<idx; i++){
+            string f = s.substr(0,i);
+            string se = s.substr(i,idx-i);
+
+            for(int j=idx+1; j<n; j++){
+                string t = s.substr(idx+1,j-idx);
+                string l = s.substr(j+1);
+
+                int n1 = f.empty() ? 1 : stoi(f);
+                int n2 = stoi(se);
+                int n3 = stoi(t);
+                int n4 = l.empty() ? 1 : stoi(l);
+
+                int temp = n1 * (n2+n3) * n4;
+
+                if(temp < mini){
+                    mini = temp;
+                    ans = f + "(" + se + "+" + t + ")" + l;
+                }
+            }
+        }
+
+        return ans;
+    }
