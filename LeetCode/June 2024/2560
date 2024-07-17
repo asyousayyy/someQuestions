@@ -1,0 +1,39 @@
+bool ispossible(int mid, vector<int> &nums, int k){
+        //mid = capability of robber(maximum amount of money he can steal from atleast k houses)
+        int i = 0, n = nums.size();
+        while(i < n && k > 0){
+            if(nums[i]>mid){
+                i++; //dont take
+            }
+            else if(nums[i]<=mid){
+                k--; 
+                i = i+2; //not adjacent
+            }
+        }
+
+        return k==0;
+
+    }
+
+    int minCapability(vector<int>& nums, int k) {
+        int n = nums.size();
+        int ans = INT_MAX;
+
+        int low = *min_element(nums.begin(), nums.end());
+        int high = *max_element(nums.begin(), nums.end());
+
+        while(low<=high){
+            int mid = (low+high)/2;
+
+            if(ispossible(mid,nums,k)){
+                ans = mid;
+                high = mid-1;
+            }
+
+            else{
+                low = mid+1;
+            }
+        }
+
+        return ans;
+    }
