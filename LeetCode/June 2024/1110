@@ -1,0 +1,24 @@
+TreeNode* helper(vector<TreeNode*> &ans, set<int> &st, TreeNode* root){
+        if(!root) return nullptr;
+
+        root->left = helper(ans,st,root->left);
+        root->right = helper(ans,st,root->right);
+
+        if(st.find(root->val) != st.end()){ //root is there
+            if(root->left) ans.push_back(root->left); //like 6
+            if(root->right) ans.push_back(root->right); //like 7
+            return nullptr;
+        }
+
+        return root;        
+    }
+
+    vector<TreeNode*> delNodes(TreeNode* root, vector<int>& d) {
+        vector<TreeNode*> ans;
+        set<int> st(d.begin(),d.end());
+
+        root = helper(ans,st,root);
+        //tree is ready
+        if(root) ans.push_back(root);
+        return ans;
+    }
