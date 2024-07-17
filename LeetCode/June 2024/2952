@@ -1,0 +1,20 @@
+int minimumAddedCoins(vector<int>& c, int target) {
+        int n = c.size();
+        int sum = 0,count = 0;
+        int i = 0;
+        sort(c.begin(), c.end());
+
+        while(sum<target){
+            if(i<n && c[i]<=(sum+1)){
+                sum += c[i];
+                i++;
+            }
+            else{ //nums[i] > (sum+1)
+                sum += (sum+1);
+                count++;
+            }
+        }
+
+        return count;
+    
+    }
