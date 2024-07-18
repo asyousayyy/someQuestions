@@ -1,0 +1,39 @@
+string largestMerge(string word1, string word2) {
+        string ans;
+
+        int i=0,j=0;
+        while(i<word1.size() && j<word2.size()){
+            if(word1[i]>word2[j]){
+                ans += word1[i];
+                i++;
+            }
+            else if(word1[i]<word2[j]){
+                ans += word2[j];
+                j++;
+            }
+            else{
+                string s1 = word1.substr(i);
+                string s2 = word2.substr(j);
+                if(s1>s2){
+                    ans += word1[i];
+                    i++;
+                }
+                else{
+                    ans += word2[j];
+                    j++;
+                }
+            }
+        }
+
+        while(i < word1.size()){
+            ans += word1[i];
+            i++;
+        }
+
+        while(j < word2.size()){
+            ans += word2[j];
+            j++;
+        }
+
+        return ans;
+    }
