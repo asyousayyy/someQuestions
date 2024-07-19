@@ -1,0 +1,36 @@
+typedef pair<int, int> pii;
+vector<int> assignTasks(vector<int>& server, vector<int>& task) {
+    vector<int> ans(task.size());
+    priority_queue<pii, vector<pii>, greater<pii>> busy,free;
+
+    for (int i = 0; i < server.size(); ++i) {
+        free.push({server[i], i});
+    }
+
+    int time = 0;
+    int j = 0;
+
+    while (j < task.size()) {
+        time = max(time, j);
+
+        while (!busy.empty() && busy.top().first <= time) {
+            pii it = busy.top();
+            busy.pop();
+            free.push({server[it.second], it.second});
+        }
+
+        if (!free.empty()) {
+            pii it = free.top();
+            free.pop();
+            busy.push({time + task[j], it.second});
+            ans[j] = it.second;
+            ++j;
+        } else {
+            if (!busy.empty()) {
+                time = busy.top().first;
+            }
+        }
+    }
+
+    return ans;
+}
