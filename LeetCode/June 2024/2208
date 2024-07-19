@@ -1,0 +1,25 @@
+int halveArray(vector<int>& nums) {
+        int n = nums.size();
+        double sum = accumulate(nums.begin(), nums.end(), 0.0);
+        double target = sum / 2.0;
+        int op = 0;
+    
+        priority_queue<double> pq;
+
+        for (int i = 0; i < n; ++i) {
+            pq.push((double)nums[i]);
+        }
+
+        double currSum = sum;
+
+        while (currSum > target) {
+            double largest = pq.top();
+            pq.pop();
+            double half = largest / 2.0;
+            currSum -= half;
+            pq.push(half);
+            ++op;
+        }
+
+        return op;
+    }
