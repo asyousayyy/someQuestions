@@ -1,0 +1,28 @@
+void helper(int node, int dist, vector<int>& d, const vector<int>& edges) {
+    if (node == -1 || d[node] != -1) return;
+    
+    d[node] = dist;
+    int next = edges[node];
+    
+    helper(next, dist + 1, d, edges);
+}
+
+int closestMeetingNode(vector<int>& edges, int n1, int n2) {
+    int n = edges.size();
+    vector<int> d1(n, -1), d2(n, -1); 
+    
+    helper(n1, 0, d1, edges);
+    helper(n2, 0, d2, edges);
+
+    int ans = -1, mini = INT_MAX;
+    for (int i = 0; i < n; ++i) {
+        if (d1[i] == -1 || d2[i] == -1) continue;
+        int maxi = max(d1[i], d2[i]);
+        if (maxi < mini) {
+            mini = maxi;
+            ans = i;
+        }
+    }
+
+    return ans;
+}
