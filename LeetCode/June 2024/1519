@@ -1,0 +1,32 @@
+ void helper(vector<int> &ans, string &l, vector<vector<int>> &adj, int node, 
+    int par, vector<int> &count){
+
+        char curr = l[node];
+        int original = count[curr-'a'];
+        count[curr-'a']++;
+
+        for(auto it : adj[node]){
+            if(par == it) continue;
+            helper(ans,l,adj,it,node,count);
+        }
+
+        ans[node] = count[curr-'a'] - original;
+        //basically goinf from parent to child, so delete upr se jo chla aa rha h
+        //from the current node
+    }
+
+    vector<int> countSubTrees(int n, vector<vector<int>>& edges, string l) {
+        vector<int> ans(l.size());
+        vector<vector<int>> adj(n);
+
+        for(int i=0; i<edges.size(); i++){
+            int u = edges[i][0];
+            int v = edges[i][1];
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+
+        vector<int> count(26,0);
+        helper(ans,l,adj,0,-1,count);
+        return ans;
+    }
