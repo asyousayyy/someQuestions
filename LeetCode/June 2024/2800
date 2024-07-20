@@ -1,0 +1,48 @@
+  bool isSubstring(string s2, string s1){
+    if (s2.find(s1) != string::npos)
+        return true;
+    return false;
+}
+
+    int helper(string a, string b) {
+        
+        int n1 = a.size(), n2 = b.size();
+        int len = min(n1, n2);
+        while (len > 0) {
+            if (a.substr(n1 - len, len) == b.substr(0, len)) {
+                return len;
+            }
+            len--;
+        }
+        return 0; // means nothing common
+
+    }
+
+    string merge(string a, string b) {
+        int len = helper(a, b);
+        if(isSubstring(a, b)){
+            return a;
+        }
+        return a + b.substr(len);
+    }
+
+    static bool cmp(string a, string b){
+        if(a.size()==b.size()) return a<b;
+        else return a.size()<b.size();
+    }
+
+    string minimumString(string a, string b, string c) {
+        vector<string> v;
+    
+        v.push_back(merge(merge(a, b), c));
+        v.push_back(merge(merge(a, c), b));
+        v.push_back(merge(merge(b, a), c));
+        v.push_back(merge(merge(b, c), a));
+        v.push_back(merge(merge(c, a), b));
+        v.push_back(merge(merge(c, b), a));
+
+        sort(v.begin(), v.end(),cmp);
+
+        return v[0];
+    }
+};
