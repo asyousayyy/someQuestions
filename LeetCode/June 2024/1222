@@ -1,0 +1,32 @@
+vector<vector<int>> queensAttacktheKing(vector<vector<int>>& queens,
+    vector<int>& king) {
+
+        vector<vector<int>> ans;
+        int x = king[0];
+        int y = king[1];
+        map<pair<int,int>, int> mp;
+
+        for(auto it : queens){
+            mp[{it[0],it[1]}] = 1;
+        }
+
+        vector<vector<int>> directions = {
+            {-1, 0}, {1, 0}, {0, -1}, {0, 1},
+            {-1, 1}, {1, 1}, {-1, -1}, {1, -1}
+        };
+
+        for (auto dir : directions) {
+            int r = x, c = y;
+            while (r >= 0 && r < 8 && c >= 0 && c < 8) {
+                r += dir[0];
+                c += dir[1];
+                if (mp[{r, c}] == 1) {
+                    ans.push_back({r, c});
+                    break;
+                }
+            }
+        }
+
+        return ans;
+
+    }
