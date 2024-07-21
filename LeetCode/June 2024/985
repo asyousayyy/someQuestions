@@ -1,0 +1,27 @@
+vector<int> sumEvenAfterQueries(vector<int>& nums, vector<vector<int>>& q) {
+    int sumEven = 0;
+    for (int num : nums) {
+        if (num % 2 == 0) {
+            sumEven += num;
+        }
+    }
+
+    vector<int> ans;
+    for (auto query : q) {
+        int val = query[0], idx = query[1];
+
+        if (nums[idx] % 2 == 0) {
+            sumEven -= nums[idx];
+        } //firstly remove from sum
+
+        nums[idx] += val; //then update this value
+
+        if (nums[idx] % 2 == 0) {
+            sumEven += nums[idx]; //insert again
+        }
+
+        ans.push_back(sumEven);
+    }
+
+    return ans;
+}
