@@ -1,0 +1,93 @@
+bool isvowel(char c) {
+    return (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u');
+}
+
+string even(string &s) {
+    int n = s.size();
+    map<char, int> mp;
+    int maxlen = INT_MIN;
+    int idx = -1;
+
+    int i = 0, j = 0;
+    while (j < n) {
+        if (isvowel(s[j])) {
+            mp[s[j]]++;
+        }
+
+        int vowelCount = 0;
+        for (auto it : mp) {
+            vowelCount += it.second;
+        }
+
+        if (vowelCount % 2 == 0) {
+            if (j - i + 1 > maxlen) {
+                maxlen = j - i + 1;
+                idx = i;
+            }
+        }
+
+        j++;
+    }
+
+    if (idx != -1) {
+        return s.substr(0, idx) + s.substr(idx + maxlen);
+    } else {
+        return s;
+    }
+}
+
+string odd(string &s) {
+    int n = s.size();
+    map<char, int> mp;
+    int maxlen = INT_MIN;
+    int idx = -1;
+
+    int i = 0, j = 0;
+    while (j < n) {
+        if (isvowel(s[j])) {
+            mp[s[j]]++;
+        }
+
+        int vowelCount = 0;
+        for (auto it : mp) {
+            vowelCount += it.second;
+        }
+
+        if (vowelCount % 2 != 0) {
+            if (j - i + 1 > maxlen) {
+                maxlen = j - i + 1;
+                idx = i;
+            }
+        }
+
+        j++;
+    }
+
+    if (idx != -1) {
+        return s.substr(0, idx) + s.substr(idx + maxlen);
+    } else {
+        return s;
+    }
+}
+
+bool doesAliceWin(string s) {
+    bool flag = true;
+
+    while (true) {
+        string new_s;
+        if (flag) {
+            new_s = odd(s);
+        } else {
+            new_s = even(s);
+        }
+
+        if (new_s.size() == s.size()) {
+            return !flag;
+        }
+
+        s = new_s;
+        flag = !flag;
+    }
+
+    return true;
+}
