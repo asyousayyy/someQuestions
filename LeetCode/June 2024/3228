@@ -1,0 +1,22 @@
+int maxOperations(string s) {
+    int n = s.size();
+    int cnt = 0; 
+    int ans = 0;  
+    int j = 0;
+
+    while (j < n) {
+        if (s[j] == '1') {
+            cnt++;
+            j++;
+        } 
+        else{
+            ans += cnt;
+            while(s[j]=='0'){
+                j++;
+                if(j==n) break;
+            }
+        }
+    }
+
+    return ans;
+}
