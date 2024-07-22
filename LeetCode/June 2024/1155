@@ -1,0 +1,22 @@
+const int mod = 1e9+7;
+    
+    int helper(int dice, int k, int sum, int target, vector<vector<int>> &dp) {
+    if (dice == 0 && sum == target) return 1;
+    if (dice == 0 || sum > target) return 0;
+    
+    if (dp[dice][sum] != -1) return dp[dice][sum];
+    
+    int ways = 0;
+    for (int i = 1; i <= k; i++) {
+        if (sum + i <= target) {
+            ways = (ways + helper(dice - 1, k, sum + i, target, dp)%mod)%mod;
+        }
+    }
+    
+    return dp[dice][sum] = ways;
+}
+
+int numRollsToTarget(int n, int k, int target) {
+    vector<vector<int>> dp(n + 1, vector<int>(target + 1, -1));
+    return helper(n, k, 0, target, dp);
+}
