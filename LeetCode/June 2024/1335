@@ -1,0 +1,36 @@
+int helper(vector<int> &nums, int days, int idx, vector<vector<int>> &dp){
+        int n = nums.size();
+        if(days==0 && idx==n){
+            return 0;
+        }
+        if(days==0 || idx==n){
+            //days==0, not all tasks performed
+            //idx==n, all days not assigned since we have to return minimum
+            //for impossible return INT_MAX
+            return INT_MAX;
+        }
+
+        if(dp[days][idx] != -1) return dp[days][idx];
+
+        int ans = INT_MAX;
+        int maxi = 0;
+
+        for(int i = idx; i <= n-days; i++){
+            maxi = max(maxi, nums[i]);
+            int temp = helper(nums,days-1,i+1,dp);
+            if(temp != INT_MAX){
+                ans = min(ans, maxi + temp);
+            }
+        }
+
+        return dp[days][idx] = ans;
+
+    }
+
+    int minDifficulty(vector<int>& nums, int d) {
+        int n = nums.size();
+        //sort(nums.begin(), nums.end());
+        if(nums.size() < d) return -1;
+        vector<vector<int>> dp(d+1, vector<int> (n+1,-1));
+        return helper(nums,d,0,dp);
+    }
