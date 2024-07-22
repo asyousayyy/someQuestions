@@ -1,0 +1,36 @@
+vector<long long> countBlackBlocks(int m, int n, vector<vector<int>>& cord) {
+        vector<long long> ans(5);
+        map<pair<int,int>, long long> mp;
+
+        for(auto c : cord){
+            int x = c[0];
+            int y = c[1];
+
+            if(x+1 < m && y+1 < n){
+                mp[{x,y}]++;
+            }
+
+            if(x+1 < m && y-1 >= 0){
+                mp[{x,y-1}]++;
+            }
+
+            if(x-1>=0 && y+1 < n){
+                mp[{x-1,y}]++;
+            }
+
+            if(x-1>=0 && y-1 >= 0){
+                mp[{x-1,y-1}]++;
+            }
+        }
+
+        for(auto it : mp){
+            int freq = it.second;
+            ans[freq]++;
+        }
+
+        long long total = (long long)(n-1) * (long long)(m-1);
+        ans[0] = total - ans[1] - ans[2] - ans[3] - ans[4];
+
+        return ans;
+
+    }
