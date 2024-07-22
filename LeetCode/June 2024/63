@@ -1,0 +1,23 @@
+int helper(int i, int j, vector<vector<int>> &g, int m, int n,
+    vector<vector<int>> &dp){
+
+        if(i==m-1 && j==n-1) return 1; //path found
+        if(i>m-1 || j>n-1) return 0;
+
+        if(dp[i][j] != -1) return dp[i][j];
+
+        if(g[i][j]==1) return 0;
+
+        int down = g[i][j] + helper(i+1,j,g,m,n,dp);
+        int right = g[i][j] + helper(i,j+1,g,m,n,dp);
+
+        return dp[i][j] = down+right;
+    }
+    int uniquePathsWithObstacles(vector<vector<int>>& g) {
+
+        int m = g.size(), n = g[0].size();
+        if(g[m-1][n-1]==1) return 0;
+        vector<vector<int>> dp(m, vector<int>(n,-1));
+        return helper(0,0,g,m,n,dp);    
+
+    }
