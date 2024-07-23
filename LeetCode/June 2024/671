@@ -1,0 +1,20 @@
+void traverse(TreeNode* root, set<int>& st) {
+    if (!root) return;
+    st.insert(root->val);
+    traverse(root->left, st);
+    traverse(root->right, st);
+}
+
+int findSecondMinimumValue(TreeNode* root) {
+    if (!root) return -1;
+    
+    set<int> st;
+    traverse(root, st);
+    
+    if (st.size() < 2) return -1;
+    
+    auto it = st.begin();
+    st.erase(*it);
+
+    return *st.begin();
+}
