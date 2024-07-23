@@ -1,0 +1,21 @@
+int helper(vector<int> &cost, int idx, int &op,int n){
+        if(idx >= n) return 0;
+
+        int leftsum = helper(cost,2*idx+1,op,n);
+        int rightsum = helper(cost,2*idx+2,op,n);
+
+        if(leftsum==rightsum){
+            op+=0;
+            return cost[idx] + leftsum;
+        }
+        else{
+            op += abs(leftsum-rightsum);
+            return cost[idx] + max(leftsum,rightsum); //because have to make equal to max only
+        }
+    }
+
+    int minIncrements(int n, vector<int>& cost) {
+        int op = 0;
+        helper(cost,0,op,n);
+        return op;
+    }
