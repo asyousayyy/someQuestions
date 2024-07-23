@@ -1,0 +1,49 @@
+bool isvalid(const string& s) {
+        int hyphenCount = 0;
+        int punctCount = 0;
+        int n = s.size();
+        
+        for (int i = 0; i < n; i++) {
+            if (isdigit(s[i])) {
+                return false; 
+            }
+
+            if (isupper(s[i])) 
+                return false;
+
+            if (s[i] == '-') {
+                if (i == 0 || i == n - 1 || !islower(s[i - 1]) || 
+                !islower(s[i + 1])) {
+                    return false;
+                }
+                hyphenCount++;
+            }
+            
+            if (s[i] == '!' || s[i] == ',' || s[i] == '.') {
+                if (i != n - 1) {
+                    return false;
+                }
+                punctCount++;
+            }
+        }
+        
+        if (hyphenCount > 1 || punctCount > 1) {
+            return false;
+        }
+        
+        return true;
+    }
+
+    int countValidWords(string s) {
+        int count = 0;
+        stringstream ss(s);
+        string token;
+
+        while (ss >> token) {
+            if (isvalid(token)) {
+                count++;
+            }
+        }
+
+        return count;
+    }
