@@ -1,0 +1,35 @@
+bool isvalid(int x){
+        map<int,int> mp;
+        while(x > 0){
+            int temp = x%10;
+            mp[temp]++;
+            x = x/10;
+        }
+
+        bool flag = true;
+        for(auto it : mp){
+            if(it.second != it.first){
+                flag = false;
+            }
+        }
+
+        return flag;
+    }
+
+    int nextBeautifulNumber(int n) {
+        
+        int ans;
+        if(n==0) return 1;
+
+        if(n>=666666) return 1224444; 
+
+        for(int i=n+1; i<=1224444; i++){
+            if(isvalid(i)){
+                ans = i;
+                break;
+            }
+        }
+
+        return ans;
+
+    }
