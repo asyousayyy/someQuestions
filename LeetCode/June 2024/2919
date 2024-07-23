@@ -1,0 +1,37 @@
+long long dp[100001];
+
+    long long helper(int idx,int k, vector<int> &nums){
+        int n = nums.size();
+        if(dp[idx]!=-1) return dp[idx];
+        if(idx >= (n-2)) return 0;
+        long long op = LLONG_MAX;
+
+        if(nums[idx]>=k){
+            op = min(op, helper(idx+1,k,nums));
+        }
+        else{
+            op = min(op, (k-nums[idx])+helper(idx+1,k,nums));
+        }
+
+        if(nums[idx+1]>=k){
+            op = min(op, helper(idx+2,k,nums));
+        }
+        else{
+            op = min(op, k-nums[idx+1]+helper(idx+2,k,nums));
+        }
+
+        if(nums[idx+2]>=k){
+            op = min(op, helper(idx+3,k,nums));
+        }
+        else{
+            op = min(op, k-nums[idx+2] + helper(idx+3,k,nums));
+        }
+
+        return dp[idx] = op;
+    }
+
+    long long minIncrementOperations(vector<int>& nums, int k) {
+        int n = nums.size();
+        memset(dp, -1, sizeof(dp));
+        return helper(0,k,nums);
+    }
