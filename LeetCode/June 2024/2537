@@ -1,0 +1,25 @@
+long long countGood(vector<int>& nums, int k) {
+    int n = nums.size();
+    long long count = 0, pairs = 0;
+    map<int,int> mp;
+
+    for(int l = 0, r = 0; r < n; r++){
+        mp[nums[r]]++;
+        pairs += mp[nums[r]]-1;
+
+        if(pairs >= k){
+            count += (n-r);
+        }
+
+        while(pairs >= k && l < r){
+            mp[nums[l]]--;
+            pairs -= mp[nums[l]];
+            if(pairs >= k){
+                count += (n-r);
+            }
+            l++;
+        }
+    }
+
+    return count;
+}
