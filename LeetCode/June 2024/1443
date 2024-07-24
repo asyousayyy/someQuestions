@@ -1,0 +1,31 @@
+int dfs(int node,int parent,vector<bool> &hasapple,
+    vector<vector<int>> &adj){
+
+        int ans = 0;
+
+        for(auto it : adj[node]){
+            if(it==parent) continue;
+            int temp = dfs(it,node,hasapple,adj);
+            if(hasapple[it] || temp > 0){
+                ans += (temp + 2);
+            }
+        }
+
+        return ans;
+
+    }
+
+    int minTime(int n, vector<vector<int>>& edges, vector<bool>& hasapple) {
+        
+        vector<vector<int>> adj(n);
+
+        for(int i = 0; i<edges.size(); i++){
+            int u = edges[i][0];
+            int v = edges[i][1];
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+
+        int ans = dfs(0,-1,hasapple,adj);
+        return ans;
+    }
