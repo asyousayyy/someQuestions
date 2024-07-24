@@ -1,0 +1,34 @@
+class Solution {
+public:
+    void dfs(int node,map<int,vector<pair<int,int>>> &mp, 
+    vector<bool>&vis, int &count){
+
+        vis[node] = 1;
+        for(auto it : mp[node]){
+            int nbr = it.first;
+            int isforward = it.second;
+
+            if(!vis[nbr]){
+                if(isforward==1) count++;
+                dfs(nbr,mp,vis,count);
+            }
+        }
+    }
+
+    int minReorder(int n, vector<vector<int>>& c) {
+        int count = 0;
+        map<int,vector<pair<int,int>>> mp;
+
+        for(auto it : c){
+            int src = it[0];
+            int dest = it[1];
+
+            mp[src].push_back({dest,1});
+            mp[dest].push_back({src,0});
+        }
+
+        vector<bool> vis(n,0);
+        dfs(0,mp,vis,count);
+        return count;
+    }
+};
