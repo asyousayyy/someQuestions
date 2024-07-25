@@ -1,0 +1,23 @@
+int minStoneSum(vector<int>& piles, int k) {
+        int n = piles.size();
+        int sum = 0;
+        priority_queue<int> pq;
+
+        for(auto it : piles){
+            pq.push(it);
+        }
+
+        while(k-- && pq.empty()==false){
+            int x = pq.top();
+            int ins = x-x/2;
+            pq.pop();
+            pq.push(ins);
+        }
+
+        while(!pq.empty()){
+            sum += pq.top();
+            pq.pop();
+        }
+
+        return sum;
+    }
