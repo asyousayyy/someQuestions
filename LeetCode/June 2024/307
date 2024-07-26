@@ -1,0 +1,56 @@
+vector<int> seg;
+    int n;
+
+    void build(vector<int> &nums,int low, int high, int ind){
+        if(low==high){
+            seg[ind] = nums[low];
+            return;
+        }
+
+        int mid = (low+high)/2;
+        build(nums,low,mid,2*ind+1);
+        build(nums,mid+1,high,2*ind+2);
+
+        seg[ind] = seg[2*ind+1] + seg[2*ind+2];
+    }
+
+    NumArray(vector<int>& nums) {
+        n = nums.size();
+        seg.resize(4*n);
+        build(nums,0,n-1,0);
+    }
+
+    void helper(int i, int low, int high, int index, int val){
+        if(index < low || index > high) return;
+
+        if(low == index && high == index){
+            seg[i] = val;
+            return;
+        }
+
+        int mid = (low+high)/2;
+        helper(2*i+1, low,mid,index,val);
+        helper(2*i+2, mid+1, high, index, val);
+
+        seg[i] = seg[2*i+1] + seg[2*i+2];
+    }
+
+    int func(int i, int low, int high, int l, int r) {
+        if (l > high || r < low) return 0; 
+
+        if (l <= low && r >= high) return seg[i]; 
+
+        int mid = (low + high) / 2;
+        int leftSum = func(2 * i + 1, low, mid, l, r);
+        int rightSum = func(2 * i + 2, mid + 1, high, l, r);
+
+        return leftSum + rightSum;
+    }
+    
+    void update(int index, int val) {
+        helper(0,0,n-1,index,val);
+    }
+    
+    int sumRange(int left, int right) {
+        return func(0,0,n-1,left,right);
+    }
