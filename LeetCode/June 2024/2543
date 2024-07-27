@@ -1,0 +1,22 @@
+bool isReachable(int m, int n) {
+        while (m > 1 && n > 1) {
+        while (m % 2 == 0) {
+            m /= 2;
+        }
+        
+        while (n % 2 == 0) {
+            n /= 2;
+        }
+
+        if (m <= 1 || n <= 1) {
+            break;
+        }
+
+        if (m >= n) {
+            m %= n;
+        } else {
+            n %= m;
+        }
+    }
+    return m != 0 && n != 0;
+    }
