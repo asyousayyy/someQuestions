@@ -1,0 +1,22 @@
+bool canConvertString(string s, string t, int k) {
+    int n = s.size();
+    if (s.size() != t.size()) return false;
+
+    vector<int> rem(26, 0);
+    for (int i = 1; i <= k; i++) {
+        int r = i % 26;
+        rem[r]++;
+    }
+
+    for (int i = 0; i < n; i++) {
+        int x = (t[i] - s[i] + 26) % 26;
+        if (x == 0) continue; 
+        if (rem[x] > 0) {
+            rem[x]--;
+        } else {
+            return false;
+        }
+    }
+
+    return true;
+}
