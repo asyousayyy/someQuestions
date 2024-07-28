@@ -1,0 +1,31 @@
+int helper(vector<int> &piles, int i, int m, int turn, 
+    vector<vector<vector<int>>> &dp) {
+
+        int n = piles.size();
+        if (i >= n) return 0;
+
+        if (dp[i][m][turn] != -1) return dp[i][m][turn];
+
+        int curr = 0;
+        int ans = (turn == 1) ? -1 : INT_MAX;
+
+        for (int x = 1; x <= 2 * m && i + x <= n; x++) {
+            
+            curr += piles[i+x-1];
+
+            if (turn == 1) {
+                ans = max(ans, curr + helper(piles, i + x, max(m, x), 0, dp));
+            } else {
+                ans = min(ans, helper(piles, i + x, max(m, x), 1, dp));
+            }
+        }
+
+        return dp[i][m][turn] = ans;
+    }
+
+    int stoneGameII(vector<int>& piles) {
+        int n = piles.size();
+        vector<vector<vector<int>>> dp(n, vector<vector<int>>(n + 1,
+        vector<int>(2, -1)));
+        return helper(piles, 0, 1, 1, dp);
+    }
