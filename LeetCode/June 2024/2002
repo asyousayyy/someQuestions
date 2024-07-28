@@ -1,0 +1,37 @@
+bool isvalid(string &s){
+        int i = 0, j = s.size()-1;
+        while(i < j){
+            if(s[i] != s[j]) return false;
+            i++;
+            j--;
+        }
+        return true;
+    }
+
+    void dfs(int i, string s, string &s1, string &s2, int &res){
+
+        if(i >= s.length()){
+            if(isvalid(s1) && isvalid(s2)){
+                res = max(res, (int)s1.size()*(int)s2.size());
+            }
+            return;
+        }
+
+        s1.push_back(s[i]);
+        dfs(i+1,s,s1,s2,res);
+        s1.pop_back();
+
+        s2.push_back(s[i]);
+        dfs(i+1,s,s1,s2,res);
+        s2.pop_back();
+
+        dfs(i+1,s,s1,s2,res); //skipping condition
+    }
+
+    int maxProduct(string s) {
+        int n = s.size();
+        string s1,s2;
+        int res = 0;
+        dfs(0,s,s1,s2,res);
+        return res;
+    }
