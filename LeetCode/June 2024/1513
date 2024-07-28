@@ -1,0 +1,19 @@
+const int mod = 1e9+7;
+
+    int numSub(string s) {
+        int n = s.size();
+        int cnt = 0;
+
+        for(int i=0; i<n; i++){
+            if(s[i]=='1'){
+                int c = 0;
+                while(s[i]=='1'){
+                    i++;
+                    c++;
+                }
+                cnt = (cnt + (long long)c*(c+1)/2)%mod;
+            }
+        }
+
+        return cnt;
+    }
