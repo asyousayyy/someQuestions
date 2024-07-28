@@ -1,0 +1,25 @@
+const set<char> st = {'a', 'e', 'i', 'o', 'u'};
+
+    int helper(string &s, int n, int i, char prev, vector<vector<int>> &dp){
+        if(i==n) return 1;
+        
+        int prevIndex = (prev == '/') ? 26 : prev - 'a';
+        if(dp[i][prevIndex] != -1) return dp[i][prevIndex];
+
+        int cnt = 0;
+        for(auto c : st){
+            if(prev=='/' || c >= prev){
+                s = s + c;
+                cnt += helper(s,n,i+1,c,dp);
+                s.pop_back();
+            }
+        }
+
+        return dp[i][prevIndex] = cnt;
+    }
+
+    int countVowelStrings(int n) {
+        string s;
+        vector<vector<int>> dp(n+1, vector<int>(27,-1));
+        return helper(s,n,0,'/',dp);
+    }
