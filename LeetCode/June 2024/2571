@@ -1,0 +1,16 @@
+ int minOperations(int n) {
+        int count = 0;
+        if(n==0) return 0;
+
+        //basically if of form 100000, then only one operation needed
+
+        if((n & n-1)==0) return 1;
+
+        int ones = log2(n); //number of ones
+        int low = pow(2,ones); //usse just chota 2 ki power
+        int high = pow(2,ones+1); //just badi two ki power
+
+        return 1 + min(minOperations(n-low), minOperations(high-n));
+        //1 for when the number becomes the power of one
+
+    }
