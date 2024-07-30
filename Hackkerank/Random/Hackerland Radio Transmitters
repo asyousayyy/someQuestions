@@ -1,0 +1,20 @@
+int hackerlandRadioTransmitters(vector<int> x, int k) {
+    sort(x.begin(), x.end());
+    int n = x.size();
+    int count = 0;
+    int i = 0;
+    
+    while(i < n){
+        count++;
+        int far = x[i]+k;
+        while(i<n && x[i]<=far){
+            i++;
+        }
+        far = x[i-1]+k;
+        while(i<n && x[i]<=far){
+            i++;
+        }
+    }
+    
+    return count;
+}
