@@ -1,0 +1,39 @@
+ const vector<pair<int, int>> directions = {{0, 1}, {0, -1}, 
+ {1, 0}, {-1, 0}};
+
+int minimumMoves(vector<string> grid, int sx, int sy, int gx, int gy) {
+    int n = grid.size();
+    queue<pair<pair<int, int>, int>> q; // coordinates, moves
+    vector<vector<int>> vis(n, vector<int>(n, 0));
+    
+    q.push({{sx, sy}, 0});
+    vis[sx][sy] = 1;
+    
+    while (!q.empty()) {
+        auto it = q.front();
+        q.pop();
+        
+        int x = it.first.first;
+        int y = it.first.second;
+        int moves = it.second;
+        
+        if (x == gx && y == gy) return moves;
+        
+        for (auto [dx, dy] : directions) {
+            int nx = x + dx;
+            int ny = y + dy;
+            
+            while (nx >= 0 && nx < n && ny >= 0 && ny < n 
+            && grid[nx][ny] != 'X') {
+                if (!vis[nx][ny]) {
+                    vis[nx][ny] = 1; 
+                    q.push({{nx, ny}, moves + 1});
+                }
+                nx += dx;
+                ny += dy;
+            }
+        }
+    }
+    
+    return -1;
+}
