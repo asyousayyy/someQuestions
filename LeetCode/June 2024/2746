@@ -1,0 +1,47 @@
+int helper(vector<string> &words, int idx, int first, int last,int dp[][26][26]){
+        
+        int n = words.size();
+        if(idx>=n) return 0;
+
+        if(dp[idx][first][last] != -1) return dp[idx][first][last];
+
+        string now = words[idx];
+        int take1 = INT_MAX;
+        int take2 = INT_MAX;
+        int currf = now[0] - 'a';
+        int currl = now[now.size()-1] - 'a';
+
+        if(last == currf){
+            take1 = words[idx].size()-1 + helper(words,idx+1,first,currl,dp);
+        }
+        else{
+            take1 = words[idx].size() + helper(words,idx+1,first,currl,dp);
+        }
+
+        if(currl == first){
+            take2 = words[idx].size()-1 + helper(words,idx+1,currf,last,dp);
+        }
+        else{
+            take2 = words[idx].size() + helper(words,idx+1,currf,last,dp);
+        }
+
+        return dp[idx][first][last] = min(take1,take2);
+    }
+
+    int minimizeConcatenatedLength(vector<string>& words) {
+        int n = words.size();
+        int ini = words[0].size();
+        int dp[n][26][26];
+
+        for(int i=0; i<n; i++){
+            for(int j=0; j<26; j++){
+                for(int k=0; k<26; k++){
+                    dp[i][j][k] = -1;
+                }
+            }
+        }
+
+        int first = words[0][0]-'a';
+        int last = words[0][words[0].size()-1]-'a';
+        return ini + helper(words,1,first,last,dp);
+    }
