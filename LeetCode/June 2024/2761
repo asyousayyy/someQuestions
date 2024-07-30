@@ -1,0 +1,28 @@
+vector<bool> sieve(int n){
+        vector<bool> isprime(n+1,true);
+        isprime[0] = false;
+        isprime[1] = false;
+
+        for (int i = 2; i <= sqrt(n); i++) {
+            if (isprime[i]) {
+                for (int j = i * i; j <= n; j += i) {
+                    isprime[j] = false;
+                }
+            }
+        }
+
+        return isprime;
+    }
+
+    vector<vector<int>> findPrimePairs(int target) {
+        vector<bool> isprime = sieve(target);
+        vector<vector<int>> ans;
+
+        for(int i=2; i<=target/2; i++){
+            if(isprime[i] && isprime[target-i]){
+                ans.push_back({i,target-i});
+            }
+        }
+
+        return ans;
+    }
