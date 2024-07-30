@@ -1,0 +1,16 @@
+vector<int> relocateMarbles(vector<int>& nums, vector<int>& from, 
+    vector<int>& to) {
+
+        int n = nums.size();
+        set<int> st(nums.begin(), nums.end());
+
+        for(int i=0; i<from.size(); i++){
+            if(st.find(from[i]) != st.end()){
+                st.erase(from[i]);
+                st.insert(to[i]);
+            }
+        }
+
+        vector<int> ans(st.begin(), st.end());
+        return ans;
+    }
