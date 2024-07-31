@@ -1,0 +1,22 @@
+long arrayManipulation(int n, vector<vector<int>> queries) {
+    long ans = 0;
+    vector<long> diff(n + 1, 0); 
+    for (const auto &it : queries) {
+        int a = it[0] - 1;
+        int b = it[1]; 
+        long k = it[2];
+
+        diff[a] += k;
+        if (b < n) { 
+            diff[b] -= k;
+        }
+    }
+
+    long current = 0;
+    for (int i = 0; i < n; i++) {
+        current += diff[i];
+        ans = max(ans, current);
+    }
+
+    return ans;
+}
