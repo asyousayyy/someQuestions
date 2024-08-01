@@ -1,0 +1,43 @@
+Question) Your friend's birthday is nearby. He asked you to take care of balloon decoration. He has bought White and Yellow balloons of N and M quantities respectively. 
+You have to decorate the balloons by placing the balloons in a straight line in any order. He likes a decoration when there are no more than W white balloons placed
+successively and there are no more than Y yellow balloons placed successively.
+Your friend wants to know the number of decorations that are possible from given input such that he likes the decorations. Output the answer modulo 109+7
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int MOD = 1e9+7;
+int dp[101][101][11][11]; 
+
+int helper(int n, int m, int w, int y, int c1, int c2) {
+    if (n == 0 && m == 0) 
+        return (c1 <= w && c2 <= y) ? 1 : 0;
+    
+    if (c1 > w || c2 > y) return 0; 
+    
+    if(dp[n][m][c1][c2] != -1) return dp[n][m][c1][c2];
+    
+    int result = 0;
+
+    if (c1 < w && n > 0) {
+        result = (result + helper(n - 1, m, w, y, c1 + 1, 0)) % MOD;
+    }
+    
+    if (c2 < y && m > 0) {
+        result = (result + helper(n, m - 1, w, y, 0, c2 + 1)) % MOD;
+    }
+    
+    return dp[n][m][c1][c2] = result;
+}
+
+int main() {
+    int n, m, w, y;
+    cin >> n >> m >> w >> y;
+    
+    memset(dp, -1, sizeof(dp));
+
+    cout << helper(n, m, w, y, 0, 0) << endl;
+
+    return 0;
+}
+
