@@ -1,0 +1,111 @@
+QUestion) You are given two 0-indexed integer arrays A and B, containing n integers each.
+You can choose two integers l and r where 0≤l≤r<n and swap the subarray A[l...r] with the subarray B[l...r].
+
+For example, if A=[1,2,3,4,5] and B=[11,12,13,14,15] and you choose l=1 and r=2, A becomes [1,12,13,4,5] and B becomes [11,2,3,14,15].
+You may choose to apply the mentioned operation once or not do anything.
+
+The score of the arrays is the maximum of sum(A) and sum(B), where sum(arr) is the sum of all the elements in the array arr
+Your task is to find the maximum possible score.
+
+Input
+The first line of input contains an integer t(1≤t≤104)
+ — the number of testcases. The description of t
+ testcases follows.
+
+The first line of each testcase contains an integer n(1≤n≤105)
+ — the number of elements in the arrays A
+ and B
+.
+
+The second line of each testcase contains n
+ space separated integers a0,a1,...an
+ (0≤ai≤109)
+ — the elements of array A
+.
+
+The third line of each testcase contains n
+ space separated integers b0,b1,...bn
+ (0≤bi≤109)
+ — the elements of array B
+.
+
+It is guaranteed that the sum of n
+ over all testcases does not exceed 105.
+Output
+For each testcase, print a single integer — the maximum possible score in a new line.
+
+Example
+Input
+3
+3
+60 60 60
+10 90 10
+5
+20 40 20 70 30
+50 20 50 40 20
+3
+7 11 13
+1 1 1
+Output
+210
+220
+31
+
+CODE)
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+
+ll kadane(vector<ll>& arr) {
+    ll max_sum = LLONG_MIN;
+    ll current_sum = 0;
+    for (ll value : arr) {
+        current_sum += value;
+        max_sum = max(max_sum, current_sum);
+        if (current_sum < 0) current_sum = 0;
+    }
+    return max_sum;
+}
+
+void solve() {
+    int n;
+    cin >> n;
+    
+    vector<ll> a(n), b(n);
+    ll sumA = 0, sumB = 0;
+    
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+        sumA += a[i];
+    }
+    
+    for (int i = 0; i < n; ++i) {
+        cin >> b[i];
+        sumB += b[i];
+    }
+    
+    vector<ll> diff(n);
+    for (int i = 0; i < n; ++i) {
+        diff[i] = a[i] - b[i];
+    }
+    
+    ll xb = kadane(diff);
+    
+    for (int i = 0; i < n; ++i) {
+        diff[i] = -diff[i];
+    }
+    
+    ll xa = kadane(diff);
+    
+    ll ans = max(sumA + xa, sumB + xb);
+    cout << ans << endl;
+}
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
