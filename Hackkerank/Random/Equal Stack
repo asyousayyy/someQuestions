@@ -1,0 +1,38 @@
+Question) https://www.hackerrank.com/challenges/one-month-preparation-kit-equal-stacks/problem?isFullScreen=true&h_l=interview&playlist_slugs%5B%5D=preparation-kits&playlist_slugs%5B%5D=one-month-preparation-kit&playlist_slugs%5B%5D=one-month-week-four
+
+void helper(vector<int>& pre, const vector<int>& h) {
+    int pSum = 0;
+    for (int i = h.size() - 1; i >= 0; --i) {
+        pSum += h[i];
+        pre.push_back(pSum);
+    }
+}
+
+int equalStacks(vector<int>& h1, vector<int>& h2, vector<int>& h3) {
+    vector<int> pre1, pre2, pre3;
+    
+    helper(pre1, h1);
+    helper(pre2, h2);
+    helper(pre3, h3);
+    
+    while(pre1.size()>0 && pre2.size()>0 && pre3.size()>0){
+        if(pre1.back() == pre2.back() && pre2.back()==pre3.back()){
+            return pre1.back(); //maximum height
+        }
+        
+        int maxi = max({pre1.back(), pre2.back(), pre3.back()});
+        
+        if(pre1.back()==maxi){
+            pre1.pop_back();
+        }
+        else if(pre2.back()==maxi){
+            pre2.pop_back();
+        }
+        else{
+            pre3.pop_back();
+        }
+    }   
+    
+    
+    return 0;
+}
