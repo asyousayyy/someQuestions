@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+bool ispossible(double c, vector<int>& arr, int loss) {
+    double a = 0, b = 0;
+
+    for (auto it : arr) {
+        if (it > c) {
+            a += (it - c);
+        } else if (it < c) {
+            b += (c - it) * 100 / (100 - loss);
+        }
+    }
+
+    return a >= b;
+}
+
+double helper(vector<int>& arr, int loss) {
+    double low = 0;
+    double high = *max_element(arr.begin(), arr.end());
+    double ans = -1;
+ 
+    double epsilon = 1e-7;
+
+    while (high - low > epsilon) {
+        double mid = (low + high) / 2;
+
+        if (ispossible(mid, arr, loss)) {
+            ans = mid;
+            low = mid; 
+        } else {
+            high = mid; 
+        }
+    }
+
+    return ans;
+}
+
+int main() {
+    int n;
+    cin >> n;
+    int loss;
+    cin >> loss;
+
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+
+    cout << helper(arr, loss) << endl;
+
+    return 0;
+}
