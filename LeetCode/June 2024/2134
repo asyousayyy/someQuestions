@@ -1,0 +1,30 @@
+int minSwaps(vector<int>& nums) {
+        int n = nums.size();
+        int total = accumulate(nums.begin(), nums.end(),0);
+        int i=0,j=0;
+        int curr = 0;
+        int ans = INT_MAX;
+        vector<int> temp;
+        for(int i=0; i<total; i++){
+            temp.push_back(nums[i]);
+        }
+        nums.insert(nums.end(), temp.begin(), temp.end());
+
+        while(j < nums.size()){
+            curr += nums[j];
+
+            while(j-i+1 > total){
+                curr -= nums[i];
+                i++;
+            }
+
+            if(j-i+1==total){
+                int zeros = total - curr; //total length - current number of 0s
+                ans = min(ans, zeros);
+            }
+
+            j++;
+        }
+
+        return ans;
+    }
