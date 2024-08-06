@@ -1,0 +1,33 @@
+int minimumPushes(string word) {
+    map<char, int> mp;
+    for (char ch : word) {
+        mp[ch]++;
+    }
+
+    vector<pair<int, char>> v;
+    for (auto it : mp) {
+        v.push_back({it.second, it.first});
+    }
+    sort(v.rbegin(), v.rend());
+
+    int x = 1;  
+    int k = 8;  
+    map<char, int> mp1;
+
+    for (auto it = v.begin(); it != v.end(); ++it) {
+        char ch = it->second;
+        mp1[ch] = x;
+        k--;
+        if (k == 0) {
+            k = 8;  
+            x++;   
+        }
+    }
+
+    int ans = 0;
+    for (char s : word) {
+        ans += mp1[s];
+    }
+
+    return ans;
+}
