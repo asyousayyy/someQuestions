@@ -1,0 +1,47 @@
+long long minimumCostWithDiscounts(int n, vector<vector<int>>& highways, int discounts) {
+   
+    vector<vector<pair<int, int>>> adj(n);
+    for (auto it : highways) {
+        int u = it[0], v = it[1], toll = it[2];
+        adj[u].emplace_back(v, toll);
+        adj[v].emplace_back(u, toll);
+    }
+
+    vector<vector<long long>> dist(n, vector<long long>(discounts + 1, LLONG_MAX));
+    dist[0][0] = 0;
+
+    priority_queue<vector<long long>, vector<vector<long long>>, greater<vector<long long>>> pq;
+    pq.push({0, 0, 0});  // {cost, starting city 0, 0 discounts used}
+
+    while (!pq.empty()) {
+        auto top = pq.top();
+        pq.pop();
+        long long cost = top[0];
+        int u = top[1];
+        int used_discounts = top[2];
+
+        if (cost > dist[u][used_discounts]) continue;
+
+        for (auto& [v, toll] : adj[u]) {
+            if (cost + toll < dist[v][used_discounts]) { //no discount
+                dist[v][used_discounts] = cost + toll;
+                pq.push({dist[v][used_discounts], v, used_discounts});
+            }
+
+            if (used_discounts < discounts) { //use discount
+                long long discounted_toll = toll / 2;
+                if (cost + discounted_toll < dist[v][used_discounts + 1]) {
+                    dist[v][used_discounts + 1] = cost + discounted_toll;
+                    pq.push({dist[v][used_discounts + 1], v, used_discounts + 1});
+                }
+            }
+        }
+    }
+
+    long long min_cost = LLONG_MAX;
+    for (int i = 0; i <= discounts; ++i) {
+        min_cost = min(min_cost, dist[n - 1][i]);
+    }
+
+    return min_cost == LLONG_MAX ? -1 : min_cost;
+}
