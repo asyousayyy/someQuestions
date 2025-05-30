@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int helper(vector<vector<int>> &s, vector<vector<int>> &t, int node, 
+    int days, int k, vector<vector<int>> &dp) {
+        
+        if (days == k) return 0;
+        if(dp[node][days]!=-1) return dp[node][days];
+
+        int stay = s[days][node] + helper(s, t, node, days + 1, k,dp);
+
+        int go = 0;
+        for (int i = 0; i < t.size(); i++) {
+            if (i == node) continue;
+            go = max(go, t[node][i] + helper(s, t, i, days + 1, k,dp));
+        }
+
+        return dp[node][days] = max(stay, go);
+    }
+
+    int maxScore(int n, int k, vector<vector<int>>& s, vector<vector<int>>& t) {
+        
+        int maxi = 0;
+        vector<vector<int>> dp(n+1, vector<int>(k+1,-1));
+        
+        for (int i = 0; i < n; i++) {
+            maxi = max(maxi, helper(s, t, i, 0, k, dp));
+        }
+
+        return maxi;
+    }
+
+};
