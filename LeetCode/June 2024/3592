@@ -1,0 +1,35 @@
+vector<int> findCoins(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> ans;
+        vector<int> dp(n+1,0);
+        dp[0] = 1;
+
+        for(int coin = 1; coin <= n; coin++){
+            vector<int> newdp = dp;
+
+            //update dp as well na
+            for(int i=coin; i<=n; i++){
+                newdp[i] += newdp[i-coin];
+            }
+
+            bool valid = true;
+            for(int i=1; i<=n; i++){
+                if(newdp[i] > nums[i-1]) {
+                    valid = false;
+                    break;
+                }
+            }
+
+            if(valid) {
+                ans.push_back(coin);
+                dp = newdp;
+            }
+
+        }
+
+        for (int i = 1; i <= n; ++i) {
+            if (dp[i] != nums[i - 1]) return {};
+        }
+
+        return ans;
+    }
