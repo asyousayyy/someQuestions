@@ -1,0 +1,35 @@
+long long dfs(int root, int parent, vector<vector<int>> &tree, 
+    vector<int> &cost, int &ans) {
+        
+        long long maxScore = 0;
+        vector<long long> scores;
+
+        for (auto child : tree[root]) {
+            
+            if (child == parent) continue;
+            long long temp = dfs(child, root, tree, cost, ans);
+            scores.push_back(temp);
+            maxScore = max(maxScore, temp); 
+        }
+
+        for(auto it : scores){
+            if(it != maxScore) ans++;
+        }
+
+        return cost[root] + maxScore;
+    }
+
+    int minIncrease(int n, vector<vector<int>>& edges, vector<int>& cost) {
+        
+        vector<vector<int>> tree(n);
+
+        for (auto &it : edges) {
+            int u = it[0], v = it[1];
+            tree[u].push_back(v);
+            tree[v].push_back(u);
+        }
+
+        int ans = 0;
+        dfs(0, -1, tree, cost, ans);
+        return ans;
+    }
