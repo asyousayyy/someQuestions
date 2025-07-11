@@ -1,0 +1,45 @@
+int secondMinimum(int n, vector<vector<int>>& edges, int time, int change) {
+
+        vector<vector<int>> adj(n+1);
+
+        for(auto it : edges){
+            adj[it[0]].push_back(it[1]);
+            adj[it[1]].push_back(it[0]);
+        }
+
+        vector<vector<int>> vis(n+1); //for each node, the visited times
+
+        int count = 0; //how many times we have reached the target
+        priority_queue<pair<int,int>, vector<pair<int,int>>,
+        greater<pair<int,int>>> pq;
+        pq.push({0,1}); //(time,node)
+
+        while(!pq.empty()){
+            auto it = pq.top();
+            pq.pop();
+
+            int curr = it.first;
+            int node = it.second;
+
+            if(!vis[node].empty() && vis[node].back()==curr) continue;            
+            if(vis[node].size()>=2) continue;
+
+            vis[node].push_back(curr);
+            if(node == n){
+                if(vis[n].size()==2){
+                    return vis[n].back(); //reached via second shortest path (or time)
+                }
+            }
+
+            if(curr/change % 2 == 1){ //red phase
+                curr += change - (curr%change);
+            }
+
+            for(auto it : adj[node]){
+                pq.push({curr+time, it});
+            }
+        }
+
+        return -1;
+
+    }
