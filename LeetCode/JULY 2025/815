@@ -1,0 +1,53 @@
+int numBusesToDestination(vector<vector<int>>& routes,
+    int source, int target) {
+
+        if(source == target) return 0;
+        
+        unordered_map<int, vector<int>> mp;
+        for(int i=0; i<routes.size(); i++){
+            vector<int> temp = routes[i];
+            for(int j=0; j<temp.size(); j++){
+                mp[temp[j]].push_back(i); //(stop, bus)
+            }
+        }    
+
+        if (!mp.count(source) || !mp.count(target)) return -1;
+
+        int ans = 0;
+        unordered_set<int> visbus, visstop;
+
+        queue<pair<int,int>> q; //curr bus, buses taken
+        for(auto it : mp[source]){
+            q.push({it,1}); //buses from source, total buses taken
+            visbus.insert(it);
+        }    
+        visstop.insert(source);
+
+        while(!q.empty()){
+            auto it = q.front();
+            q.pop();
+            int currbus = it.first;
+            int totalbus = it.second;
+
+            vector<int> v = mp[target];
+            for(auto it : v){
+                if(it==currbus) return totalbus;
+            }
+
+            for(auto it : routes[currbus]){
+                //the stops in the current bus route
+                if(visstop.find(it) == visstop.end()){
+                    visstop.insert(it);
+                    vector<int> next = mp[it];
+                    for(int i=0; i<next.size(); i++){
+                        if(visbus.find(next[i])==visbus.end()){
+                            q.push({next[i], totalbus+1});
+                            visbus.insert(next[i]);
+                        }
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
