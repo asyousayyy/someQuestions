@@ -1,0 +1,94 @@
+class Disjointset {
+public:
+    int n;
+    vector<int> parent, rank, size;
+
+    Disjointset(int sz) {
+        n = sz;
+        parent.resize(sz + 1);
+        rank.resize(sz + 1, 0);
+        size.resize(sz + 1, 1);
+        iota(parent.begin(), parent.end(), 0);
+    }
+
+    int findpar(int a) {
+        if (parent[a] == a) return a;
+        return parent[a] = findpar(parent[a]);
+    }
+
+    void unionbyrank(int a, int b) {
+        a = findpar(a);
+        b = findpar(b);
+        if (a == b) return;
+
+        if (rank[a] < rank[b]) {
+            parent[a] = b;
+        } else if (rank[a] > rank[b]) {
+            parent[b] = a;
+        } else {
+            parent[b] = a;
+            rank[a]++;
+        }
+    }
+
+    void unionbysize(int a, int b) {
+        a = findpar(a);
+        b = findpar(b);
+        if (a == b) return;
+
+        if (size[a] < size[b]) {
+            parent[a] = b;
+            size[b] += size[a];
+        } else {
+            parent[b] = a;
+            size[a] += size[b];
+        }
+    }
+};
+
+class Solution {
+public:
+    vector<int> processQueries(int c, 
+        vector<vector<int>>& con, 
+        vector<vector<int>>& q) {
+
+        vector<int> ans;
+        Disjointset ds(c);
+
+        for (auto it : con) {
+            ds.unionbysize(it[0], it[1]);
+        }
+
+        unordered_map<int, set<int>> mp;
+        vector<bool> offline(c + 1, false);
+
+        for (int i = 1; i <= c; i++) {
+            int leader = ds.findpar(i);
+            mp[leader].insert(i);
+        }
+
+        for (auto it : q) {
+            int type = it[0], x = it[1];
+            int leader = ds.findpar(x);
+
+            if (type == 1) {
+                if (!offline[x]) {
+                    ans.push_back(x);
+                } else {
+                    if (!mp[leader].empty()) {
+                        ans.push_back(*mp[leader].begin());
+                    } else {
+                        ans.push_back(-1);
+                    }
+                }
+            } else if (type == 2) {
+                if (!offline[x]) {
+                    offline[x] = true;
+                    mp[leader].erase(x);
+                }
+            }
+        }
+
+        return ans;
+    }
+};
