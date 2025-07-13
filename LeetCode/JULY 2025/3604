@@ -1,0 +1,36 @@
+int minTime(int n, vector<vector<int>>& edges) {
+    vector<vector<vector<int>>> adj(n);
+    
+       for (auto& e : edges) {
+            adj[e[0]].push_back({e[1], e[2], e[3]});  
+        }
+
+        using pii = pair<int, int>; 
+        priority_queue<pii, vector<pii>, greater<pii>> pq;
+        vector<int> dist(n, INT_MAX);
+        pq.push({0, 0});
+        dist[0] = 0;
+
+        while (!pq.empty()) {
+            auto [time, node] = pq.top(); pq.pop();
+        
+            if (time > dist[node]) continue;
+            if (node == n - 1) return time;
+
+            for (auto& e : adj[node]) {
+                
+                int to = e[0], s = e[1], en = e[2];
+                if (time > en) continue;
+
+                int reachingtime = max(time, s)+1;
+
+                if (reachingtime < dist[to]) {
+                    dist[to] = reachingtime;
+                    pq.push({reachingtime, to});
+                }
+            }
+        }
+
+        return -1;
+       
+    }
