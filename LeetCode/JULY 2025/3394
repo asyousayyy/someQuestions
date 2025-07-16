@@ -1,0 +1,31 @@
+bool helper(vector<pair<int,int>> &x){
+    sort(x.begin(), x.end());
+    vector<pair<int,int>> ans;
+
+    int start = x[0].first;
+    int end = x[0].second;
+    
+    for(int i = 1; i < x.size(); i++){
+        if(x[i].first < end){
+            end = max(end, x[i].second);
+        } else {
+            ans.push_back({start, end});
+            start = x[i].first;
+            end = x[i].second;
+        }
+    }
+
+    ans.push_back({start, end});
+    return ans.size() >= 3; 
+}
+
+bool checkValidCuts(int n, vector<vector<int>>& nums) {
+    vector<pair<int,int>> x, y;
+
+    for (auto it : nums) {
+        x.push_back({it[0], it[2]}); 
+        y.push_back({it[1], it[3]});
+    }
+
+    return helper(x) || helper(y);
+}
