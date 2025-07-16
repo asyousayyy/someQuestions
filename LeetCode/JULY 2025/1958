@@ -1,0 +1,34 @@
+ bool valid(int i, int j) {
+    return i >= 0 && j >= 0 && i < 8 && j < 8;
+}
+
+bool helper(int i, int j, int dx, int dy, vector<vector<char>> &board, char col) {
+    int ni = i + dx;
+    int nj = j + dy;
+
+    int count = 0;
+    while (valid(ni, nj)) {
+        if (board[ni][nj] == '.') return false;
+        if (board[ni][nj] == col) return count >= 1;
+        count++;
+        ni += dx;
+        nj += dy;
+    }
+
+    return false;
+}
+
+bool checkMove(vector<vector<char>>& board, int i, int j, char color) {
+    board[i][j] = color;
+
+    vector<pair<int, int>> dirs = {{1,0}, {-1,0}, {0,1}, {0,-1},
+    {1,1}, {1,-1}, {-1,1}, {-1,-1}};
+
+    for (auto it : dirs) {
+        if (helper(i, j, it.first, it.second, board, color)) {
+            return true;
+        }
+    }
+
+    return false;
+}
