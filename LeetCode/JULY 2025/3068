@@ -1,0 +1,30 @@
+long long maximumValueSum(vector<int>& nums, int k, 
+    vector<vector<int>>& edges) {
+        int n = nums.size();
+        vector<pair<int,int>> profit;
+        int cnt=0;
+        long long ans = accumulate(nums.begin(), nums.end(), 0ll);
+
+        for(int i=0; i<n; i++){
+            int temp = (nums[i]^k)-nums[i];
+            if(temp>0) cnt++;
+            profit.push_back({temp,i});
+        }
+
+        sort(profit.rbegin(), profit.rend());
+        //now keep taking two values
+        //if we have odd number break out
+        for(int i=0; i+1<n; i+=2){
+            int g1 = profit[i].first;
+            int g2 = profit[i+1].first;
+
+            if(g1+g2>0){
+                ans += (g1+g2);
+            }
+            else{
+                break;
+            }
+        }
+
+        return ans;
+    }
