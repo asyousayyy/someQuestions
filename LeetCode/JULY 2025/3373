@@ -1,0 +1,66 @@
+class Solution {
+public:
+    vector<vector<int>> helper(vector<vector<int>> &edges){
+    vector<vector<int>> adj(edges.size()+1);
+    for(auto it : edges){
+        int u = it[0];
+        int v = it[1];
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    return adj;
+}
+
+void dfsColor(int node, int par, vector<vector<int>> &adj, vector<int> &color, int &even, int &odd){
+    if(color[node] == 0) even++;
+    else odd++;
+
+    for(auto it : adj[node]){
+        if(it != par){
+            color[it] = !color[node]; 
+            dfsColor(it, node, adj, color, even, odd);
+        }
+    }
+}
+
+vector<int> maxTargetNodes(vector<vector<int>>& edges1, vector<vector<int>>& edges2) {
+    vector<vector<int>> adj1 = helper(edges1);
+    vector<vector<int>> adj2 = helper(edges2);
+
+    int n = adj1.size();
+    int m = adj2.size();
+
+    vector<int> color1(n, -1), color2(m, -1);
+    color1[0] = 0; 
+    color2[0] = 0;
+
+    int even1 = 0, odd1 = 0;
+    int even2 = 0, odd2 = 0;
+
+    dfsColor(0, -1, adj1, color1, even1, odd1);
+    dfsColor(0, -1, adj2, color2, even2, odd2);
+
+    int maxi = max(even2, odd2);
+    vector<int> ans;
+
+    //if node is at even level, then all even nodes will be at even to it
+    //therefore add evenA + maxi
+    //but if node is odd level, then all odd nodes will be at even level to it
+    //therefore add oddA + maxi
+
+    //maxi doesnt matter comes from odd or even because it can be joined to any node
+    //so if comes from odd nodes, then join at even nodes
+    //and if comes from even nodes, then join at odd nodes
+
+    for(int i=0; i<n; i++){
+        if(color1[i] == 0){
+            ans.push_back(maxi + even1);
+        } else {
+            ans.push_back(maxi + odd1);
+        }
+    }
+
+    return ans;
+}
+
+};
