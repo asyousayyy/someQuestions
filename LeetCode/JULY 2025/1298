@@ -1,0 +1,40 @@
+int maxCandies(vector<int>& status, vector<int>& candies, 
+    vector<vector<int>>& keys, vector<vector<int>>& contain, vector<int>& initial) {
+        
+    int n = status.size();
+    queue<int> q;
+    vector<int> vis(n, 0);
+    int ans = 0;
+
+    unordered_set<int> have; 
+    for (auto it : initial) {
+        if (status[it] == 1) q.push(it);
+        have.insert(it);
+    }
+
+    while (!q.empty()) {
+        auto it = q.front();
+        q.pop();
+
+        int box = it;
+        if (vis[box]) continue;
+        vis[box] = 1;
+        ans += candies[box];
+
+        for (auto k : keys[box]) {
+            status[k] = 1; // unlocked now
+            if (have.count(k) && !vis[k]) {
+                q.push(k);
+            }
+        }
+
+        for (auto x : contain[box]) {
+            have.insert(x); //might be open or closed
+            if (status[x] == 1 && !vis[x]) {
+                q.push(x); //if open push in queue
+            }
+        }
+    }
+
+    return ans;
+}
