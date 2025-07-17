@@ -1,0 +1,36 @@
+int helper(vector<vector<int>> &nums, int i, vector<vector<int>> &dp, int k, int n){
+
+        if(i>=nums.size() || k==0) return 0;
+        if(dp[i][k] != -1) return dp[i][k];
+
+        int take = 0;
+        int nottake = helper(nums,i+1,dp,k,n);
+
+        int low = i+1, high = n-1;
+        int ans = n;
+
+        while(low<=high){
+            int mid = (low+high)/2;
+            if(nums[mid][0] > nums[i][1]){
+                ans = mid;
+                high = mid-1;
+            }
+            else{
+                low = mid+1;
+            }
+        }
+
+        take = nums[i][2] + helper(nums,ans,dp,k-1,n);
+
+        return dp[i][k] = max(take,nottake);
+    }
+
+    int maxValue(vector<vector<int>>& events, int k) {
+        
+        int n = events.size();
+        sort(events.begin(), events.end()); 
+
+        vector<vector<int>> dp(n + 1, vector<int>(k + 1, -1));
+
+        return helper(events,0,dp,k,n);
+    }
