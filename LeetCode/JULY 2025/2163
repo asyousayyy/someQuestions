@@ -1,0 +1,48 @@
+long long minimumDifference(vector<int>& nums) {
+        
+        int n = nums.size()/3;
+        int n3 = nums.size();
+        priority_queue<long long> maxpq;
+        priority_queue<long long,vector<long long>,greater<long long>> minpq;
+        vector<long long>left(n3,0), right(n3,0);
+
+        long long sum = 0;
+
+        for(int i=0; i<n3; i++){
+            sum += nums[i];
+            maxpq.push(nums[i]);
+
+            if(maxpq.size()>n){
+                sum -= maxpq.top();
+                maxpq.pop();
+            }
+
+            if(i>=n-1){
+                left[i] = sum; //keep updating sum of smallest n from left
+            }
+        }
+
+        sum = 0;
+
+        for(int i=n3-1; i>=0; i--){
+            sum += nums[i];
+            minpq.push(nums[i]);
+
+            if(minpq.size()>n){
+                sum -= minpq.top();
+                minpq.pop();
+            }
+
+            if(i<=n3-n){
+                right[i] = sum; //keep updating sum of smallest n from right
+            }
+        }
+
+        long long ans = LLONG_MAX;
+
+        for(int i=n-1; i<n3-n; i++){
+            ans = min(ans, left[i]-right[i+1]);
+        }
+
+        return ans;
+    }
