@@ -1,0 +1,64 @@
+
+vector<pair<int, int>> dirs = {{0, 1}, {1, 0}}; 
+
+bool valid(vector<vector<int>> &grid, int i, int j, int th) {
+    
+    for (int x = i; x < i + 3; x++) {
+        for (int y = j; y < j + 3; y++) {
+            for (auto [dx, dy] : dirs) {
+                int nx = x + dx;
+                int ny = y + dy;
+
+                if (nx < i + 3 && ny < j + 3) {
+                    if (abs(grid[x][y] - grid[nx][ny]) > th)
+                        return false;
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+
+vector<vector<int>> resultGrid(vector<vector<int>>& grid, int th) {
+    int m = grid.size(), n = grid[0].size();
+
+    vector<vector<vector<int>>> dp(m, vector<vector<int>>(n));
+
+    for (int i = 0; i <= m - 3; i++) {
+        for (int j = 0; j <= n - 3; j++) {
+            if (valid(grid, i, j, th)) {
+                int sum = 0;
+                for (int x = i; x < i + 3; x++) {
+                    for (int y = j; y < j + 3; y++) {
+                        sum += grid[x][y];
+                    }
+                }
+                
+                for (int x = i; x < i + 3; x++) {
+                    for (int y = j; y < j + 3; y++) {
+                        dp[x][y].push_back(sum / 9);
+                    }
+                }
+            }
+        }
+    }
+
+    vector<vector<int>> res(m, vector<int>(n));
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (dp[i][j].empty()) {
+                res[i][j] = grid[i][j];
+            } else {
+                int total = 0;
+                for (auto val : dp[i][j]) {
+                    total += val;
+                }
+                res[i][j] = total / dp[i][j].size();
+            }
+        }
+    }
+
+    return res;
+}
