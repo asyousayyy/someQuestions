@@ -1,0 +1,28 @@
+const int mod = 1e9+7;
+
+    int countTrapezoids(vector<vector<int>>& points) {
+    
+        unordered_map<int,int> mp;
+        for(auto it : points){
+            int x = it[0];
+            int y = it[1];
+            mp[y]++;
+        }
+
+        long long total = 0;
+        for(auto it : mp){
+            int p = it.second;
+            total += 1LL * p * (p-1) / 2; //total points we have
+        }
+
+        long long ans = 0;
+        for(auto it : mp){
+            int p = it.second;
+            int curr = 1LL * p * (p-1)/2;
+            ans += (total - curr) * curr;
+        }
+
+        ans = ans/2; //because we count each two times
+        return ans%mod;
+        
+    }
