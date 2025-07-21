@@ -1,0 +1,31 @@
+int minCost(vector<int>& start, vector<int>& home, vector<int>& row, 
+    vector<int>& col) {
+       
+    int m = row.size();
+    int n = col.size();
+    int ans = 0;
+
+    if(start[0]<home[0]){
+        for(int i=start[0]+1; i<=home[0]; i++){
+            ans += row[i];
+        }
+    }
+    else{
+        for(int i=start[0]-1; i>=home[0]; i--){
+            ans += row[i];
+        }
+    }
+
+    if(start[1]<home[1]){
+        for(int i=start[1]+1; i<=home[1]; i++){
+            ans += col[i];
+        }
+    }
+    else{
+        for(int i=start[1]-1; i>=home[1]; i--){
+            ans += col[i];
+        }
+    }
+
+    return ans;
+}
