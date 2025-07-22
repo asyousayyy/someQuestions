@@ -1,0 +1,34 @@
+long long helper(string s, string pat){
+        //find number of subsequences
+        long long count = 0, temp = 0;
+
+        for(auto it : s){
+            if(it == pat[0]){
+                temp++; //potential starting points
+            }
+            else if(it == pat[1]){
+                count += temp;
+            }
+        }
+
+        return count;
+    }
+
+    long long temp(string &text, string &pat){
+        long long cnt=0;
+        for(auto it : text){
+            if(it==pat[0]) cnt++;
+        }
+        return (cnt)*(cnt+1)/2;
+    }
+
+    long long maximumSubsequenceCount(string text, string pat) {
+        long long cnt = 0;
+        int n = text.size(), m = pat.size();
+
+        if(pat[0]==pat[1]){
+            return temp(text, pat);
+        }
+
+        return max(helper(pat[0]+text, pat), helper(text+pat[1], pat));
+    }
