@@ -1,0 +1,45 @@
+class Solution {
+public:
+    int minimumIndex(vector<int>& nums) {
+        int n = nums.size();
+        map<int,int> mp;
+        int num = -1, freq = 0;
+
+        for(auto it : nums){
+            mp[it]++;
+            if(mp[it]>freq){
+                freq = mp[it];
+                num = it;
+            }
+        }
+
+        vector<int> pre(n,0);
+        if(nums[0]==num) pre[0] = 1;
+
+        for(int i=1; i<n; i++){
+            if(nums[i] == num){
+                pre[i] = 1 + pre[i-1];
+            }
+            else{
+                pre[i] = pre[i-1];
+            }
+        }
+
+        int idx = -1;
+        int total = pre[n-1];
+
+        for(int i = 0; i<n; i++){
+            int len1 = (i-0+1);
+            int len2 = (n-i-1);
+            int val1 = pre[i];
+            int val2 = total - pre[i];
+
+            if(val1>len1/2 && val2>len2/2){
+                return i;
+            }
+        }
+
+        return idx;
+
+    }
+};
