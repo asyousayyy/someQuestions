@@ -1,0 +1,70 @@
+class Solution {
+public:
+    void dfs(int node, int parent, vector<int> &nums,
+    vector<unordered_set<int>> &desc, vector<int> &subtree,
+    vector<vector<int>> &adj){
+
+        int ans = nums[node]; //initial val
+        desc[node].insert(node);
+
+        for(auto it : adj[node]){
+            if(it==parent) continue;
+            dfs(it,node,nums,desc,subtree,adj);
+            ans = ans ^ subtree[it];
+            for(int x : desc[it]){
+                desc[node].insert(x);
+            }
+        }
+
+        subtree[node] = ans;
+    }
+
+    int minimumScore(vector<int>& nums, vector<vector<int>>& edges) {
+        
+        int n = nums.size();
+        vector<vector<int>> adj(n);
+
+        for(auto it : edges){
+            adj[it[0]].push_back(it[1]);
+            adj[it[1]].push_back(it[0]);
+        }
+
+        int ans = INT_MAX;
+        vector<unordered_set<int>> desc(n); //descendents of a node
+        vector<int> subtree(n,0);
+
+        dfs(0,-1,nums,desc,subtree,adj);
+        //we have descendents, and xor of each subtree
+        int total = subtree[0];
+
+        for(int i=1; i<n; i++){
+            for(int j=i+1; j<n; j++){
+                int val1,val2,val3 = 0;
+                //j is desc of i
+                if(desc[i].find(j) != desc[i].end()){
+                    val1 = total ^ subtree[i];
+                    val2 = subtree[i] ^ subtree[j];
+                    val3 = subtree[j];
+                }
+
+                //if i is desc of j
+                else if(desc[j].find(i) != desc[j].end()){
+                    val1 = total ^ subtree[j];
+                    val2 = subtree[j] ^ subtree[i];
+                    val3 = subtree[i];
+                }
+
+                else{
+                    val1 = total ^ subtree[i] ^ subtree[j];
+                    val2 = subtree[i];
+                    val3 = subtree[j];
+                }
+
+                int score = max({val1,val2,val3}) - min({val1,val2,val3});
+                ans = min(ans, score);
+            }
+        }
+
+        return ans;
+    }
+};
