@@ -1,0 +1,53 @@
+vector<int> maxPoints(vector<vector<int>>& grid, vector<int>& queries) {
+        int m = grid.size();
+        int n = grid[0].size();
+        int k = queries.size();
+        vector<int> ans(k, 0);
+
+        int dx[4] = {1, -1, 0, 0};
+        int dy[4] = {0, 0, 1, -1};
+
+        vector<pair<int, int>> nums;
+        for (int i = 0; i < k; i++) {
+            nums.push_back({queries[i], i});
+        }
+
+        sort(nums.begin(), nums.end());
+
+        vector<vector<int>> vis(m, vector<int>(n, 0));
+        priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>,
+        greater<>> pq;
+
+        pq.push({grid[0][0], {0, 0}});
+        vis[0][0] = 1;
+
+        int i = 0, count = 0;
+
+        for (int q = 0; q < k; q++) {
+            int threshold = nums[q].first;
+            int idx = nums[q].second;
+
+            while(!pq.empty() && pq.top().first < threshold){
+                auto it = pq.top();
+                pq.pop();
+                int x = it.second.first;
+                int y = it.second.second;
+                count++;
+
+                for(int i=0; i<4; i++){
+                    int newx = x + dx[i];
+                    int newy = y + dy[i];
+
+                    if(newx>=0 && newy>=0 && newx<m && newy<n &&
+                    !vis[newx][newy]){
+                        pq.push({grid[newx][newy],{newx,newy}});
+                        vis[newx][newy] = 1;
+                    }
+                }
+            }
+
+            ans[idx] = count;
+        }
+
+        return ans;
+    }
