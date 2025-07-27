@@ -1,0 +1,33 @@
+long long numOfSubsequences(string s) {
+        int n = s.size();
+        long long sum = 0;
+        vector<int> pre,suf;
+        int l = 0, t = 0;
+
+        for(int i=0; i<n; i++){
+            if(s[i]=='L') l++;
+            pre.push_back(l);
+        }
+
+        for(int i=n-1; i>=0; i--){
+            if(s[i]=='T') t++;
+            suf.push_back(t);
+        }
+
+        reverse(suf.begin(), suf.end());
+
+        long long lm = 0, tm = 0, cm = 0, total = 0;
+
+        for(int i=0; i<n; i++){
+            if(s[i]=='C'){
+                total += 1ll * pre[i] * suf[i];
+                lm += 1ll * (1+pre[i]) * suf[i];
+                tm += 1ll * (pre[i]) * (1+suf[i]);
+            }
+                cm = max(cm, 1ll*pre[i]*suf[i]); //at which pos should i insert,
+                //so check every position for c and find optimal where we should place it
+        }
+
+        return max({lm,tm,total+cm});
+
+    }
