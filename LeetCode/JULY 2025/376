@@ -1,0 +1,38 @@
+int helper(int idx, int diff, vector<int> &nums, vector<vector<int>> &dp){
+   
+    int n = nums.size();
+    
+    if(idx >= n) return 0;
+
+    if(dp[idx][diff] != -1) return dp[idx][diff];
+
+    int nottake = helper(idx + 1, diff, nums, dp);
+    
+    int take = 0;
+
+    for(int j = idx + 1; j < n; j++){
+        int temp = nums[j] - nums[idx];
+        if (temp == 0) continue;
+
+        if ((diff == 1 && temp < 0) || (diff == 0 && temp > 0)){
+            take = max(take, 1 + helper(j, !diff, nums, dp));
+        }
+    }
+
+    return dp[idx][diff] = max(take, nottake);
+}
+
+int wiggleMaxLength(vector<int>& nums) {
+    int n = nums.size();
+    if(n <= 1) return n;
+
+    vector<vector<int>> dp(n, vector<int>(2, -1));
+
+    int maxlen = 1;
+    for(int i = 0; i < n; i++) {
+        maxlen = max(maxlen, 1 + helper(i, 1, nums, dp)); 
+        maxlen = max(maxlen, 1 + helper(i, 0, nums, dp)); 
+    }
+
+    return maxlen;
+}
