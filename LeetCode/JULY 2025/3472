@@ -1,0 +1,35 @@
+int dist(char a, char b) {
+        int d = abs(a - b);
+        return min(d, 26 - d);
+    }
+
+   int helper(string &s, int k, int i, int j, vector<vector<vector<int>>> &dp){
+    if(i > j) return 0;
+    if(i == j) return 1;
+    if(dp[i][j][k] != -1) return dp[i][j][k];
+
+    if(s[i] == s[j]){
+        return dp[i][j][k] = 2 + helper(s, k, i + 1, j - 1, dp);
+    }
+
+    int res = 0;
+
+    if(s[i]!=s[j]){
+        int temp = dist(s[i], s[j]);
+        if(k>=temp){
+            res = 2 + helper(s,k-temp,i+1,j-1,dp);
+        }
+    }
+
+    res = max(res, helper(s, k, i + 1, j, dp));
+    res = max(res, helper(s, k, i, j - 1, dp));
+
+    return dp[i][j][k] = res;
+}
+
+int longestPalindromicSubsequence(string s, int k) {
+    int n = s.size();
+    vector<vector<vector<int>>> dp(n, vector<vector<int>>(n,
+     vector<int>(k + 1, -1)));
+    return helper(s, k, 0, n - 1, dp);
+}
