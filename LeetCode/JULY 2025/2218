@@ -1,0 +1,33 @@
+int f(vector<int> &pile, int j) {
+
+    int sum = 0;
+    for (int i = 0; i < j && i < pile.size(); ++i) {
+        sum += pile[i];
+    }
+    return sum;
+
+}
+
+int helper(vector<vector<int>> &piles, int i, int k,
+vector<vector<int>> &dp){
+
+    if (i == piles.size()) return 0;
+    if(dp[i][k]!=-1) return dp[i][k];
+
+    // not take anything from current pile
+    int nottake = helper(piles, i + 1, k, dp);
+
+    int take = 0;
+    for (int j = 1; j <= min((int)piles[i].size(), k); ++j) {
+        int sum = f(piles[i], j);
+        take = max(take, sum + helper(piles, i + 1, k - j, dp));
+    }
+
+    return dp[i][k] = max(take, nottake);
+}
+
+int maxValueOfCoins(vector<vector<int>>& piles, int k) {
+    int n = piles.size();
+    vector<vector<int>> dp(n+1, vector<int>(k+1,-1));
+    return helper(piles, 0, k, dp);
+}
