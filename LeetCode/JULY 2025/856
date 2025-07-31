@@ -1,0 +1,24 @@
+int dfs(string &s, int &i){
+        int ans = 0;
+
+        while(i<s.size()){
+            if(s[i]=='('){
+                i++; //isse aage wali string
+                int inner = dfs(s, i);
+                if(inner == 0) ans += 1; // () string
+                else ans += 2*inner;
+            }
+            else{
+                i++;
+                return ans;
+            }
+        }
+
+        return ans;
+    }
+
+    int scoreOfParentheses(string s) {
+        int n = s.size();
+        int i = 0;
+        return dfs(s,i);
+    }
