@@ -1,0 +1,42 @@
+vector<int> shortestAlternatingPaths(int n, vector<vector<int>>& red, 
+    vector<vector<int>>& blue) {
+        vector<int> ans(n,-1);
+        vector<vector<pair<int,int>>> adj(n);
+
+        for(auto it : red){
+            adj[it[0]].push_back({it[1],0});
+        }
+
+        for(auto it : blue){
+            adj[it[0]].push_back({it[1],1});
+        }
+
+        queue<vector<int>> q;
+        vector<vector<bool>> vis(n+1, vector<bool>(2,0));
+        q.push({0,0,-1});
+        vis[0][1] = vis[0][0] = 1;
+        ans[0] = 0;
+
+        while(!q.empty()){
+            auto it = q.front();
+            int u = it[0];
+            int steps = it[1];
+            int prevcolor = it[2];
+
+            q.pop();
+
+            if(ans[u]==-1) ans[u] = steps;
+
+            for(auto it : adj[u]){
+                int v = it.first;
+                int color = it.second;
+
+                if(!vis[v][color] && color != prevcolor){
+                    vis[v][color] = 1;
+                    q.push({v,steps+1,color});
+                    
+                }
+            }
+        }
+        return ans;
+    }
