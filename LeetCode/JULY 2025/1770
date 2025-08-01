@@ -1,0 +1,21 @@
+int helper(vector<int>& nums, vector<int>& mul, int i, int k, 
+    vector<vector<int>> &dp) {
+        if (k == mul.size()) return 0;
+
+        if (dp[i][k] != -1) return dp[i][k];
+
+        int j = nums.size() - 1 - (k - i); 
+
+        int left = nums[i] * mul[k] + helper(nums, mul, i + 1, k + 1,dp);
+        int right = nums[j] * mul[k] + helper(nums, mul, i, k + 1,dp);
+
+        return dp[i][k] = max(left, right);
+    }
+
+    int maximumScore(vector<int>& nums, vector<int>& mul) {
+        int m = mul.size();
+
+        vector<vector<int>> dp(m + 1, vector<int>(m + 1, -1));
+
+        return helper(nums, mul, 0, 0, dp);
+    }
