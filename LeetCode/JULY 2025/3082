@@ -1,0 +1,56 @@
+class Solution {
+public:
+   
+    const int MOD = 1e9 + 7;
+
+    int powmod(int base, int exp) {
+    
+        int result = 1;
+
+        while (exp > 0) {
+            if (exp % 2 == 1) {
+                result = (1LL * result * base) % MOD;
+                exp = exp-1;
+            }
+            else{
+                base = (1LL * base * base) % MOD;
+                exp /= 2;
+            }
+        }
+        
+        return result;
+    }
+
+    int helper(vector<int> &nums, int k, int i, int sum, int picked,
+    vector<vector<vector<int>>> &dp) {
+        int n = nums.size();
+
+        if(dp[i][sum][picked]!=-1) return dp[i][sum][picked];
+
+        if (i == n) {
+            if (sum == k && picked > 0) {
+                return powmod(2, n - picked); 
+            }
+            return 0;
+        }
+
+        int notTake = helper(nums, k, i + 1, sum, picked,dp);
+
+        int take = 0;
+        if (sum + nums[i] <= k) {
+            take = helper(nums, k, i + 1, sum + nums[i], picked + 1,dp);
+        }
+
+        return dp[i][sum][picked] = (take + notTake) % MOD;
+    }
+
+    int sumOfPower(vector<int>& nums, int k) {
+        int n = nums.size();
+
+        vector<vector<vector<int>>>dp(n + 1, 
+        vector<vector<int>>(k + 1, vector<int>(n + 1, -1)));
+        
+        return helper(nums, k, 0, 0, 0,dp);
+    }
+
+};
