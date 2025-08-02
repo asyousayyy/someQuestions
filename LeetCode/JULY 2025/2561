@@ -1,0 +1,44 @@
+long long minCost(vector<int>& b1, vector<int>& b2) {
+        unordered_map<int, int> mp1, mp2;
+        for (auto it : b1) mp1[it]++;
+        for (auto it : b2) mp2[it]++;
+        
+        map<int, int> total;
+        for (auto& [k, v] : mp1) total[k] += v;
+        for (auto& [k, v] : mp2) total[k] += v;
+
+        for (auto& [k, v] : total) {
+            if (v % 2 != 0) return -1;
+        }
+
+        vector<int> v1, v2;
+        for (auto& [key, _] : total) {
+            int f1 = mp1[key];
+            int f2 = mp2[key];
+            int target = (f1 + f2) / 2;
+            if (f1 > target) {
+                for (int i = 0; i < f1 - target; ++i)
+                    v1.push_back(key);
+            }
+            if (f2 > target) {
+                for (int i = 0; i < f2 - target; ++i)
+                    v2.push_back(key);
+            }
+        }
+
+        sort(v1.begin(), v1.end());     // ascending
+        sort(v2.rbegin(), v2.rend());   // descending
+
+        int mini = INT_MAX;
+        for (int x : b1) mini = min(mini, x);
+        for (int x : b2) mini = min(mini, x);
+
+        long long cost = 0;
+        for (int i = 0; i < v1.size(); ++i) {
+            cost += min(2*mini,min(v1[i], v2[i]));
+            //for swapping two elements, we can do so by swapping minimum elements 
+            //twice
+        }
+
+        return cost;
+    }
