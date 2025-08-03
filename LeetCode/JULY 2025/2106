@@ -1,0 +1,50 @@
+class Solution {
+public:
+    int maxTotalFruits(vector<vector<int>>& fruit, int start, int k) {
+        int n = fruit.size();
+        int m = 2e5+1;
+        vector<int> pos(m,0);
+
+        for(int i=0; i<n; i++){
+            pos[fruit[i][0]] = fruit[i][1];
+        }
+
+        vector<int> left(m,0), right(m,0);
+
+        left[start] = pos[start];
+        //move left
+        for(int i = start-1; i>=0; i--){
+            left[i] = left[i+1] + pos[i];
+        }
+
+        right[start] = pos[start];
+        //move right
+        for(int i=start+1; i<m; i++){
+            right[i] = right[i-1] + pos[i];
+        }
+
+        long long ans = 0;
+
+        //move left->right
+        for(int l = 0; l <= min(k, start); l++){
+            int r = min(k-2*l, m-start+1);
+
+            if(start+r < m){
+                long long curr = left[start-l] + right[start+r] - pos[start];
+                ans = max(ans, curr);
+            }
+        }
+
+        //move right->left
+        for(int r=0; r<=min(k, m-start-1); r++){
+            int l = min(k-2*r, start-0);
+
+            if(start-l >= 0){
+                long long curr = left[start-l] + right[start+r] - pos[start];
+                ans = max(ans, curr);
+            }
+        }
+
+        return ans;
+    }
+};
