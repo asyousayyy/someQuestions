@@ -1,0 +1,36 @@
+class Solution {
+public:
+
+    int helper(int u, int v, vector<set<int>> &adj){
+
+        int s1 = adj[u].size();
+        int s2 = adj[v].size();
+
+        if(adj[u].find(v)!=adj[u].end()){
+            return s1+s2-1;
+        }
+
+        return s1+s2;
+    }
+
+    int maximalNetworkRank(int n, vector<vector<int>>& roads) {
+        
+        int ans = 0;
+        vector<set<int>> adj(n);
+
+        for(auto it : roads){
+            int u = it[0];
+            int v = it[1];
+            adj[u].insert(v);
+            adj[v].insert(u);
+        }
+
+        for(int i=0; i<n; i++){
+            for(int j=i+1; j<n; j++){
+                ans = max(ans, helper(i,j,adj));
+            }
+        }
+
+        return ans;
+    }
+};
