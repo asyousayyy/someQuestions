@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int helper(vector<pair<int,int>> &v, int i, int prev,
+    vector<vector<int>> &dp) {
+
+        if(i >= v.size()) return 0;
+        if(dp[i][prev+1] != -1) return dp[i][prev+1];
+
+        int nottake = helper(v, i+1, prev, dp);
+
+        int take = 0;
+        if(prev == -1 || v[i].second >= v[prev].second) {
+            take = v[i].second + helper(v, i+1, i, dp);
+        }
+
+        return dp[i][prev+1] = max(take, nottake);
+    }
+
+    int bestTeamScore(vector<int>& scores, vector<int>& ages) {
+        vector<pair<int,int>> v;
+
+        for(int i = 0; i < ages.size(); i++) {
+            v.push_back({ages[i], scores[i]});
+        }
+
+        sort(v.begin(), v.end());  
+
+        vector<vector<int>> dp(ages.size()+1, vector<int>(ages.size()+1,-1));
+        return helper(v, 0, -1, dp);
+    }
+};
