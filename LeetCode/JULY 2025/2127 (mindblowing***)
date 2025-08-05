@@ -1,0 +1,96 @@
+class Solution {
+public:
+
+    int dfs1(int node, vector<int> &vis, vector<vector<int>> &adj){
+        int len = 1;
+        vis[node]=1;
+
+        for(auto it : adj[node]){
+            if(!vis[it]){
+                len = max(len,1 + dfs1(it, vis, adj)); //take the maximum one
+            }
+        }
+
+        return len;
+    }
+
+    int helper(vector<int> &fav, int node, int temp){
+        int ans = 0;
+        //go reverse from the node, in each direction
+        vector<vector<int>> adj(fav.size());
+
+        for(int i=0; i<fav.size(); i++){
+            adj[fav[i]].push_back(i);
+        }
+
+        vector<int> vis(fav.size(),0);
+
+        for(auto it : adj[node]){
+            if(!vis[it] && it!=temp){
+                ans = max(ans, dfs1(it, vis, adj));
+            }
+        }
+
+        return ans;
+
+    }
+
+    void dfs(int node, vector<int> &fav, vector<int> &vis,
+    int &longestcycle, vector<pair<int,int>> &v){
+        
+        unordered_map<int,int> mp; //node, step;
+        int step = 0;
+        int curr = node;
+
+        while(!vis[curr]){
+            vis[curr] = 1;
+            mp[curr] = step;
+            step++;
+            curr = fav[curr];
+        }
+
+        if(mp.count(curr)){ //saw this again
+            int cycle = step - mp[curr]; //length of cycle
+            if(cycle==2 && fav[fav[curr]]==curr){
+                v.push_back({fav[curr],curr});
+            }
+            else{
+                longestcycle = max(longestcycle, cycle);
+            }
+        }
+        
+    }
+
+    int maximumInvitations(vector<int>& fav) {
+        int n = fav.size();
+        vector<vector<int>> adj(n);
+
+        for(int i=0; i<n; i++){
+            adj[i].push_back(fav[i]); 
+        }
+
+        int longestcycle = 0; //tracking the longest cycle
+        vector<pair<int,int>> v; //tracking 2-length cycle nodes
+
+        vector<int> vis(n,0);
+        for(int i=0; i<n; i++){
+            if(!vis[i]){
+                dfs(i,fav,vis,longestcycle,v);
+            }
+        }
+
+        int total = 0;
+
+        //for 2-length cycles
+        for(auto it : v){
+            int a = it.first;
+            int b = it.second;
+            int lena = helper(fav,a,b);
+            int lenb = helper(fav,b,a);
+            total += (2+lena+lenb);
+        }
+
+        return max(longestcycle, total);
+            
+    }
+};
