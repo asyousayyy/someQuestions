@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int helper(int i, vector<int> &job, int d, vector<vector<int>> &dp){
+
+        if(d==1){
+            int temp = 0;
+            for(int k=i; k<job.size(); k++){
+                temp = max(temp, job[k]);
+            }
+            return temp;
+        }
+
+        if(dp[i][d] != -1) return dp[i][d];
+
+        int maxi = 0;
+        int ans = INT_MAX;
+
+        for(int j=i; j<=job.size()-d; j++){
+            maxi = max(maxi, job[j]);
+            ans = min(ans, maxi+helper(j+1,job,d-1,dp));
+        }
+
+        return dp[i][d] = ans;
+    }
+
+    int minDifficulty(vector<int>& job, int d) {
+        int n = job.size();
+        if(n<d) return -1;
+        vector<vector<int>> dp(n+1, vector<int> (d+1,-1));
+        return helper(0,job,d,dp);
+    }
+};
