@@ -1,0 +1,36 @@
+class DetectSquares {
+public:
+    unordered_map<int, unordered_map<int,int>> mpx,mpy;
+
+    DetectSquares() {}
+    
+    void add(vector<int> point) {
+        mpx[point[0]][point[1]]++;
+        mpy[point[1]][point[0]]++;
+    }
+    
+    int count(vector<int> point) {
+        int x = point[0];
+        int y = point[1];
+        
+        int ans = 0;
+
+        for(auto &[x2,cnt] : mpy[y]){
+
+            if(x2==x) continue;
+            int length = abs(x2-x);
+
+            ans += mpx[x][y+length]*mpx[x2][y+length]*cnt; //cnt = count of x2
+            ans += mpx[x][y-length]*mpx[x2][y-length]*cnt;
+        }
+
+        return ans;
+    }
+};
+
+/**
+ * Your DetectSquares object will be instantiated and called as such:
+ * DetectSquares* obj = new DetectSquares();
+ * obj->add(point);
+ * int param_2 = obj->count(point);
+ */
