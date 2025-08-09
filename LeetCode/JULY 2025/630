@@ -1,0 +1,44 @@
+class Solution {
+public:
+    // int helper(int i, vector<vector<int>> &nums, int curr, vector<vector<int>> &dp) {
+    //     int n = nums.size();
+    //     if (i >= n) return 0;
+
+    //     if (dp[i][curr] != -1) return dp[i][curr];
+
+    //     int notpick = helper(i + 1, nums, curr, dp);
+
+    //     int pick = 0;
+    //     if (curr + nums[i][0] <= nums[i][1]) {
+    //         pick = 1 + helper(i + 1, nums, curr + nums[i][0], dp);
+    //     }
+
+    //     return dp[i][curr] = max(notpick, pick);
+    // }
+
+    int scheduleCourse(vector<vector<int>>& nums) {
+        int n = nums.size();
+        
+        sort(nums.begin(), nums.end(), [](auto &a, auto &b) {
+            return a[1] < b[1]; 
+        });
+
+        priority_queue<int> pq;
+        int curr = 0;
+
+        for(auto it : nums){
+            int duration = it[0];
+            int lastday = it[1];
+
+            pq.push(duration);
+            curr += duration;
+
+            while(curr > lastday){
+                curr -= pq.top();
+                pq.pop();
+            }
+        }
+
+        return pq.size();
+    }
+};
