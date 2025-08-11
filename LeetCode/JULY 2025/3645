@@ -1,0 +1,46 @@
+class Solution {
+public:
+    static bool cmp(pair<int,int> &a, pair<int,int> &b){
+        if(a.first == b.first) return a.second>b.second;
+        return a.first<b.first;
+    }
+
+    long long maxTotal(vector<int>& value, vector<int>& limit) {
+        int n = value.size();
+        long long ans = 0;
+
+        vector<pair<int,int>> temp;
+        priority_queue<int, vector<int>,greater<int>> pq;
+
+        for(int i=0; i<n; i++){
+            temp.push_back({limit[i],value[i]});
+        }
+
+        sort(temp.begin(), temp.end(), cmp);
+
+        int curr = 0;
+
+        for(int i=0; i<temp.size(); i++){
+
+            if(curr < temp[i].first){
+                curr++;
+                ans += temp[i].second;
+                pq.push(temp[i].first);
+            }
+
+            i++; //check from next element
+            while(i<temp.size() && temp[i].first <= curr){
+                i++;
+            }
+            i--;
+
+            while(!pq.empty() && pq.top() <= curr){
+                pq.pop();
+                curr--;
+            }
+
+        }
+
+        return ans;
+    }
+};
