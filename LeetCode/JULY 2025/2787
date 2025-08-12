@@ -1,0 +1,29 @@
+class Solution {
+public:
+    const int mod = 1e9+7;
+
+    int helper(int n, int x, vector<int> &powers, int i, int curr,
+    vector<vector<int>> &dp){
+        if(curr==n) return 1;
+        if(curr>n || i>=powers.size()) return 0;
+
+        if(dp[i][curr]!=-1) return dp[i][curr];
+
+        int nottake = helper(n,x,powers,i+1,curr,dp);
+        int take = helper(n,x,powers,i+1,curr+powers[i],dp);
+
+        return dp[i][curr] = (nottake+take)%mod;
+    }
+
+    int numberOfWays(int n, int x) {
+        vector<int> powers;
+
+        for(int i=1; pow(i,x)<=n; i++){
+            long long val = pow(i,x);
+            powers.push_back(val);
+        }
+
+        vector<vector<int>> dp(powers.size()+1, vector<int>(n+1,-1));
+        return helper(n,x,powers,0,0,dp);
+    }
+};
