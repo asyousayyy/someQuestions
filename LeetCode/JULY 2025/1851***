@@ -1,0 +1,36 @@
+vector<int> minInterval(vector<vector<int>>& intervals, 
+    vector<int>& queries) {
+        
+        sort(intervals.begin(), intervals.end());
+        vector<pair<int,int>> v;
+
+        for(int i=0; i<queries.size(); i++){
+            v.push_back({queries[i],i});
+        }
+
+        sort(v.begin(), v.end());
+        vector<int> ans(queries.size(),-1);
+
+        priority_queue<pair<int,int>, 
+        vector<pair<int,int>>, greater<pair<int,int>>> pq;
+
+        int i = 0;
+
+        for(auto &[query,idx] : v){
+            
+            while(i<intervals.size() &&
+            intervals[i][0]<=query){
+                pq.push({intervals[i][1]-intervals[i][0]+1,
+                intervals[i][1]});
+                i++;
+            }       
+
+            while(!pq.empty() && pq.top().second < query){
+                pq.pop();
+            }     
+
+            if(!pq.empty()) ans[idx] = pq.top().first;
+        }
+
+        return ans;
+    }
