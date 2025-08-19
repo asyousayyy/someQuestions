@@ -1,0 +1,40 @@
+class Solution {
+public:
+    int minCost(int n, vector<vector<int>>& edges) {
+
+        vector<vector<pair<int,long long>>> adj(n);
+        for(auto it : edges){
+            adj[it[0]].push_back({it[1],it[2]});
+            adj[it[1]].push_back({it[0],2*it[2]});
+        }
+        
+        priority_queue<pair<long long,int>, vector<pair<long long,int>>, 
+        greater<pair<long long,int>>> pq;
+        vector<long long> dist(n, LLONG_MAX);
+
+        pq.push({0,0}); //cost, node
+        dist[0]=0;
+
+        while(!pq.empty()){
+            auto it = pq.top();
+            pq.pop();
+
+            long long cost = it.first;
+            int node = it.second;
+
+            if(node==n-1) return (int)cost;
+            if(cost > dist[node]) continue;
+
+            for(auto it : adj[node]){
+                int next = it.first;
+                long long nextcost = it.second;
+                if(dist[next] > cost+nextcost){
+                    pq.push({cost+nextcost, next});
+                    dist[next] = cost+nextcost;
+                }
+            }
+        }
+
+        return -1;
+    }
+};
