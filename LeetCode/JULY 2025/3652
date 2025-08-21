@@ -1,0 +1,33 @@
+class Solution {
+public:
+    long long maxProfit(vector<int>& prices, vector<int>& str, int k) {
+        int n = prices.size();
+
+        vector<long long> price(n), pre(n);
+        price[0] = prices[0];
+        pre[0] = 1LL * prices[0] * str[0];
+
+        for (int i = 1; i < n; i++) {
+            price[i] = price[i-1] + prices[i];
+            pre[i] = pre[i-1] + 1LL * prices[i] * str[i];
+        }
+
+        long long baseProfit = pre[n-1];
+        cout<<pre[n-1]<<endl;
+        long long maxGain = LLONG_MIN;
+
+        for (int i = 0; i <= n-k; i++) {
+            int l = i, r = i+k-1;
+
+            long long oldVal = pre[r] - (l > 0 ? pre[l-1] : 0);
+
+            int mid = i + k/2;
+            long long newVal = price[r] - price[mid-1];
+
+            maxGain = max(maxGain, newVal - oldVal);
+        }
+        
+        return max(baseProfit,baseProfit + maxGain);
+    }
+};
+©leetcode
