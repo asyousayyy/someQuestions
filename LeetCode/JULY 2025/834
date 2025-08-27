@@ -1,0 +1,54 @@
+class Solution {
+public:
+
+    int dfs1(int root, int level, vector<int> &count, vector<vector<int>> &adj,
+    vector<int> &vis1){
+        
+        vis1[root] = 1;
+        int dist = level;
+
+        for(auto it : adj[root]){
+            if(!vis1[it]){
+                dist += dfs1(it,level+1,count,adj,vis1);
+                count[root] += count[it];
+            }
+        }
+
+        count[root]++;
+        return dist;
+    }
+
+    void dfs2(vector<int> &vis2, vector<vector<int>> &adj, 
+    vector<int> &count, vector<int> &ans, int node, int n){
+        vis2[node] = 1;
+
+        for(auto it : adj[node]){
+            if(!vis2[it]){
+                ans[it] = ans[node] + (n - count[it]) - count[it];
+                dfs2(vis2,adj,count,ans,it,n);
+            }
+        }
+    }
+
+    vector<int> sumOfDistancesInTree(int n, vector<vector<int>>& edges) {
+        vector<int> ans(n);
+        vector<vector<int>> adj(n);
+
+        for(auto it : edges){
+            int u = it[0];
+            int v = it[1];
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+
+        vector<int> vis1(n,0);
+        vector<int> count(n,0);
+        ans[0] = dfs1(0,0,count,adj,vis1);
+
+        vector<int> vis2(n,0);
+        dfs2(vis2,adj,count,ans,0, n);
+
+        return ans;
+
+    }
+};
