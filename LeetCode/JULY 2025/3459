@@ -1,0 +1,50 @@
+class Solution {
+public:
+    int dx[4] = {1, 1, -1, -1};
+    int dy[4] = {1, -1, -1, 1};
+
+    int m, n;
+    vector<vector<vector<vector<int>>>> dp;
+
+    int dfs(int i, int j, int dir, int turn, int target, vector<vector<int>>& grid) {
+        
+        int newi = i + dx[dir];
+        int newj = j + dy[dir];
+
+        if(newi<0 || newj<0 || newi>=m|| newj >=n || grid[newi][newj] != target) return 0;
+
+        if(dp[newi][newj][dir][turn]!=-1) return dp[newi][newj][dir][turn];
+
+        int next = (target==2) ? 0 : 2;
+
+        int temp = dfs(newi, newj, dir, turn, next, grid);
+
+        if(turn==1){
+            int newdir = (dir+1)%4;
+            temp = max(temp, dfs(newi, newj, newdir, 0, next, grid));
+        }
+
+        return dp[newi][newj][dir][turn] = 1 + temp;
+    }
+
+    int lenOfVDiagonal(vector<vector<int>>& grid) {
+        m = grid.size();
+        n = grid[0].size();
+
+        dp.assign(m, vector<vector<vector<int>>>(n, vector<vector<int>>(4, 
+        vector<int>(2, -1))));
+
+        int ans = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    for (int dir = 0; dir < 4; dir++) {
+                        ans = max(ans, 1 + dfs(i, j, dir, 1, 2, grid));
+                    }
+                }
+            }
+        }
+
+        return ans;
+    }
+};
