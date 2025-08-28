@@ -1,0 +1,36 @@
+class Solution {
+public:
+    vector<vector<int>> sortMatrix(vector<vector<int>>& grid) {
+        int n = grid.size();
+        map<int,priority_queue<int, vector<int>, greater<int>>> mp1; //for top right
+        map<int,priority_queue<int>> mp2; //for middle + lower 
+
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                int d = (i-j);
+                if(d<0){
+                    mp1[d].push(grid[i][j]);
+                }
+                else{
+                    mp2[d].push(grid[i][j]);
+                }
+            }
+        }
+
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                int d = (i-j);
+                if(d<0){
+                    grid[i][j] = mp1[d].top();
+                    mp1[d].pop();
+                }
+                else{
+                    grid[i][j] = mp2[d].top();
+                    mp2[d].pop();
+                }
+            }
+        }
+
+        return grid;
+    }
+};
