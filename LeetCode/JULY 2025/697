@@ -1,0 +1,49 @@
+class Solution {
+public:
+    
+    int findShortestSubArray(vector<int>& nums) {
+        int n = nums.size();
+        int deg = 0;
+
+        unordered_map<int,int> mp;
+        for(auto it : nums){
+            mp[it]++;
+        }
+
+        for(auto it : mp){
+            deg = max(deg, it.second);
+        }
+
+        int len = INT_MAX;
+        vector<int> temp;
+
+        for(auto it : mp){
+            if(it.second==deg){
+                temp.push_back(it.first);
+            }
+        }
+
+        unordered_map<int,int> first,last;
+
+        for(auto it : temp){
+            for(int i=0; i<n; i++){
+                if(nums[i]==it){
+                    last[nums[i]] = i;
+                }
+                if(first.find(nums[i])==first.end()){
+                    first[nums[i]] = i;
+                }
+                if(first.find(nums[i]) != first.end()){
+                    continue;
+                }
+            }
+        }
+
+        for(auto it : temp){
+            len = min(len, last[it]-first[it]+1);
+        }
+
+        return len;
+       
+    }
+};
