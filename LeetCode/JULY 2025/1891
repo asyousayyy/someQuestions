@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+bool func(vector<int> &nums, int mid, int k) {
+    long long count = 0;
+    for (int len : nums) {
+        count += len / mid;  
+    }
+    return count >= k;
+}
+
+int helper(vector<int> &nums, int k){
+    int n = nums.size();
+    int low = 1, high = *max_element(nums.begin(), nums.end());
+    int ans = -1;
+    
+    while(low<=high){
+        int mid = (low+high)/2;
+        
+        if(func(nums,mid,k)){
+            ans = mid;
+            low = mid+1;
+        }
+        
+        else{
+            high = mid-1;
+        }
+    }
+    
+    return ans;
+}
+
+int main()
+{
+    int n,k;
+    cin>>n>>k;
+    
+    vector<int> nums(n);
+    for(int i=0; i<n; i++){
+        cin>>nums[i];
+    }
+    
+    cout<<helper(nums,k)<<endl;
+
+    return 0;
+}
