@@ -1,0 +1,53 @@
+class Solution {
+public:
+
+    void helper(int prod, int i, int k, vector<int> &factors, vector<int> &temp,
+    int mini, int maxi,int &diff, vector<int> &best){
+
+        if(k==0){
+            if(prod==1){
+                int curr = maxi-mini;
+                if(curr<diff){
+                    diff = curr;
+                    best = temp;
+                }
+            }
+            return;
+        }
+
+        if(i >= (int)factors.size()) return;
+
+        //nottake
+        helper(prod,i+1,k,factors,temp,mini,maxi,diff,best);
+
+        //take
+        if(prod%factors[i]==0){
+            temp.push_back(factors[i]);
+
+            helper(prod/factors[i],i,k-1,factors,temp,min(mini,factors[i]),
+            max(maxi,factors[i]),diff,best);
+
+            temp.pop_back();
+        }
+    }
+
+    vector<int> minDifference(int n, int k) {
+        vector<int> factors, temp;
+
+        for (int i = 1; i <= sqrt(n); i++) {
+            if (n % i == 0) {
+                factors.push_back(i);
+                if (i != n / i) factors.push_back(n / i);
+            }
+        }
+
+        sort(factors.begin(), factors.end());
+
+        int diff = INT_MAX;
+        vector<int> best;
+
+        helper(n,0,k,factors,temp,INT_MAX,INT_MIN,diff,best);
+        
+        return (diff==INT_MAX) ? vector<int>{} : best;
+    }
+};
