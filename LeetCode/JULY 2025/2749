@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int makeTheIntegerZero(int num1, int num2) {
+        
+        for(long long i=1;i<=60;i++){
+
+            long long x=(long long)num1-i*(long long)num2;
+            if(x<0)return -1;
+            
+            int bits=__builtin_popcountll(x);
+            if(bits<=i&&i<=x)return (int)i;
+        }
+
+        return -1;
+
+    }
+};
