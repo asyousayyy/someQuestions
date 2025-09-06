@@ -1,0 +1,32 @@
+class Solution {
+public:
+    long long minOperations(vector<vector<int>>& queries) {
+        int q = queries.size();
+        long long total = 0;
+
+        for(auto it : queries){
+            long long low = it[0], high = it[1];
+            long long ops = 0;
+            long long level = 1, base = 1;
+
+            while(base <= high){
+                long long nextbase = base*4;
+
+                long long left = max(low, base);
+                long long right = min(high, nextbase-1);
+
+                if(left<=right){
+                    long long num = right - left + 1;
+                    ops += (num * level);
+                }
+
+                base = nextbase;
+                level++;
+            }
+
+            total += (ops+1)/2;
+        }
+
+        return total;
+    }
+};
