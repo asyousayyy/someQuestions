@@ -1,0 +1,53 @@
+class Solution {
+public:
+    int maxWeight(int n, vector<vector<int>>& edges, int k, int t) {
+
+        if(k==0) return 0;
+        
+        vector<vector<pair<int,int>>> adj(n);
+        int maxi = -1;
+        
+        for(auto it : edges){
+            int u = it[0];
+            int v = it[1];
+            int w = it[2];
+            adj[u].push_back({v,w});
+        }
+
+        queue<vector<int>> q; 
+        for(int i=0; i<n; i++){
+            q.push({0,0,i});
+        }
+
+        unordered_map<int, unordered_map<int, unordered_map<int,int>>> dist;
+        //save space
+
+        while(!q.empty()){
+            auto it = q.front();
+            q.pop();
+
+            int edges_taken = it[0];
+            int pathsum = it[1];
+            int currnode = it[2];
+
+            if(edges_taken >= k){
+                if(pathsum > 0){
+                    maxi = max(maxi, pathsum);
+                }
+                continue; 
+            }
+
+            for(auto e : adj[currnode]){
+                int v = e.first;
+                int wt = e.second;
+
+                if(pathsum + wt < t && pathsum + wt > dist[edges_taken+1][v][currnode]){
+                    dist[edges_taken+1][v][currnode] = pathsum + wt;
+                    q.push({edges_taken+1, pathsum+wt, v});
+                }
+            }
+        }
+
+        return maxi;
+    }
+};
