@@ -1,0 +1,119 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Book{
+    public:
+    
+    int id;
+    string name;
+    string author;
+    bool isavailable;
+    
+    Book(int id, string name, string author){
+        this->id = id;
+        this->name = name;
+        this->author =author;
+        this->isavailable = true; //new books are available
+    }
+};
+
+class Library{
+    private:
+    
+    vector<Book> books;
+    
+    public:
+    
+    void addBook(int id, string name, string author){
+        books.push_back(Book(id,name,author));
+        cout<<"Book added successfully"<<endl;
+    }
+    
+    void displayBooks(){
+        
+        if(books.empty()){
+            cout<<"No books to display"<<endl;
+            return;
+        }
+        
+        else{
+            for(auto it : books){
+                cout<<"Book id : "<<it.id<<endl;
+                cout<<"Book name : "<<it.name<<endl;
+                cout<<"Book author : "<<it.author<<endl;
+            }
+        }
+    }
+    
+    void searchBook(string keyword){
+        if(books.empty()){
+            cout<<"Not found"<<endl;
+            return;
+        }
+        
+        else{
+            for(auto it : books){
+                if(it.name == keyword){
+                    cout<<"Found the book"<<endl;
+                    cout<<"Book id : "<<it.id<<endl;
+                    cout<<"Book author : "<<it.author<<endl;
+                }
+            }
+        }
+    }
+    
+    void borrowBook(int id){
+        for(auto it : books){
+            if(it.id == id){
+                if(it.isavailable == true){
+                    it.isavailable = false;
+                    cout<<"Book borrowed with id : "<<it.id<<endl;
+                }
+                else{
+                    cout<<"Book already borrowed"<<endl;
+                    return;
+                }
+            }
+        }
+        
+        cout<<"Book not found"<<endl;
+    }
+    
+    void returnBook(int id){
+        for(auto it : books){
+            if(it.id == id){
+                if(it.isavailable == false){
+                    it.isavailable = true;
+                    cout<<"Book returned successfully"<<endl;
+                }
+                else{
+                    cout<<"Book was not borrowed"<<endl;
+                }
+            }
+            
+            return;
+        }
+    }
+    
+};
+
+int main() {
+    Library lib;
+
+    lib.addBook(101, "C++ Basics", "Bjarne Stroustrup");
+    lib.addBook(102, "Python Fundamentals", "Guido van Rossum");
+
+    lib.displayBooks();
+
+    lib.searchBook("C++ Basics");
+
+    lib.borrowBook(101);
+    lib.borrowBook(101); // try borrowing again
+
+    lib.returnBook(101);
+    lib.returnBook(101); // try returning again
+
+    lib.displayBooks();
+
+    return 0;
+}
