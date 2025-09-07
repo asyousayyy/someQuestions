@@ -1,0 +1,31 @@
+class Solution {
+public:
+    bool helper(string &s){
+        int n = s.size();
+        for(auto it : s){
+            if(it != 'a'){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    int minOperations(string s) {
+        int n = s.size();
+        int mini = INT_MAX;
+        char ch;
+
+        for(auto it : s){
+            int temp = it - 'a';
+            if(temp < mini && temp != 0){
+                mini = temp;
+                ch = it;
+            }
+        }
+
+        if(helper(s)) return 0;
+        
+        return 26 - (ch-'a');
+    }
+};
