@@ -1,0 +1,37 @@
+class Solution {
+public:
+    bool iscon(char c){
+        set<char> st = {'a','e','i','o','u','A','E','I','O','U'};
+        if(st.find(c)==st.end()) return true;
+
+        return false;
+    }
+
+    string sortVowels(string s) {
+        string temp;
+        vector<char> v;
+
+        map<char,int> mp;
+        for(auto it : s){
+            mp[it]++;
+        }
+
+        string vow = "AEIOUaeiou";       
+        int i=0;
+
+        for(int j=0; j<s.size(); j++){
+            if(iscon(s[j])){
+                temp += s[j];
+            }
+            else{
+                while(mp[vow[i]]==0){
+                    i++;
+                }
+                temp += vow[i];
+                mp[vow[i]]--;
+            }
+        }
+
+        return temp;
+    }
+};
