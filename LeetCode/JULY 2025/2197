@@ -1,0 +1,40 @@
+class Solution {
+public:
+    int gcd(int a, int b){
+        if(b==0) return a;
+        return gcd(b, a%b);
+    }
+
+    long long lcm(long long a, long long b){
+        int g = gcd(a,b);
+        return a/g * b;
+    }
+
+    vector<int> replaceNonCoprimes(vector<int>& nums) {
+        int n = nums.size();
+        vector<long long> ans;
+
+        for(auto it : nums){
+            ans.push_back(it);
+
+            while(ans.size()>1){
+                long long a = ans.back();
+                ans.pop_back();
+                long long b = ans.back();
+                ans.pop_back();
+
+                if(gcd(a,b) > 1){
+                    ans.push_back(lcm(a,b));
+                }
+                else{
+                    ans.push_back(b);
+                    ans.push_back(a);
+                    break; //necessary otherwise the while loop will keep taking these
+                }
+            }
+        }
+
+        return vector<int>(ans.begin(), ans.end());
+
+    }
+};
