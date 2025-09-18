@@ -1,0 +1,61 @@
+class TaskManager {
+public:
+
+    unordered_map<int, int> mp1; //taskid, userid
+    unordered_map<int, int> mp2; //taskid, priority
+    priority_queue<pair<int,int>> pq;
+
+    TaskManager(vector<vector<int>>& tasks) {
+        for (auto &t : tasks) {
+            int u = t[0], tid = t[1], pr = t[2];
+            mp1[tid] = u;
+            mp2[tid] = pr;
+            pq.push({pr, tid});
+        }
+    }    
+    
+    void add(int userid, int taskid, int p) {
+        mp1[taskid] = userid;
+        mp2[taskid] = p;
+        pq.push({p, taskid});
+    }
+    
+    void edit(int taskid, int newp) {
+        mp2[taskid] = newp;
+        pq.push({newp, taskid});
+    }
+    
+    void rmv(int taskid) {
+        mp2.erase(taskid);
+    }
+    
+    int execTop() {
+        int t = -1;
+
+        while(!pq.empty()){
+            auto [p, tid] = pq.top();
+            
+            if(mp2.find(tid)==mp2.end() || mp2[tid] != p){
+                pq.pop();
+                continue;
+            }
+
+            pq.pop();
+            int userid = mp1[tid];
+            mp2.erase(tid);
+            mp1.erase(tid);
+            return userid;             
+        }
+
+        return -1;
+    }
+};
+
+/**
+ * Your TaskManager object will be instantiated and called as such:
+ * TaskManager* obj = new TaskManager(tasks);
+ * obj->add(userId,taskId,priority);
+ * obj->edit(taskId,newPriority);
+ * obj->rmv(taskId);
+ * int param_4 = obj->execTop();
+ */
