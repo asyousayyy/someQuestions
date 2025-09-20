@@ -1,0 +1,37 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int helper(int n, vector<int> &book, int t){
+    int i=0,j=0;
+    int sum = 0;
+    int ans = 0;
+    
+    while(j<n){
+        sum += book[j];
+        
+        while(sum > t){
+            sum -= book[i];
+            i++;
+        }
+        
+        ans = max(ans, j-i+1);
+        j++;
+    }
+    
+    return ans;
+}
+
+int main(){
+    
+    int n,t;
+    cin>>n>>t;
+    
+    vector<int> book(n);
+    for(int i=0; i<n; i++){
+        cin>>book[i];
+    }
+    
+    cout<<helper(n,book,t);
+    
+    return 0;
+}
