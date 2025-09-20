@@ -1,0 +1,56 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+//BS on answer
+bool helper(int k, vector<int>&nums, long long &total, int s){
+    int n = nums.size();
+    vector<long long> temp(n);
+    
+    for(int i=0; i<n; i++){
+        temp[i] = nums[i] + 1ll * (i+1) * k;
+    }
+    
+    sort(temp.begin(), temp.end());
+    
+    long long hh = 0;
+    for(int i=0; i<k; i++){
+        hh += temp[i];
+    }
+    
+    total = hh;
+    return hh <= s;
+}
+
+int main(){
+    
+    int n,s;
+    cin>>n>>s;
+    
+    int ans = 0; //the no if items
+    long long cost = 0; //the total cost
+    
+    vector<int> nums(n);
+    for(int i=0; i<n; i++){
+        cin>>nums[i];
+    }
+    
+    int low = 1, high = n;
+    
+    while(low<=high){
+        int mid = (low+high)/2; //the items taken
+        long long total;
+        
+        if(helper(mid,nums,total,s)){
+            ans = mid;
+            cost = total;
+            low = mid+1;
+        }
+        
+        else{
+            high = mid-1;
+        }
+    }
+    
+    cout<<ans<<" "<<cost<<endl;
+    return 0;
+}
