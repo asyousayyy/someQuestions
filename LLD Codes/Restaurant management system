@@ -1,0 +1,89 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class MenuItem{
+public:
+    int id;
+    string name;
+    string description;
+    double price;
+    string category;
+    bool isavailable;
+
+    MenuItem(int id, string name, string description, double price, string category, bool isavailable = true){
+        this->id = id;
+        this->name = name;
+        this->description = description;
+        this->price = price;
+        this->category = category;
+        this->isavailable = isavailable;
+    }
+
+    void updateprice(double newprice){ price = newprice; }
+
+    void setavailablity(bool status){ isavailable = status; }
+
+    void display(){
+        cout << "Name: " << name << ", Category: " << category << ", Price: $" << price << endl;
+        cout << (isavailable ? "Available" : "Not Available") << endl;
+    }
+};
+
+class RestaurantMenu{
+public:
+    vector<MenuItem> items;
+
+    void additem(MenuItem item){ items.push_back(item); }
+
+    void removeItem(int id){
+        for(auto it = items.begin(); it != items.end(); ){
+            if(it->id == id) it = items.erase(it);
+            else ++it;
+        }
+    }
+
+    void displayMenu(){
+        for(auto &it : items) it.display();
+    }
+
+    void searchitem(string name){
+        for(auto &it : items){
+            if(it.name == name){
+                cout << "Found:" << endl;
+                it.display();
+                return;
+            }
+        }
+        cout << "Not Found" << endl;
+    }
+
+    void getitemsbycategory(string category){
+        for(auto &it : items){
+            if(it.category == category) it.display();
+        }
+    }
+};
+
+int main(){
+    RestaurantMenu menu;
+
+    menu.additem(MenuItem(1, "Pasta", "Italian pasta", 12.5, "Main Course"));
+    menu.additem(MenuItem(2, "Coke", "Chilled soft drink", 2.5, "Beverages"));
+    menu.additem(MenuItem(3, "Chicken Wings", "Spicy starter", 6.0, "Starters"));
+
+    cout << "Full Menu:" << endl;
+    menu.displayMenu();
+
+    cout << "\nSearch for Pasta:" << endl;
+    menu.searchitem("Pasta");
+
+    cout << "\nItems in Beverages:" << endl;
+    menu.getitemsbycategory("Beverages");
+
+    menu.items[1].setavailablity(false);
+
+    cout << "\nUpdated Menu:" << endl;
+    menu.displayMenu();
+
+    return 0;
+}
