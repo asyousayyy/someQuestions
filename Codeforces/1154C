@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int helper(int a, int b, int c){
+    //leftover food se kitne din chlega have to find out
+    vector<int> temp = {0,1,2,0,2,1,0};
+    
+    int maxi = 0;
+    
+    for(int start = 0; start < 7; start++){
+        int aa = a, bb = b, cc = c;
+        int days = 0;
+        int i = start;
+        
+        while(true){
+            int food = temp[i%7];
+            if(food==0 && aa>0) aa--;
+            else if(food==1 && bb>0) bb--;
+            else if(food==2 && cc>0) cc--;
+            else break;
+            days++;
+            i++;
+        }
+        
+        maxi = max(maxi, days);
+    }
+    return maxi;
+}
+
+int main(){
+    
+    int a,b,c;
+    cin>>a>>b>>c;
+    
+    int fullweek = min({a/3, b/2, c/2});
+    
+    a -= 3 * fullweek;
+    b -= 2 * fullweek;
+    c -= 2 * fullweek;
+    
+    cout<<helper(a,b,c) + (7*fullweek)<<endl;
+    
+    return 0;
+}
