@@ -1,0 +1,58 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int dx[4] = {-1,0,1,0};
+int dy[4] = {0,1,0,-1};
+
+void helper(vector<vector<int>> &v, int n, vector<int> &temp){
+    //temp has the corrdinates which all robots can reach
+    
+    int xmin = -10000, xmax = 10000;
+    int ymin = -10000, ymax = 10000;
+    
+    for(int i=0; i<n; i++){
+        int a = v[i][2], b = v[i][3], c = v[i][4], d = v[i][5];
+        int x = v[i][0], y = v[i][1];
+        
+        if(a==0) xmin = max(xmin, x);
+        if(b==0) ymax = min(ymax, y);
+        if(c==0) xmax = min(xmax, x);
+        if(d==0) ymin = max(ymin, y);
+    }
+    
+    if(xmin <= xmax && ymin <= ymax){
+        temp = {xmin, ymin};
+    }
+    
+    else{
+        temp.clear();
+    }
+}
+
+int main(){
+    
+    int q;
+    cin>>q;
+    
+    while(q--){
+        int n;
+        cin>>n; //the number of robots
+        
+        vector<vector<int>> v;
+        for(int i=0; i<n; i++){
+            
+            int x,y,a,b,c,d;
+            cin>>x>>y>>a>>b>>c>>d;
+            
+            v.push_back({x,y,a,b,c,d});
+        }
+        
+        vector<int> temp;
+        helper(v,n,temp);
+        if(temp.size()==0) cout<<"0"<<endl;
+        else cout<<"1"<<" "<<temp[0]<<" "<<temp[1]<<endl;
+        
+    }
+    
+    return 0;
+}
