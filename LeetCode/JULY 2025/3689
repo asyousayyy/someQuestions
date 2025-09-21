@@ -1,0 +1,19 @@
+class Solution {
+public:
+    long long maxTotalValue(vector<int>& nums, int k) {
+        int n = nums.size();
+        long long ans = 0;
+
+        vector<long long> maxi(n),mini(n);
+        maxi[0] = nums[0];
+        mini[0] = nums[0];
+
+        for(int i=1; i<n; i++){
+            maxi[i]=max(maxi[i-1],(long long)nums[i]);
+            mini[i]=min(mini[i-1],(long long)nums[i]);
+            ans = max(ans, maxi[i]-mini[i]);
+        }
+
+        return 1ll * ans * k;
+    }
+};
