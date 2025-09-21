@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int helper(vector<int> &v){
+    int n = v.size();
+    unordered_map<int,int> mp; //number, last index
+    
+    for(int i=0; i<n; i++){
+        mp[v[i]]=i;
+    }
+    
+    int ele = -1, idx = INT_MAX;
+    
+    for(auto it : mp){
+        if(it.second < idx){
+            idx = it.second;
+            ele = it.first;
+        }
+    }
+    
+    return ele;
+}
+
+int main(){
+    
+    int n;
+    cin>>n;
+    
+    vector<int> v(n);
+    
+    for(int i=0; i<n; i++){
+        cin>>v[i];
+    }
+    
+    cout<<helper(v)<<endl;
+    
+    return 0;
+}
