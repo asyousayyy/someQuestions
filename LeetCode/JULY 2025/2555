@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int maximizeWin(vector<int>& nums, int k) {
+        int n = nums.size();
+        vector<int> dp(n+1,0);
+
+        int i=0;
+        int ans = 0;
+
+        for(int j=0; j<n; j++){
+            while(nums[j]-nums[i] > k){
+                i++;
+            }
+            int len = j-i+1; //number of elements in current window
+            ans = max(ans, len + dp[i]); //len is current seg, 
+            //dp[i] is the maximum segment till i(left end) [can take only 2]
+
+            //now update till right
+            dp[j+1] = max(dp[j], len);
+        }
+
+        return ans;
+    }
+};
