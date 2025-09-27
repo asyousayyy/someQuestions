@@ -1,0 +1,53 @@
+class Solution {
+public:
+    int minimumVisitedCells(vector<vector<int>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+
+        vector<set<int>> row(m), col(n);
+
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                row[i].insert(j);
+            }
+        }
+
+        for(int j=0; j<n; j++){
+            for(int i=0; i<m; i++){
+                col[j].insert(i);
+            }
+        }
+
+        queue<vector<int>> q; //((x,y),moves)
+        q.push({0,0,1});
+
+        while(!q.empty()){
+            auto it = q.front();
+            q.pop();
+
+            int x = it[0];
+            int y = it[1];
+            int moves = it[2];
+
+            if(x==m-1 && y==n-1) return moves;
+
+            //right moves
+            auto it1 = row[x].upper_bound(y); //just next unvisited column
+            while(it1!=row[x].end() && *it1 <= y + grid[x][y]){
+                int temp = *it1;
+                q.push({x,temp,moves+1});
+                it1 = row[x].erase(it1); //will erase and return the next col
+            }
+            
+            //down moves
+            auto it2 = col[y].upper_bound(x);
+            while(it2!=col[y].end() && *it2 <= x + grid[x][y]){
+                int temp = *it2;
+                q.push({temp,y,moves+1});
+                it2 = col[y].erase(it2); //will erase and return the next row
+            }
+        }
+
+        return -1;
+    }
+};
