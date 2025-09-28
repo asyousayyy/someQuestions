@@ -1,0 +1,64 @@
+class Solution {
+public:
+    
+    // bool validi(vector<int> &nums, int i){
+    //     for(int idx=0; idx<i; idx++){
+    //         if(nums[idx] >= nums[idx+1]) return false;
+    //     }
+    //     return true;
+    // }
+
+    // bool validd(vector<int> &nums, int i){
+    //     int n = nums.size();
+    //     for(int idx=i; idx<n-1; idx++){
+    //         if(nums[idx] <= nums[idx+1]) return false;
+    //     }
+    //     return true;
+    // }
+    
+    // long long helper(vector<int> &nums, int i, vector<long long> &pre){
+    //     int n = nums.size();
+    //     if(i>=n-1) return LLONG_MAX;
+        
+    //     if(!validi(nums,i) || !validd(nums,i+1)){
+    //         return LLONG_MAX;
+    //     }
+
+    //     long long sum1 = pre[i];
+    //     long long sum2 = pre.back() - pre[i];
+
+    //     return abs(sum1 - sum2);
+    // }
+    
+    long long splitArray(vector<int>& nums) {
+        int n = nums.size();
+        long long ans = LLONG_MAX;
+        
+        vector<long long> pre(n);
+        pre[0] = nums[0];
+
+        for(int i=1; i<n; i++){
+            pre[i] = nums[i]+pre[i-1];
+        }
+
+        vector<int> inc(n,true), dec(n, true);
+
+        for(int i=1; i<n; i++){
+            inc[i] = inc[i-1] && (nums[i-1]<nums[i]);
+        }
+
+        for(int i=n-2; i>=0; i--){
+            dec[i] = dec[i+1] && (nums[i]>nums[i+1]);
+        }
+        
+        for(int i=0; i<n-1; i++){
+            long long sum1 = pre[i];
+            long long sum2 = pre.back() - pre[i];
+            if(inc[i] && dec[i+1]){
+                ans = min(ans, llabs(sum1-sum2));
+            }
+        }
+
+        return (ans==LLONG_MAX ? -1 : ans);
+    }
+};©leetcode
