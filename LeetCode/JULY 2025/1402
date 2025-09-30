@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int helper(vector<int> &nums, int i, int t, vector<vector<int>> &dp){
+        
+        int n = nums.size();
+        if(i>=n) return 0;
+        if(dp[i][t]!=-1) return dp[i][t];
+
+        int nottake = 0 + helper(nums, i+1, t,dp);
+        int take = nums[i]*t + helper(nums, i+1, t+1, dp);
+
+        return dp[i][t] = max(take,nottake);
+    }
+
+    int maxSatisfaction(vector<int>& nums) {
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+        vector<vector<int>> dp(n+1, vector<int>(n+2,-1));
+        return helper(nums,0,1,dp);
+    }
+};
