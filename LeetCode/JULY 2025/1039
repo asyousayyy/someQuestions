@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int helper(vector<int> &values, int i, int j,
+    vector<vector<int>> &dp){
+
+        int n = values.size();
+
+        if(i+1==j){
+            return 0;
+        }
+
+        if(dp[i][j]!=-1) return dp[i][j];
+
+        int score = INT_MAX;
+        for(int k=i+1; k<j; k++){
+            int temp = (values[i]*values[k]*values[j]) + helper(values, i, k, dp) +
+            helper(values, k, j, dp);
+
+            score = min(score, temp);
+        }
+
+        return dp[i][j] = score;
+
+    }
+
+    int minScoreTriangulation(vector<int>& values) {
+        int n = values.size();
+        vector<vector<int>> dp(n+1, vector<int>(n+1, -1));
+        return helper(values, 0, n-1, dp);
+    }
+};
