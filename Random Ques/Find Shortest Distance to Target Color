@@ -1,0 +1,56 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> helper(vector<int> &colors, vector<vector<int>> &queries) {
+    int n = colors.size();
+    vector<vector<int>> left(n, vector<int>(4, -1));
+    vector<vector<int>> right(n, vector<int>(4, -1));
+
+    for (int i = 0; i < n; i++) {
+        for (int col = 1; col <= 3; col++) {
+            if (colors[i] == col)
+                left[i][col] = i;
+            else if (i > 0)
+                left[i][col] = left[i - 1][col];
+        }
+    }
+
+    for (int i = n - 1; i >= 0; i--) {
+        for (int col = 1; col <= 3; col++) {
+            if (colors[i] == col)
+                right[i][col] = i;
+            else if (i < n - 1)
+                right[i][col] = right[i + 1][col];
+        }
+    }
+
+    vector<int> ans;
+    for (auto &q : queries) {
+        int idx = q[0];
+        int col = q[1];
+        int res = INT_MAX;
+
+        if (left[idx][col] != -1)
+            res = min(res, abs(idx - left[idx][col]));
+        if (right[idx][col] != -1)
+            res = min(res, abs(right[idx][col] - idx));
+
+        ans.push_back(res == INT_MAX ? -1 : res);
+    }
+    return ans;
+}
+
+int main() {
+    vector<int> colors = {1, 1, 2, 1, 3, 2, 2, 3, 3};
+    vector<vector<int>> queries = {{1, 3}, {2, 2}, {6, 1}};
+
+    vector<int> result = helper(colors, queries);
+
+    cout << "[";
+    for (int i = 0; i < result.size(); ++i) {
+        cout << result[i];
+        if (i < result.size() - 1) cout << ", ";
+    }
+    cout << "]" << endl;
+    return 0;
+}
