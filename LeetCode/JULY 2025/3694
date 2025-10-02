@@ -1,0 +1,44 @@
+class Solution {
+public:
+
+    int distinctPoints(string s, int k) {
+        int n = s.size();
+        set<pair<int,int>> st;
+
+        unordered_map<char, pair<int,int>> mp;
+        mp['U'] = {0,1};
+        mp['D'] = {0,-1};
+        mp['L'] = {-1,0};
+        mp['R'] = {1,0};
+
+        // //find final coordinate
+        // int x = 0, y = 0;
+        // for(auto it : s){
+        //     char ch = it;
+        //     x += mp[ch].first;
+        //     y += mp[ch].second;
+        // }
+
+        // st.insert(x,y);
+
+        // //now if you remove UL - do DR
+        // //LR = UD = 0
+        // for(int i=0; i<n-k; i++){
+        //     int tempx = x, tempy = y;
+        //     string curr = s.substr(i,k);
+
+        vector<pair<int,int>> prefix(n+1, {0,0});
+        for(int i=0; i<n; i++){
+            prefix[i+1].first = prefix[i].first + mp[s[i]].first;
+            prefix[i+1].second = prefix[i].second + mp[s[i]].second;
+        }
+
+        for(int i=0; i<=n-k; i++){
+            int final_x = prefix[n].first - (prefix[i+k].first - prefix[i].first);
+            int final_y = prefix[n].second - (prefix[i+k].second - prefix[i].second);
+            st.insert({final_x, final_y});
+        }
+
+        return st.size();
+    }
+};
