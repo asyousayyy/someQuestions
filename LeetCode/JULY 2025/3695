@@ -1,0 +1,84 @@
+class DisjointSet{
+    public:
+
+    vector<int> parent, rank, size;
+
+    DisjointSet(int sz){
+        parent.resize(sz);
+        rank.resize(sz,0);
+        size.resize(sz,1);
+        for(int i=0; i<sz; i++){
+            parent[i] = i;
+        }
+    }
+
+    int findpar(int u){
+        if(parent[u]==u) return u;
+        else return parent[u] = findpar(parent[u]);
+    }
+
+    void unionBySize(int a, int b){
+        int par1 = findpar(a);
+        int par2 = findpar(b);
+        
+        if(par1==par2) return;
+       
+        if(size[par1]<size[par2]){
+            parent[par1] = par2;
+            size[par2] += size[par1];
+        }
+        else{
+            parent[par2] = par1;
+            size[par1] += size[par2];
+        }
+    }
+
+};
+
+class Solution {
+public:
+    long long maxAlternatingSum(vector<int>& nums, 
+                                vector<vector<int>>& swaps) {
+        int n = nums.size();
+
+        DisjointSet ds(n);
+
+        for(auto it : swaps){
+            int u = it[0];
+            int v = it[1];
+            ds.unionBySize(u,v);
+        }
+
+        long long ans = 0;
+        unordered_map<int, vector<pair<int,int>>> mp; //parent, (value, index)
+
+        for(int i=0; i<n; i++){
+            mp[ds.findpar(i)].push_back({nums[i], i});
+        }             
+
+        for(auto &it : mp){
+            auto vec = it.second;
+            int cnt = 0;
+            long long sum = 0;
+
+            for(auto &x : vec){
+                if(x.second % 2 == 0) cnt++;
+                sum += x.first;
+            }
+
+            sort(vec.begin(), vec.end(), [](auto &a, auto &b){
+                return a.first > b.first;
+            });
+
+            long long tempsum = 0;
+            for(int i=0; i<cnt; i++){
+                tempsum += vec[i].first;
+            }
+
+            ans += (2*tempsum) - sum; //main relation, have to think about this
+        }
+
+        return ans;
+
+    }
+};
