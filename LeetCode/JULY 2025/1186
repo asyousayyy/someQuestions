@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int maximumSum(vector<int>& arr) {
+        int n = arr.size();
+        int maxi = INT_MIN;
+
+        if(n==1) return arr[0];
+
+        vector<int> pre(n); //no deletion or starting from this index
+        pre[0] = arr[0];
+
+        vector<int> curr(n); //one deletion 
+        //either delete this or add this into previous deleted ele sum
+        curr[0] = 0;
+
+        for(int i=1; i<n; i++){
+            pre[i] = max(arr[i], pre[i-1]+arr[i]);
+            curr[i] = max(pre[i-1], curr[i-1]+arr[i]);
+
+            maxi = max({maxi, pre[i], curr[i]});
+        }
+
+        return maxi;
+    }
+};
