@@ -1,0 +1,40 @@
+class Solution {
+public:
+    bool helper(long long success, int mid, int spell, vector<int> &potions){
+        long long temp = (long long)potions[mid] * spell;
+        return temp >= success;
+    }
+
+    vector<int> successfulPairs(vector<int>& spells, 
+    vector<int>& potions, long long success) {
+        int n = spells.size();
+        int m = potions.size();
+
+        vector<int> ans;
+
+        sort(potions.begin(), potions.end());
+
+        for(auto it : spells){
+            int curr = it;
+
+            int low = 0;
+            int high = m-1;
+            int cnt = 0;
+
+            while(low<=high){
+                int mid = low + (high-low)/2;
+                if(helper(success,mid,curr,potions)){
+                    cnt = (m-mid);
+                    high = mid-1;
+                }
+                else{
+                    low = mid+1;
+                }
+            } 
+
+            ans.push_back(cnt);           
+        }
+
+        return ans;
+    }
+};
