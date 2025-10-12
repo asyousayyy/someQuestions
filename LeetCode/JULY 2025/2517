@@ -1,0 +1,46 @@
+class Solution {
+public:
+    bool helper(int mid, vector<int> &price, int k, unordered_map<int,int> &mp){
+        int cnt = 1;
+        int n = price.size();
+
+        int curr = price[0];
+        for(int i=1; i<n; i++){
+            if(price[i] - curr >= mid){
+                cnt++;
+                curr = price[i];
+            }            
+        }
+
+        return cnt>=k;
+    }
+
+    int maximumTastiness(vector<int>& price, int k) {
+        int n = price.size();
+        sort(price.begin(), price.end());
+        unordered_map<int,int> mp;
+
+        for(auto it : price){
+            mp[it]++;
+        }
+
+        int low = 0;
+        int high = price[n-1] - price[0];
+        int ans = -1;
+
+        while(low<=high){
+            int mid = (low+high)/2;
+
+            if(helper(mid,price,k,mp)){
+                ans = mid;
+                low = mid+1;
+            }
+
+            else{
+                high = mid-1;
+            }
+        }
+
+        return ans;
+    }
+};
